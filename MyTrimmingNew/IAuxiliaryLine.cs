@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew
 {
-    interface IAuxiliaryLine
+    public interface IAuxiliaryLine
     {
         void Move();
 

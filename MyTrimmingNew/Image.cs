@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace MyTrimmingNew
 {
-    class Image
+    public class Image
     {
         private System.IO.FileInfo _imageInfo;
 
@@ -17,22 +17,10 @@ namespace MyTrimmingNew
             _imageInfo = new System.IO.FileInfo(imagePath);
         }
 
-        /// <summary>
-        /// Bitmap画像
-        /// </summary>
-        /// <returns></returns>
         public Bitmap BitmapImage { get; private set; }
 
-        /// <summary>
-        /// 画像の横幅
-        /// </summary>
-        /// <returns></returns>
         public int Width { get { return BitmapImage.Width; } }
 
-        /// <summary>
-        /// 画像の縦幅
-        /// </summary>
-        /// <returns></returns>
         public int Height { get { return BitmapImage.Height; } }
 
         public string SaveNameExample
