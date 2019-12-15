@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace MyTrimmingNew
 {
-    class ImageFixedWindow
+    public class ImageFixedWindow
     {
         private Image _image;
         private Bitmap _fixedWindowImage;
