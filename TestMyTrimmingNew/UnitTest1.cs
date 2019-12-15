@@ -29,6 +29,7 @@ namespace TestMyTrimmingNew
             MyTrimmingNew.Image img = new MyTrimmingNew.Image(@".\Resource\test001.jpg");
             MyTrimmingNew.ImageFixedWindow ifw = new MyTrimmingNew.ImageFixedWindow(img, 600, 400);
             Assert.AreEqual(ifw.Width, 600);
+            Assert.AreEqual(ifw.Height, 400);
         }
     }
 }
