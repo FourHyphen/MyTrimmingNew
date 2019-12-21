@@ -83,14 +83,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AuxiliaryLineFactory.cs" />
+    <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="Image.cs" />
+    <Compile Include="DisplayImage.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
-    <Compile Include="ImageFixedWindow.cs" />
     <Compile Include="ImageOpenDirector.cs" />
     <Compile Include="ImageSaveDirector.cs" />
     <Compile Include="RectangleAuxiliaryWithFixedRatio.cs" />
+    <Compile Include="WindowSize.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,7 +121,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

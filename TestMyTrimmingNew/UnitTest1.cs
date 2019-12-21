@@ -1,16 +1,29 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Drawing;
 
 namespace TestMyTrimmingNew
 {
     [TestClass]
     public class UnitTest1
     {
+        // TODO: リソース管理すればDeploymentItemと共有できるか？
+        private const string _testResourceImage001Path = @".\Resource\test001.jpg";
+
+        // TODO: リソース管理してxaml側と数字を共有する
+        private const int _windowInitWidth = 800;
+        private const int _windowInitHeight = 600;
+
+        private MyTrimmingNew.DisplayImage GetDisplayImage(string filePath)
+        {
+            return new MyTrimmingNew.DisplayImage(filePath, _windowInitWidth, _windowInitHeight);
+        }
+
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestSuccessOfCreateBitmapAfterNewImage()
         {
-            MyTrimmingNew.Image img = new MyTrimmingNew.Image(@".\Resource\test001.jpg");
+            MyTrimmingNew.DisplayImage img = GetDisplayImage(_testResourceImage001Path);
             Assert.IsNotNull(img.BitmapImage);
         }
 
@@ -18,18 +31,22 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNotEqualOfImageNameAndSaveNameExample()
         {
-            MyTrimmingNew.Image img = new MyTrimmingNew.Image(@".\Resource\test001.jpg");
-            Assert.AreNotEqual(img.SaveNameExample, "test001.jpg");
+            MyTrimmingNew.DisplayImage img = GetDisplayImage(_testResourceImage001Path);
+            Assert.AreNotEqual(img.SaveNameExample, System.IO.Path.GetFileName(_testResourceImage001Path));
         }
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestEqualOfReductionWidthAndHeight()
+        public void TestEqualOfChangedImageSizeWidthAndHeight()
         {
-            MyTrimmingNew.Image img = new MyTrimmingNew.Image(@".\Resource\test001.jpg");
-            MyTrimmingNew.ImageFixedWindow ifw = new MyTrimmingNew.ImageFixedWindow(img, 600, 400);
-            Assert.AreEqual(ifw.Width, 600);
-            Assert.AreEqual(ifw.Height, 400);
+            // 数字の根拠無し
+            int newWidth = 600;
+            int newHeight = 350;
+
+            Bitmap img = new Bitmap(_testResourceImage001Path);
+            Bitmap newImg = MyTrimmingNew.common.Image.CreateBitmap(img, newWidth, newHeight);
+            Assert.AreEqual(newImg.Width, newWidth);
+            Assert.AreEqual(newImg.Height, newHeight);
         }
     }
 }

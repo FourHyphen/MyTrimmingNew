@@ -22,7 +22,7 @@ namespace MyTrimmingNew
         /// <exception>
         /// 画像オープンエラー
         /// </exception>
-        public Image ImageOpen(System.Windows.Controls.Image imageField,
+        public DisplayImage ImageOpen(System.Windows.Controls.Image imageField,
                                System.Windows.Shapes.Rectangle auxiliaryLineField,
                                System.Windows.Controls.Primitives.StatusBarItem imageSizeField,
                                int windowWidth,
@@ -37,9 +37,9 @@ namespace MyTrimmingNew
             }
 
             // TODO: 実装をプログラミングしてないか？
-            Image image = new Image(filePath);
-            imageField.Source = new ImageFixedWindow(image, windowWidth, windowHeight).GetImage();
-            imageSizeField.Content = "オリジナル画像: 横" + image.Width.ToString() + "x縦" + image.Height.ToString();
+            DisplayImage image = new DisplayImage(filePath, windowWidth, windowHeight);
+            imageField.Source = image.GetImage();
+            imageSizeField.Content = "オリジナル画像: 横" + image.OriginalImageWidth.ToString() + "x縦" + image.OriginalImageHeight.ToString();
 
             return image;
         }

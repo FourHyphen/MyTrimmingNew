@@ -18,7 +18,7 @@ namespace MyTrimmingNew
 {
     public partial class MainWindow : Window
     {
-        private Image _image;
+        private DisplayImage _image;
 
         public MainWindow()
         {

@@ -22,7 +22,7 @@ namespace MyTrimmingNew
         /// <exception>
         /// 画像保存エラー
         /// </exception>
-        public bool ImageSave(Image image,
+        public bool ImageSave(DisplayImage image,
                               IAuxiliaryLine auxiliaryLine,
                               System.Windows.Controls.Primitives.StatusBarItem SaveResultField)
         {
