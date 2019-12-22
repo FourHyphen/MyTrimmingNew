@@ -16,7 +16,7 @@ namespace MyTrimmingNew
 
         public int ImageFitWindowHeight { get; set; }
 
-        private double ImageFitWindowRatio { get; set; }
+        public double ImageFitWindowRatio { get; private set; }
 
         public WindowSize(int windowWidth, int windowHeight, int imageWidth, int imageHeight)
         {

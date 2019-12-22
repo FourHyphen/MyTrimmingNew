@@ -9,6 +9,7 @@ namespace TestMyTrimmingNew
     {
         // TODO: リソース管理すればDeploymentItemと共有できるか？
         private const string _testResourceImage001Path = @".\Resource\test001.jpg";
+        private const string _testResourceImage002Path = @".\Resource\test002.jpg";
 
         // TODO: リソース管理してxaml側と数字を共有する
         private const int _windowInitWidth = 800;
@@ -47,6 +48,48 @@ namespace TestMyTrimmingNew
             Bitmap newImg = MyTrimmingNew.common.Image.CreateBitmap(img, newWidth, newHeight);
             Assert.AreEqual(newImg.Width, newWidth);
             Assert.AreEqual(newImg.Height, newHeight);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectWidthAndHeightOfInitAuxiliaryLineIfImageWidthLongerThanImageHeight()
+        {
+            MyTrimmingNew.ImageController ic = new MyTrimmingNew.ImageController(_testResourceImage001Path,
+                                                                                 _windowInitWidth,
+                                                                                 _windowInitHeight);
+
+            int widthRatio = 16;
+            int heightRatio = 9;
+            MyTrimmingNew.AuxiliaryController ac = new MyTrimmingNew.AuxiliaryController(ic.DisplayImageWidth,
+                                                                                         ic.DisplayImageHeight,
+                                                                                         widthRatio,
+                                                                                         heightRatio);
+
+            double ratio = (double)widthRatio / (double)heightRatio;
+            int fittedHeight = (int)((double)_windowInitWidth / ratio);
+            Assert.AreEqual(ac.AuxiliaryWidth, _windowInitWidth);
+            Assert.AreEqual(ac.AuxiliaryHeight, fittedHeight);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test002.jpg")]
+        public void TestCorrectWidthAndHeightOfInitAuxiliaryLineIfImageHeightLongerThanImageWidth()
+        {
+            MyTrimmingNew.ImageController ic = new MyTrimmingNew.ImageController(_testResourceImage002Path,
+                                                                                 _windowInitWidth,
+                                                                                 _windowInitHeight);
+
+            int widthRatio = 16;
+            int heightRatio = 9;
+            MyTrimmingNew.AuxiliaryController ac = new MyTrimmingNew.AuxiliaryController(ic.DisplayImageWidth,
+                                                                                         ic.DisplayImageHeight,
+                                                                                         widthRatio,
+                                                                                         heightRatio);
+
+            double ratio = (double)widthRatio / (double)heightRatio;
+            int fittedWidth = (int)((double)_windowInitHeight / ratio);
+            Assert.AreEqual(ac.AuxiliaryWidth, fittedWidth);
+            Assert.AreEqual(ac.AuxiliaryHeight, _windowInitHeight);
         }
     }
 }

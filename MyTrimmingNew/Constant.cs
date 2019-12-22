@@ -12,10 +12,10 @@ namespace MyTrimmingNew
         private static int _menuItemHeight = 20;
         private static int _titleHeight = 18;
         private static int _statusBarHeight = 18;
-        private static int _frameUpper = 3;
-        private static int _frameRight = 3;
-        private static int _frameLower = 3;
-        private static int _frameLeft = 3;
+        private static int _frameUpper = 4;
+        private static int _frameRight = 4;
+        private static int _frameLower = 4;
+        private static int _frameLeft = 4;
 
         /// <summary>
         /// 画像を表示する領域サイズの横幅を正確に求めるための固定値

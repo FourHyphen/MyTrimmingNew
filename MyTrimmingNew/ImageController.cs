@@ -21,6 +21,10 @@ namespace MyTrimmingNew
 
         public int OriginalImageHeight { get { return BitmapImage.Height; } }
 
+        public int DisplayImageWidth { get { return _windowSize.ImageFitWindowWidth; } }
+
+        public int DisplayImageHeight { get { return _windowSize.ImageFitWindowHeight; } }
+
         /// <summary>
         /// 表示用画像
         /// </summary>

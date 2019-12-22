@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AuxiliaryController.cs" />
     <Compile Include="AuxiliaryLineFactory.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />

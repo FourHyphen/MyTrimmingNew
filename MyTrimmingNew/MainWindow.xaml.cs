@@ -19,6 +19,7 @@ namespace MyTrimmingNew
     public partial class MainWindow : Window
     {
         private ImageController _imageController;
+        private AuxiliaryController _auxiliaryController;
 
         public MainWindow()
         {
@@ -30,15 +31,29 @@ namespace MyTrimmingNew
             string filePath = ImageFileOpenDialog.GetInstance().Show();
             if(filePath != "")
             {
-                DisplayImageInfo(filePath);
+                DisplayInfo(filePath);
             }
         }
 
+        /// <summary>
+        /// 各種データを表示する
+        /// 表示順は画像情報 → 補助線情報とすること
+        /// </summary>
+        /// <param name="filePath"></param>
+        private void DisplayInfo(string filePath)
+        {
+            DisplayImageInfo(filePath);
+            DisplayAuxiliaryLine();
+        }
+
+        /// <summary>
+        /// TODO: 実装をプログラミングしてないか？
+        /// </summary>
+        /// <param name="imageFilePath"></param>
         private void DisplayImageInfo(string imageFilePath)
         {
             try
             {
-                // TODO: 実装をプログラミングしてないか？
                 _imageController = new ImageController(imageFilePath,
                                                        (int)Width - Constant.FixCanvasWidth,
                                                        (int)Height - Constant.FixCanvasHeight);
@@ -49,6 +64,23 @@ namespace MyTrimmingNew
             {
                 // TODO: 画像オープン失敗時の例外処理
             }
+        }
+
+        /// <summary>
+        /// 切り抜き補助矩形初期化
+        /// TODO: 比率を16:9固定ではなく4:3とかの任意比率に対応する
+        /// TODO: 比率の初期値どうする？config.ini管理？
+        /// </summary>
+        private void DisplayAuxiliaryLine()
+        {
+            _auxiliaryController = new AuxiliaryController(_imageController.DisplayImageWidth,
+                                                           _imageController.DisplayImageHeight);
+
+            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
+            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
+            Canvas.SetLeft(xAuxiliaryLine, 0.0);
+            Canvas.SetTop(xAuxiliaryLine, 0.0);
+            xAuxiliaryLineLength.Content = _auxiliaryController.GetLineSizeString();
         }
 
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
