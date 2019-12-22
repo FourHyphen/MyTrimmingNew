@@ -18,7 +18,7 @@ namespace MyTrimmingNew
 {
     public partial class MainWindow : Window
     {
-        private DisplayImage _image;
+        private ImageController _imageController;
 
         public MainWindow()
         {
@@ -27,16 +27,25 @@ namespace MyTrimmingNew
 
         private void menuFileOpen_Click(object sender, RoutedEventArgs e)
         {
-            ImageOpenDirector iod = new ImageOpenDirector();
+            string filePath = ImageFileOpenDialog.GetInstance().Show();
+            if(filePath != "")
+            {
+                DisplayImageInfo(filePath);
+            }
+        }
+
+        private void DisplayImageInfo(string imageFilePath)
+        {
             try
             {
-                _image = iod.ImageOpen(xShowImage,
-                                       xAuxiliaryLine,
-                                       xOriginalImageLength,
-                                       (int)Width - Constant.FixCanvasWidth,
-                                       (int)Height - Constant.FixCanvasHeight);
+                // TODO: 実装をプログラミングしてないか？
+                _imageController = new ImageController(imageFilePath,
+                                                       (int)Width - Constant.FixCanvasWidth,
+                                                       (int)Height - Constant.FixCanvasHeight);
+                xShowImage.Source = _imageController.GetImage();
+                xOriginalImageLength.Content = _imageController.GetImageSizeString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // TODO: 画像オープン失敗時の例外処理
             }
@@ -49,12 +58,9 @@ namespace MyTrimmingNew
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
-            ImageSaveDirector isd = new ImageSaveDirector();
             try
             {
-                isd.ImageSave(_image,
-                              null,
-                              xSaveResult);
+                _imageController.Save(null, xSaveResult);
 
             }
             catch (Exception ex)

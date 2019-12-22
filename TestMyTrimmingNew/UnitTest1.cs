@@ -14,16 +14,16 @@ namespace TestMyTrimmingNew
         private const int _windowInitWidth = 800;
         private const int _windowInitHeight = 600;
 
-        private MyTrimmingNew.DisplayImage GetDisplayImage(string filePath)
+        private MyTrimmingNew.ImageController GetDisplayImage(string filePath)
         {
-            return new MyTrimmingNew.DisplayImage(filePath, _windowInitWidth, _windowInitHeight);
+            return new MyTrimmingNew.ImageController(filePath, _windowInitWidth, _windowInitHeight);
         }
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestSuccessOfCreateBitmapAfterNewImage()
         {
-            MyTrimmingNew.DisplayImage img = GetDisplayImage(_testResourceImage001Path);
+            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
             Assert.IsNotNull(img.BitmapImage);
         }
 
@@ -31,7 +31,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNotEqualOfImageNameAndSaveNameExample()
         {
-            MyTrimmingNew.DisplayImage img = GetDisplayImage(_testResourceImage001Path);
+            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
             Assert.AreNotEqual(img.SaveNameExample, System.IO.Path.GetFileName(_testResourceImage001Path));
         }
 

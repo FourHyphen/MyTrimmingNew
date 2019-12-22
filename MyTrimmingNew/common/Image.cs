@@ -9,6 +9,20 @@ namespace MyTrimmingNew.common
 {
     public class Image
     {
+        /// <summary>
+        /// サイズを変更したBitmapSourceImageを作成する
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="newWidth"></param>
+        /// <param name="newHeight"></param>
+        public static System.Windows.Media.Imaging.BitmapSource CreateBitmapSourceImage(Bitmap image,
+                                                                                        int newWidth,
+                                                                                        int newHeight)
+        {
+            Bitmap resizeImage = CreateBitmap(image, newWidth, newHeight);
+            return CreateBitmapSourceImage(resizeImage);
+        }
+
         [System.Runtime.InteropServices.DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         public static extern bool DeleteObject(IntPtr hObject);
 

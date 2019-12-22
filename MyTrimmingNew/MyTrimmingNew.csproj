@@ -85,11 +85,9 @@
     <Compile Include="AuxiliaryLineFactory.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="DisplayImage.cs" />
+    <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
-    <Compile Include="ImageOpenDirector.cs" />
-    <Compile Include="ImageSaveDirector.cs" />
     <Compile Include="RectangleAuxiliaryWithFixedRatio.cs" />
     <Compile Include="WindowSize.cs" />
     <Page Include="MainWindow.xaml">
