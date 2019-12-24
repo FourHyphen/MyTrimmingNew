@@ -73,19 +73,32 @@ namespace MyTrimmingNew
         /// </summary>
         private void DisplayAuxiliaryLine()
         {
-            _auxiliaryController = new AuxiliaryController(_imageController.DisplayImageWidth,
-                                                           _imageController.DisplayImageHeight);
+            _auxiliaryController = new AuxiliaryController(_imageController);
 
             xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
             xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
-            Canvas.SetLeft(xAuxiliaryLine, 0.0);
-            Canvas.SetTop(xAuxiliaryLine, 0.0);
+            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
+            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
             xAuxiliaryLineLength.Content = _auxiliaryController.GetLineSizeString();
         }
 
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
         {
+            if (Keys.IsKeyCursor(e.Key))
+            {
+                MoveAuxiliaryLine(Keys.ToEnableKeys(e.Key)); ;
+            }
+        }
 
+        /// <summary>
+        /// 補助線をキー入力内容の通りに移動する
+        /// </summary>
+        /// <param name="key"></param>
+        private void MoveAuxiliaryLine(Keys.EnableKeys key)
+        {
+            _auxiliaryController.MoveAuxiliaryLine(key);
+            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
+            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
         }
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)

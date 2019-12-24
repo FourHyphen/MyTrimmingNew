@@ -89,6 +89,7 @@
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="RectangleAuxiliaryWithFixedRatio.cs" />
     <Compile Include="WindowSize.cs" />
     <Page Include="MainWindow.xaml">
