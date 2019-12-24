@@ -48,7 +48,7 @@ namespace MyTrimmingNew
             }
             private set
             {
-                _auxiliaryLeftRelativeImage = value;
+                _auxiliaryLeftRelativeImage = FitInRangeAuxiliaryLeftRelativeImage(value);
             }
         }
 
@@ -127,6 +127,22 @@ namespace MyTrimmingNew
             }
 
             return toMoveTop;
+        }
+
+        private int FitInRangeAuxiliaryLeftRelativeImage(int toMoveLeft)
+        {
+            if (toMoveLeft < 0)
+            {
+                return 0;
+            }
+
+            //int maxOriginLeft = DisplayImageHeight - AuxiliaryHeight - AuxiliaryLineThickness;
+            //if (toMoveLeft > maxOriginTop)
+            //{
+            //    return AuxiliaryTopRelativeImage;
+            //}
+
+            return toMoveLeft;
         }
     }
 }

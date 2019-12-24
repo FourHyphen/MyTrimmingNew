@@ -131,5 +131,19 @@ namespace TestMyTrimmingNew
             ac.MoveAuxiliaryLine(down);
             Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
         }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectAuxiliaryLineOriginAfterInputCursorKeyLeftIfAuxiliaryLineOriginLeftIsZero()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            ac.MoveAuxiliaryLine(Keys.EnableKeys.Left);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
     }
 }
