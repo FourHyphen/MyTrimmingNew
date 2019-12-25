@@ -136,11 +136,11 @@ namespace MyTrimmingNew
                 return 0;
             }
 
-            //int maxOriginLeft = DisplayImageHeight - AuxiliaryHeight - AuxiliaryLineThickness;
-            //if (toMoveLeft > maxOriginTop)
-            //{
-            //    return AuxiliaryTopRelativeImage;
-            //}
+            int maxOriginLeft = DisplayImageWidth - AuxiliaryWidth - AuxiliaryLineThickness;
+            if (toMoveLeft > maxOriginLeft)
+            {
+                return AuxiliaryLeftRelativeImage;
+            }
 
             return toMoveLeft;
         }

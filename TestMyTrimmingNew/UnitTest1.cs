@@ -145,5 +145,30 @@ namespace TestMyTrimmingNew
             ac.MoveAuxiliaryLine(Keys.EnableKeys.Left);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
         }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineStayInImageAfterInputCursorKeyRightIfAuxiliaryLineRightIsImageRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryWidth;
+            Keys.EnableKeys right = Keys.EnableKeys.Right;
+            for (int i = 1; i < enableRightRange; i++)
+            {
+                ac.MoveAuxiliaryLine(right);
+                // 原点を右に移動させるので、原点位置=Leftと比較する
+                Assert.AreEqual(i, ac.AuxiliaryLeftRelativeImage);
+            }
+
+            Assert.AreEqual(enableRightRange, ac.AuxiliaryLeftRelativeImage);
+
+            ac.MoveAuxiliaryLine(right);
+            Assert.AreEqual(enableRightRange, ac.AuxiliaryLeftRelativeImage);
+        }
     }
 }
