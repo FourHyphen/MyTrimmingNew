@@ -26,5 +26,10 @@ namespace MyTrimmingNew
         /// 画像を表示する領域サイズの縦幅を正確に求めるための固定値
         /// </summary>
         public static readonly int FixCanvasHeight = _frameUpper + _menuItemHeight + _titleHeight + _statusBarHeight + _frameLower;
+
+        /// <summary>
+        /// MouseDown時、正確な箇所を狙わずともある程度の範囲に収まっていれば良しとするマージン
+        /// </summary>
+        public static readonly int MouseDownPointMargin = 20;
     }
 }

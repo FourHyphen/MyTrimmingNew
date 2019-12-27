@@ -122,14 +122,14 @@ namespace MyTrimmingNew
         {
             // MouseUp時に発行するイベントをセット
             Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            //_auxiliaryController.SetMouseDownEvent(pointRelatedAuxiliaryLine);
+            _auxiliaryController.SetMouseDownEvent(pointRelatedAuxiliaryLine);
         }
 
         private void xShowImageMouseUp(object sender, MouseButtonEventArgs e)
         {
             // MouseDown時にセットしたイベントを発行
             Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            //_auxiliaryController.PublishMouseDownEvent(pointRelatedAuxiliaryLine);
+            _auxiliaryController.PublishMouseDownEvent(pointRelatedAuxiliaryLine);
 
             // イベント発行結果を画面に反映
             ReflectStateOfAuxiliaryLineToDisplay();
@@ -143,7 +143,7 @@ namespace MyTrimmingNew
         {
             try
             {
-                _imageController.Save(null, xSaveResult);
+                _imageController.Save(xSaveResult);
 
             }
             catch (Exception ex)

@@ -67,8 +67,7 @@ namespace MyTrimmingNew
         /// <exception>
         /// 画像保存エラー
         /// </exception>
-        public bool Save(IAuxiliaryLine auxiliaryLine,
-                         System.Windows.Controls.Primitives.StatusBarItem SaveResultField)
+        public bool Save(System.Windows.Controls.Primitives.StatusBarItem SaveResultField)
         {
             string filePath = ImageFileSaveDialog.GetInstance(SaveNameExample, DirPath).Show();
             if (filePath == "")
@@ -80,7 +79,7 @@ namespace MyTrimmingNew
             //       (次の保存試行の結果と混ざるというか誤解させそう)
             try
             {
-                //image.Save(filePath, auxiliaryLine);
+                //image.Save(filePath);
                 SaveResultField.Content = "保存に成功しました";
             }
             catch (Exception ex)
