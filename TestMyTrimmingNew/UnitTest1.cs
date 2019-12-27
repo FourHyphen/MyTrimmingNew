@@ -181,6 +181,21 @@ namespace TestMyTrimmingNew
                                                              widthRatio,
                                                              heightRatio);
 
+            // Width基準でHeightを変更するよう、Width >> height となる値を設定
+            int willDecreaseWidthPixel = -100;
+            int willDecreaseHeightPixel = -5;
+            ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+
+            // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+            willDecreaseWidthPixel = -5;
+            willDecreaseHeightPixel = -100;
+            ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+        }
+
+        private void ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(AuxiliaryController ac,
+                                                                                    int mouseMoveWidthPixel,
+                                                                                    int mouseMoveHeightPixel)
+        {
             // 操作前の値を保持
             int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
             int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
@@ -188,19 +203,41 @@ namespace TestMyTrimmingNew
             int beforeChangeSizeHeight = ac.AuxiliaryHeight;
 
             // 操作
-            int willDecreaseWidthPixel = -100;
-            int willDecreaseHeightPixel = -5;    // Width基準でHeightを変更するよう、Width >> height となる値を設定
-            ac.ChangeSizeAuxiliaryLineWhereOperationBottomRight(willDecreaseWidthPixel, willDecreaseHeightPixel);
+            ac.ChangeSizeAuxiliaryLineWhereOperationBottomRight(mouseMoveWidthPixel, mouseMoveHeightPixel);
 
             // 右下の点の操作であれば、原点は変わらないのが正解
             Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);
             Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
 
             // サイズ変更確認
-            int afterChangeSizeWidth = beforeChangeSizeWidth + willDecreaseWidthPixel;
-            int afterChangeSizeHeight = beforeChangeSizeHeight + (int)((double)willDecreaseWidthPixel / ac.AuxiliaryRatio);
-            Assert.AreEqual(afterChangeSizeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(afterChangeSizeHeight, ac.AuxiliaryHeight);
+            int expectSizeWidth = beforeChangeSizeWidth + mouseMoveWidthPixel;
+            int expectSizeHeight = beforeChangeSizeHeight + (int)((double)mouseMoveWidthPixel / ac.AuxiliaryRatio);
+            Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
+        }
+
+        private void ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(AuxiliaryController ac,
+                                                                                    int mouseMoveWidthPixel,
+                                                                                    int mouseMoveHeightPixel)
+        {
+            // 操作前の値を保持
+            int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
+            int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
+            int beforeChangeSizeWidth = ac.AuxiliaryWidth;
+            int beforeChangeSizeHeight = ac.AuxiliaryHeight;
+
+            // 操作
+            ac.ChangeSizeAuxiliaryLineWhereOperationBottomRight(mouseMoveWidthPixel, mouseMoveHeightPixel);
+
+            // 右下の点の操作であれば、原点は変わらないのが正解
+            Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
+
+            // サイズ変更確認
+            int expectChangeSizeWidth = beforeChangeSizeWidth + (int)((double)mouseMoveHeightPixel * ac.AuxiliaryRatio);
+            int expectChangeSizeHeight = beforeChangeSizeHeight + mouseMoveHeightPixel;
+            Assert.AreEqual(expectChangeSizeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(expectChangeSizeHeight, ac.AuxiliaryHeight);
         }
     }
 }

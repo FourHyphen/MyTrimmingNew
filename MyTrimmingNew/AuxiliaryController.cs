@@ -166,13 +166,13 @@ namespace MyTrimmingNew
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
         {
-
-            return true;
+            int baseWidthChangeHeight = CalcAuxiliaryLineHeightWithFitRatio(willChangeWidth);
+            return (Math.Abs(baseWidthChangeHeight) > Math.Abs(willChangeHeight));
         }
 
         private int CalcAuxiliaryLineWidthWithFitRatio(int changeHeight)
         {
-            return (int)((double)changeHeight / AuxiliaryRatio);
+            return (int)((double)changeHeight * AuxiliaryRatio);
         }
 
         private int CalcAuxiliaryLineHeightWithFitRatio(int changeWidth)
