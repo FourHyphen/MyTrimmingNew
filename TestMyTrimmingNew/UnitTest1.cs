@@ -192,6 +192,27 @@ namespace TestMyTrimmingNew
             ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereBottomRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            // 原点が変わるような操作の場合(= 右下点を思いっきり左や上に引っ張る操作)、サイズを変更しない
+            // TODO: 対応する？
+            int willDecreaseWidthPixel = -1200;
+            int willDecreaseHeightPixel = -10;
+            ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+
+            willDecreaseWidthPixel = -10;
+            willDecreaseHeightPixel = -1200;
+            ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+        }
+
         private void ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(AuxiliaryController ac,
                                                                                     int mouseMoveWidthPixel,
                                                                                     int mouseMoveHeightPixel)
@@ -211,7 +232,12 @@ namespace TestMyTrimmingNew
 
             // サイズ変更確認
             int expectSizeWidth = beforeChangeSizeWidth + mouseMoveWidthPixel;
-            int expectSizeHeight = beforeChangeSizeHeight + (int)((double)mouseMoveWidthPixel / ac.AuxiliaryRatio);
+            int expectSizeHeight = (int)Math.Round((double)expectSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+            if (expectSizeWidth < beforeLeftRelativeImage || expectSizeHeight < beforeTopRelativeImage)
+            {
+                expectSizeWidth = beforeChangeSizeWidth;
+                expectSizeHeight = beforeChangeSizeHeight;
+            }
             Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
         }
@@ -234,10 +260,15 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
 
             // サイズ変更確認
-            int expectChangeSizeWidth = beforeChangeSizeWidth + (int)((double)mouseMoveHeightPixel * ac.AuxiliaryRatio);
-            int expectChangeSizeHeight = beforeChangeSizeHeight + mouseMoveHeightPixel;
-            Assert.AreEqual(expectChangeSizeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(expectChangeSizeHeight, ac.AuxiliaryHeight);
+            int expectSizeHeight = beforeChangeSizeHeight + mouseMoveHeightPixel;
+            int expectSizeWidth = (int)Math.Round((double)expectSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+            if (expectSizeWidth < beforeLeftRelativeImage || expectSizeHeight < beforeTopRelativeImage)
+            {
+                expectSizeWidth = beforeChangeSizeWidth;
+                expectSizeHeight = beforeChangeSizeHeight;
+            }
+            Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
         }
     }
 }

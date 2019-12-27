@@ -149,19 +149,25 @@ namespace MyTrimmingNew
         public void ChangeSizeAuxiliaryLineWhereOperationBottomRight(int changeWidth, int changeHeight)
         {
             // widthとheight、基準にする変更サイズに合わせてRatioの通りにサイズを変更する
-            int changeWidthFitRatio = changeWidth;
-            int changeHeightFitRatio = changeHeight;
+            int newWidth = AuxiliaryWidth + changeWidth;
+            int newHeight = AuxiliaryHeight + changeHeight;
             if (BaseWidthWhenChangeSize(changeWidth, changeHeight))
             {
-                changeHeightFitRatio = CalcAuxiliaryLineHeightWithFitRatio(changeWidth);
+                newHeight = CalcAuxiliaryLineHeightWithFitRatio(newWidth);
             }
             else
             {
-                changeWidthFitRatio = CalcAuxiliaryLineWidthWithFitRatio(changeHeight);
+                newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
             }
 
-            AuxiliaryWidth += changeWidthFitRatio;
-            AuxiliaryHeight += changeHeightFitRatio;
+            // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
+            if (newWidth < 0 || newHeight < 0)
+            {
+                return;
+            }
+
+            AuxiliaryWidth = newWidth;
+            AuxiliaryHeight = newHeight;
         }
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
@@ -170,14 +176,16 @@ namespace MyTrimmingNew
             return (Math.Abs(baseWidthChangeHeight) > Math.Abs(willChangeHeight));
         }
 
-        private int CalcAuxiliaryLineWidthWithFitRatio(int changeHeight)
+        private int CalcAuxiliaryLineWidthWithFitRatio(int newAuxiliaryHeight)
         {
-            return (int)((double)changeHeight * AuxiliaryRatio);
+            double newWidth = (double)newAuxiliaryHeight * AuxiliaryRatio;
+            return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
         }
 
-        private int CalcAuxiliaryLineHeightWithFitRatio(int changeWidth)
+        private int CalcAuxiliaryLineHeightWithFitRatio(int newAuxiliaryWidth)
         {
-            return (int)((double)changeWidth / AuxiliaryRatio);
+            double newHeight = (double)newAuxiliaryWidth / AuxiliaryRatio;
+            return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
         }
 
         internal void SetMouseDownEvent(Point pointRelatedAuxiliaryLine)
