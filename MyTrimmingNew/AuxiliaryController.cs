@@ -76,7 +76,7 @@ namespace MyTrimmingNew
 
         private int AuxiliaryHeightRatio { get; set; }
 
-        private double AuxiliaryRatio
+        public double AuxiliaryRatio
         {
             get
             {
@@ -143,6 +143,40 @@ namespace MyTrimmingNew
             }
 
             return toMoveLeft;
+        }
+
+        public void ChangeSizeAuxiliaryLineWhereOperationBottomRight(int changeWidth, int changeHeight)
+        {
+            // widthとheight、基準にする変更サイズに合わせてRatioの通りにサイズを変更する
+            int changeWidthFitRatio = changeWidth;
+            int changeHeightFitRatio = changeHeight;
+            if (BaseWidthWhenChangeSize(changeWidth, changeHeight))
+            {
+                changeHeightFitRatio = CalcAuxiliaryLineHeightWithFitRatio(changeWidth);
+            }
+            else
+            {
+                changeWidthFitRatio = CalcAuxiliaryLineWidthWithFitRatio(changeHeight);
+            }
+
+            AuxiliaryWidth += changeWidthFitRatio;
+            AuxiliaryHeight += changeHeightFitRatio;
+        }
+
+        private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
+        {
+
+            return true;
+        }
+
+        private int CalcAuxiliaryLineWidthWithFitRatio(int changeHeight)
+        {
+            return (int)((double)changeHeight / AuxiliaryRatio);
+        }
+
+        private int CalcAuxiliaryLineHeightWithFitRatio(int changeWidth)
+        {
+            return (int)((double)changeWidth / AuxiliaryRatio);
         }
     }
 }
