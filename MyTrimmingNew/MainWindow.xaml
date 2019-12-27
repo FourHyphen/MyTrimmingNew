@@ -29,6 +29,8 @@
                 <Image Name="xShowImage"
                        Cursor="Arrow"
                        HorizontalAlignment="Left"
+                       MouseDown="xShowImageMouseDown"
+                       MouseUp="xShowImageMouseUp"
                        Panel.ZIndex="0"
                        Stretch="None"
                        VerticalAlignment="Top"/>

@@ -26,6 +26,8 @@ namespace MyTrimmingNew
             InitializeComponent();
         }
 
+        #region "画像ファイルオープン"
+
         private void menuFileOpen_Click(object sender, RoutedEventArgs e)
         {
             string filePath = ImageFileOpenDialog.GetInstance().Show();
@@ -74,13 +76,24 @@ namespace MyTrimmingNew
         private void DisplayAuxiliaryLine()
         {
             _auxiliaryController = new AuxiliaryController(_imageController);
-
-            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
-            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
-            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
-            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
+            ReflectStateOfAuxiliaryLineToDisplay();
             xAuxiliaryLineLength.Content = _auxiliaryController.GetLineSizeString();
         }
+
+        #endregion
+
+        /// <summary>
+        /// 現在の補助線の状態を画面に反映する
+        /// </summary>
+        private void ReflectStateOfAuxiliaryLineToDisplay()
+        {
+            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
+            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
+            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
+            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
+        }
+
+        #region "キー操作時の処理"
 
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
         {
@@ -101,6 +114,31 @@ namespace MyTrimmingNew
             Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
         }
 
+        #endregion
+
+        #region "マウス操作時の処理"
+
+        private void xShowImageMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // MouseUp時に発行するイベントをセット
+            Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
+            //_auxiliaryController.SetMouseDownEvent(pointRelatedAuxiliaryLine);
+        }
+
+        private void xShowImageMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            // MouseDown時にセットしたイベントを発行
+            Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
+            //_auxiliaryController.PublishMouseDownEvent(pointRelatedAuxiliaryLine);
+
+            // イベント発行結果を画面に反映
+            ReflectStateOfAuxiliaryLineToDisplay();
+        }
+
+        #endregion
+
+        #region "画像ファイル保存 TODO: 実装"
+
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -114,5 +152,7 @@ namespace MyTrimmingNew
                 throw ex;
             }
         }
+
+        #endregion
     }
 }

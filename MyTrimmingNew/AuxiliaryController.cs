@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyTrimmingNew
 {
@@ -177,6 +178,16 @@ namespace MyTrimmingNew
         private int CalcAuxiliaryLineHeightWithFitRatio(int changeWidth)
         {
             return (int)((double)changeWidth / AuxiliaryRatio);
+        }
+
+        internal void SetMouseDownEvent(Point pointRelatedAuxiliaryLine)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void PublishMouseDownEvent(Point pointRelatedAuxiliaryLine)
+        {
+            throw new NotImplementedException();
         }
     }
 }
