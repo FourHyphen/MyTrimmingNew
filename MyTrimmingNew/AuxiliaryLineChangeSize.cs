@@ -108,10 +108,24 @@ namespace MyTrimmingNew
                 newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
             }
 
+            int maxWidth = AC.DisplayImageWidth - AC.AuxiliaryLeftRelativeImage;
+            int maxHeight = AC.DisplayImageHeight - AC.AuxiliaryTopRelativeImage;
+
             // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
             if (newWidth < 0 || newHeight < 0)
             {
                 return;
+            }
+            // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
+            else if (newWidth > maxWidth)
+            {
+                newWidth = maxWidth;
+                newHeight = CalcAuxiliaryLineHeightWithFitRatio(newWidth);
+            }
+            else if(newHeight > maxHeight)
+            {
+                newHeight = maxHeight;
+                newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
             }
 
             AC.AuxiliaryWidth = newWidth;

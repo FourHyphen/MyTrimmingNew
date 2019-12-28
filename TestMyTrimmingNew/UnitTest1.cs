@@ -229,6 +229,32 @@ namespace TestMyTrimmingNew
                                                     false);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeBottomRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
+            int willDecreaseWidthPixel = -100;
+            int willDecreaseHeightPixel = -5;
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willDecreaseWidthPixel,
+                                                    willDecreaseHeightPixel,
+                                                    true);
+
+            int willIncreaseWidthPixel = 200;
+            int willIncreaseHeightPixel = 10;
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willIncreaseWidthPixel,
+                                                    willIncreaseHeightPixel,
+                                                    true);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereBottomRight(AuxiliaryController ac,
                                                              int mouseMoveWidthPixel,
                                                              int mouseMoveHeightPixel,
@@ -268,9 +294,25 @@ namespace TestMyTrimmingNew
 
             if (expectSizeWidth < beforeLeftRelativeImage || expectSizeHeight < beforeTopRelativeImage)
             {
+                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
                 expectSizeWidth = beforeChangeSizeWidth;
                 expectSizeHeight = beforeChangeSizeHeight;
             }
+            else if(expectSizeWidth > ac.DisplayImageWidth || expectSizeHeight > ac.DisplayImageHeight)
+            {
+                // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
+                if (isWidthMuchLongerThanHeight)
+                {
+                    expectSizeWidth = ac.DisplayImageWidth;
+                    expectSizeHeight = (int)Math.Round((double)expectSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                }
+                else
+                {
+                    expectSizeHeight = ac.DisplayImageHeight;
+                    expectSizeWidth = (int)Math.Round((double)expectSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                }
+            }
+
             Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
         }
