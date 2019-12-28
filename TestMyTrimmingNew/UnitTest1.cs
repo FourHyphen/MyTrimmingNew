@@ -188,12 +188,18 @@ namespace TestMyTrimmingNew
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
             int willDecreaseWidthPixel = -100;
             int willDecreaseHeightPixel = -5;
-            ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willDecreaseWidthPixel,
+                                                    willDecreaseHeightPixel,
+                                                    true);
 
             // Height基準でWidthを変更するよう、Height >> Width となる値を設定
             willDecreaseWidthPixel = -5;
             willDecreaseHeightPixel = -100;
-            ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willDecreaseWidthPixel,
+                                                    willDecreaseHeightPixel,
+                                                    false);
         }
 
         [TestMethod]
@@ -210,16 +216,23 @@ namespace TestMyTrimmingNew
             // TODO: 対応する？
             int willDecreaseWidthPixel = -1200;
             int willDecreaseHeightPixel = -10;
-            ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willDecreaseWidthPixel,
+                                                    willDecreaseHeightPixel,
+                                                    true);
 
             willDecreaseWidthPixel = -10;
             willDecreaseHeightPixel = -1200;
-            ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(ac, willDecreaseWidthPixel, willDecreaseHeightPixel);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
+                                                    willDecreaseWidthPixel,
+                                                    willDecreaseHeightPixel,
+                                                    false);
         }
 
-        private void ChangeAuxiliaryLineSizeIfWidthLongerThanHeightWhereBottomRight(AuxiliaryController ac,
-                                                                                    int mouseMoveWidthPixel,
-                                                                                    int mouseMoveHeightPixel)
+        private void ChangeAuxiliaryLineSizeWhereBottomRight(AuxiliaryController ac,
+                                                             int mouseMoveWidthPixel,
+                                                             int mouseMoveHeightPixel,
+                                                             bool isWidthMuchLongerThanHeight)
         {
             // 操作前の値を保持
             int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
@@ -240,42 +253,19 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
 
             // サイズ変更確認
-            int expectSizeWidth = beforeChangeSizeWidth + mouseMoveWidthPixel;
-            int expectSizeHeight = (int)Math.Round((double)expectSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-            if (expectSizeWidth < beforeLeftRelativeImage || expectSizeHeight < beforeTopRelativeImage)
+            int expectSizeWidth;
+            int expectSizeHeight;
+            if (isWidthMuchLongerThanHeight)
             {
-                expectSizeWidth = beforeChangeSizeWidth;
-                expectSizeHeight = beforeChangeSizeHeight;
+                expectSizeWidth = beforeChangeSizeWidth + mouseMoveWidthPixel;
+                expectSizeHeight = (int)Math.Round((double)expectSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
             }
-            Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
-        }
+            else
+            {
+                expectSizeHeight = beforeChangeSizeHeight + mouseMoveHeightPixel;
+                expectSizeWidth = (int)Math.Round((double)expectSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+            }
 
-        private void ChangeAuxiliaryLineSizeIfHeightLongerThanWidthWhereBottomRight(AuxiliaryController ac,
-                                                                                    int mouseMoveWidthPixel,
-                                                                                    int mouseMoveHeightPixel)
-        {
-            // 操作前の値を保持
-            int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
-            int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
-            int beforeChangeSizeWidth = ac.AuxiliaryWidth;
-            int beforeChangeSizeHeight = ac.AuxiliaryHeight;
-
-            // 操作
-            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseMoveWidthPixel;
-            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
-            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
-            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
-            ac.SetEvent(mouseDown);
-            ac.PublishEvent(mouseUp);
-
-            // 右下の点の操作であれば、原点は変わらないのが正解
-            Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
-
-            // サイズ変更確認
-            int expectSizeHeight = beforeChangeSizeHeight + mouseMoveHeightPixel;
-            int expectSizeWidth = (int)Math.Round((double)expectSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
             if (expectSizeWidth < beforeLeftRelativeImage || expectSizeHeight < beforeTopRelativeImage)
             {
                 expectSizeWidth = beforeChangeSizeWidth;
