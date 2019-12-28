@@ -157,98 +157,25 @@ namespace MyTrimmingNew
             return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
         }
 
-        private enum KindMouseDownPoint
+        private IAuxiliaryLineOperation AuxiliaryLineOperation { get; set; }
+
+        public void SetEvent()
         {
-            AuxiliaryLineLeftTop,
-            AuxiliaryLineRightTop,
-            AuxiliaryLineRightBottom,
-            AuxiliaryLineLeftBottom,
-            AuxiliaryLineInside,
-            Else
+            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this);
         }
 
-        private KindMouseDownPoint MouseDownPoint { get; set; }
-
-        private IAuxiliaryLineKeyOperation AuxiliaryLineKeyOperation { get; set; }
-
-        //private IAuxiliary AuxiliaryLineMouseOperation { get; set; }
-
-        public void SetEventKeyOperation(Keys.EnableKeys key)
+        public void SetEvent(Point pointRelatedAuxiliaryLine)
         {
-            AuxiliaryLineKeyOperation = AuxiliaryLineKeyOperationFactory.Create(this, key);
+            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this, pointRelatedAuxiliaryLine);
         }
 
-        public void SetEventMouseOperation(Point pointRelatedAuxiliaryLine)
+        public void PublishEvent(object operation)
         {
-            // マウス押下場所によって補助線の操作内容を決定
-            MouseDownPoint = GetKindMouseDownPoint(pointRelatedAuxiliaryLine);
-
-            // TODO: MouseUp時にPublishする内容をセット
-            //  -> 四隅でのサイズ変更と中央選択でのマウスでの矩形移動、の両方を扱いたい！
-            //      -> そしてこれはMouseDownと深い関わりがあるのでは？
-            //         MouseDownに変更があったとき、どこまでその余波が出る？
-            //AuxiliaryLineMoveOrChangeSizeMethod = Factory(MouseDownPoint);
-        }
-
-        private KindMouseDownPoint GetKindMouseDownPoint(Point mouse)
-        {
-            int mouseX = (int)mouse.X;
-            int mouseY = (int)mouse.Y;
-            bool isInRangeLeft = IsInRangeMouseDownPoint(mouseX, 0);
-            bool isInRangeRight = IsInRangeMouseDownPoint(mouseX, AuxiliaryWidth);
-            bool isInRangeTop = IsInRangeMouseDownPoint(mouseY, 0);
-            bool isInRangeBottom = IsInRangeMouseDownPoint(mouseY, AuxiliaryHeight);
-
-            // 補助線の4隅の点のいずれか
-            if (isInRangeLeft)
+            if (AuxiliaryLineOperation == null)
             {
-                if (isInRangeTop)
-                {
-                    return KindMouseDownPoint.AuxiliaryLineLeftTop;
-                }
-                else if (isInRangeBottom)
-                {
-                    return KindMouseDownPoint.AuxiliaryLineLeftBottom;
-                }
+                return;
             }
-            else if (isInRangeRight)
-            {
-                if (isInRangeTop)
-                {
-                    return KindMouseDownPoint.AuxiliaryLineRightTop;
-                }
-                else if (isInRangeBottom)
-                {
-                    return KindMouseDownPoint.AuxiliaryLineRightBottom;
-                }
-            }
-
-            // 4隅の点ではないが、補助線の内側
-            if ((0 < mouseX && mouseX < AuxiliaryWidth) &&
-                (0 < mouseY && mouseY < AuxiliaryHeight))
-            {
-                return KindMouseDownPoint.AuxiliaryLineInside;
-            }
-
-            return KindMouseDownPoint.Else;
-        }
-
-        private bool IsInRangeMouseDownPoint(int mouseDownPoint, int basePoint)
-        {
-            int minusBasePoint = basePoint - Constant.MouseDownPointMargin;
-            int plusBasePoint = basePoint + Constant.MouseDownPointMargin;
-            return (minusBasePoint < mouseDownPoint && mouseDownPoint < plusBasePoint);
-        }
-
-        public void PublishEventKeyOperation()
-        {
-            AuxiliaryLineKeyOperation.Execute();
-        }
-
-        public void PublishEventMouseOperation(Point pointRelatedAuxiliaryLine)
-        {
-            //AuxiliaryLineMoveOrChangeSizeMethod.Execute();
-            throw new NotImplementedException();
+            AuxiliaryLineOperation.Execute(operation);
         }
     }
 }

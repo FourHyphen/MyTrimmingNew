@@ -103,8 +103,8 @@ namespace TestMyTrimmingNew
                                                              widthRatio,
                                                              heightRatio);
 
-            ac.SetEventKeyOperation(Keys.EnableKeys.Up);
-            ac.PublishEventKeyOperation();
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Up);
             Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
         }
 
@@ -119,17 +119,18 @@ namespace TestMyTrimmingNew
                                                              heightRatio);
 
             int enableDownRange = ac.DisplayImageHeight - ac.AuxiliaryHeight;
-            ac.SetEventKeyOperation(Keys.EnableKeys.Down);
+            Keys.EnableKeys down = Keys.EnableKeys.Down;
+            ac.SetEvent();
             for (int i = 1; i < enableDownRange; i++)
             {
-                ac.PublishEventKeyOperation();
+                ac.PublishEvent(down);
                 Assert.AreEqual(i, ac.AuxiliaryTopRelativeImage);
             }
 
             int maxDownRange = enableDownRange - _auxiliaryLineThickness;
             Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
 
-            ac.PublishEventKeyOperation();
+            ac.PublishEvent(down);
             Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
         }
 
@@ -143,8 +144,8 @@ namespace TestMyTrimmingNew
                                                              widthRatio,
                                                              heightRatio);
 
-            ac.SetEventKeyOperation(Keys.EnableKeys.Left);
-            ac.PublishEventKeyOperation();
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Left);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
         }
 
@@ -159,17 +160,18 @@ namespace TestMyTrimmingNew
                                                              heightRatio);
 
             int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryWidth;
-            ac.SetEventKeyOperation(Keys.EnableKeys.Right);
+            Keys.EnableKeys right = Keys.EnableKeys.Right;
+            ac.SetEvent();
             for (int i = 1; i < enableRightRange; i++)
             {
-                ac.PublishEventKeyOperation();
+                ac.PublishEvent(right);
                 // 原点を右に移動させるので、原点位置=Leftと比較する
                 Assert.AreEqual(i, ac.AuxiliaryLeftRelativeImage);
             }
 
             Assert.AreEqual(enableRightRange, ac.AuxiliaryLeftRelativeImage);
 
-            ac.PublishEventKeyOperation();
+            ac.PublishEvent(right);
             Assert.AreEqual(enableRightRange, ac.AuxiliaryLeftRelativeImage);
         }
 

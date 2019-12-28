@@ -6,33 +6,31 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew
 {
-    class AuxiliaryLineMove : IAuxiliaryLineKeyOperation
+    class AuxiliaryLineMove : IAuxiliaryLineOperation
     {
         private AuxiliaryController AC { get; set; }
 
-        private Keys.EnableKeys Key { get; set; }
-
-        public AuxiliaryLineMove(AuxiliaryController ac, Keys.EnableKeys key)
+        public AuxiliaryLineMove(AuxiliaryController ac)
         {
             AC = ac;
-            Key = key;
         }
 
-        public void Execute()
+        public void Execute(object object_key)
         {
-            if (Key == Keys.EnableKeys.Up)
+            Keys.EnableKeys key = (Keys.EnableKeys)object_key;
+            if (key == Keys.EnableKeys.Up)
             {
                 AC.AuxiliaryTopRelativeImage--;
             }
-            else if (Key == Keys.EnableKeys.Down)
+            else if (key == Keys.EnableKeys.Down)
             {
                 AC.AuxiliaryTopRelativeImage++;
             }
-            else if (Key == Keys.EnableKeys.Right)
+            else if (key == Keys.EnableKeys.Right)
             {
                 AC.AuxiliaryLeftRelativeImage++;
             }
-            else if (Key == Keys.EnableKeys.Left)
+            else if (key == Keys.EnableKeys.Left)
             {
                 AC.AuxiliaryLeftRelativeImage--;
             }

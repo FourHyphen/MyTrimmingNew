@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew
 {
-    interface IAuxiliaryLineKeyOperation
+    interface IAuxiliaryLineOperation
     {
-        void Execute();
+        void Execute(object operation);
     }
 }

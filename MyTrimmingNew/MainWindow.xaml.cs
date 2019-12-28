@@ -88,8 +88,8 @@ namespace MyTrimmingNew
         {
             if (Keys.IsKeyCursor(e.Key))
             {
-                SetAuxiliaryLineEvent(Keys.ToEnableKeys(e.Key));
-                PublishAuxiliaryLineEvent();
+                SetAuxiliaryLineEvent();
+                PublishAuxiliaryLineEvent(Keys.ToEnableKeys(e.Key));
             }
         }
 
@@ -132,27 +132,19 @@ namespace MyTrimmingNew
 
         #region "内部処理: 補助線操作処理"
 
-        private void SetAuxiliaryLineEvent(Keys.EnableKeys key)
+        private void SetAuxiliaryLineEvent()
         {
-            _auxiliaryController.SetEventKeyOperation(key);
+            _auxiliaryController.SetEvent();
         }
 
         private void SetAuxiliaryLineEvent(Point mousePoint)
         {
-            _auxiliaryController.SetEventMouseOperation(mousePoint);
+            _auxiliaryController.SetEvent(mousePoint);
         }
 
-        private void PublishAuxiliaryLineEvent()
+        private void PublishAuxiliaryLineEvent(object operation)
         {
-            _auxiliaryController.PublishEventKeyOperation();
-
-            // イベント発行結果を画面に反映
-            ReflectStateOfAuxiliaryLineToDisplay();
-        }
-
-        private void PublishAuxiliaryLineEvent(Point mouseRelatedAuxiliaryLine)
-        {
-            //_auxiliaryController.PublishEventMouseOperation(mouseRelatedAuxiliaryLine);
+            _auxiliaryController.PublishEvent(operation);
 
             // イベント発行結果を画面に反映
             ReflectStateOfAuxiliaryLineToDisplay();
