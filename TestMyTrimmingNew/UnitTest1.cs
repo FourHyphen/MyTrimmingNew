@@ -228,7 +228,12 @@ namespace TestMyTrimmingNew
             int beforeChangeSizeHeight = ac.AuxiliaryHeight;
 
             // 操作
-            ac.ChangeSizeAuxiliaryLineWhereOperationBottomRight(mouseMoveWidthPixel, mouseMoveHeightPixel);
+            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseMoveWidthPixel;
+            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
+            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
+            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
+            ac.SetEvent(mouseDown);
+            ac.PublishEvent(mouseUp);
 
             // 右下の点の操作であれば、原点は変わらないのが正解
             Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);
@@ -257,7 +262,12 @@ namespace TestMyTrimmingNew
             int beforeChangeSizeHeight = ac.AuxiliaryHeight;
 
             // 操作
-            ac.ChangeSizeAuxiliaryLineWhereOperationBottomRight(mouseMoveWidthPixel, mouseMoveHeightPixel);
+            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseMoveWidthPixel;
+            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
+            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
+            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
+            ac.SetEvent(mouseDown);
+            ac.PublishEvent(mouseUp);
 
             // 右下の点の操作であれば、原点は変わらないのが正解
             Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);

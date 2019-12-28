@@ -83,6 +83,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AuxiliaryController.cs" />
+    <Compile Include="AuxiliaryLineChangeSize.cs" />
     <Compile Include="AuxiliaryLineOperationFactory.cs" />
     <Compile Include="AuxiliaryLineMove.cs" />
     <Compile Include="common\Image.cs" />

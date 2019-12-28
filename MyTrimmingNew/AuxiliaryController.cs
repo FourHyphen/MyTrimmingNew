@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace MyTrimmingNew
 {
+    /// <summary>
+    /// TODO: ちょっといろいろPublicにし過ぎでは？
+    /// </summary>
     public class AuxiliaryController
     {
         public AuxiliaryController(ImageController ic,
@@ -68,9 +71,9 @@ namespace MyTrimmingNew
 
         private int AuxiliaryLineThickness { get; set; }
 
-        public int AuxiliaryWidth { get; private set; }
+        public int AuxiliaryWidth { get; set; }
 
-        public int AuxiliaryHeight { get; private set; }
+        public int AuxiliaryHeight { get; set; }
 
         public double AuxiliaryRatio { get; private set; }
 
@@ -115,48 +118,6 @@ namespace MyTrimmingNew
             return toMoveLeft;
         }
 
-        public void ChangeSizeAuxiliaryLineWhereOperationBottomRight(int changeWidth, int changeHeight)
-        {
-            // widthとheight、基準にする変更サイズに合わせてRatioの通りにサイズを変更する
-            int newWidth = AuxiliaryWidth + changeWidth;
-            int newHeight = AuxiliaryHeight + changeHeight;
-            if (BaseWidthWhenChangeSize(changeWidth, changeHeight))
-            {
-                newHeight = CalcAuxiliaryLineHeightWithFitRatio(newWidth);
-            }
-            else
-            {
-                newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
-            }
-
-            // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if (newWidth < 0 || newHeight < 0)
-            {
-                return;
-            }
-
-            AuxiliaryWidth = newWidth;
-            AuxiliaryHeight = newHeight;
-        }
-
-        private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
-        {
-            int baseWidthChangeHeight = CalcAuxiliaryLineHeightWithFitRatio(willChangeWidth);
-            return (Math.Abs(baseWidthChangeHeight) > Math.Abs(willChangeHeight));
-        }
-
-        private int CalcAuxiliaryLineWidthWithFitRatio(int newAuxiliaryHeight)
-        {
-            double newWidth = (double)newAuxiliaryHeight * AuxiliaryRatio;
-            return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
-        }
-
-        private int CalcAuxiliaryLineHeightWithFitRatio(int newAuxiliaryWidth)
-        {
-            double newHeight = (double)newAuxiliaryWidth / AuxiliaryRatio;
-            return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
-        }
-
         private IAuxiliaryLineOperation AuxiliaryLineOperation { get; set; }
 
         public void SetEvent()
@@ -164,9 +125,9 @@ namespace MyTrimmingNew
             AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this);
         }
 
-        public void SetEvent(Point pointRelatedAuxiliaryLine)
+        public void SetEvent(Point coordinateRelatedAuxiliaryLine)
         {
-            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this, pointRelatedAuxiliaryLine);
+            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this, coordinateRelatedAuxiliaryLine);
         }
 
         public void PublishEvent(object operation)
