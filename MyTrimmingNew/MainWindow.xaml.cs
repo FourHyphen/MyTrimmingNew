@@ -26,7 +26,7 @@ namespace MyTrimmingNew
             InitializeComponent();
         }
 
-        #region "画像ファイルオープン"
+        #region "ユーザー操作時処理: 画像ファイルオープン"
 
         private void menuFileOpen_Click(object sender, RoutedEventArgs e)
         {
@@ -82,62 +82,37 @@ namespace MyTrimmingNew
 
         #endregion
 
-        /// <summary>
-        /// 現在の補助線の状態を画面に反映する
-        /// </summary>
-        private void ReflectStateOfAuxiliaryLineToDisplay()
-        {
-            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
-            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
-            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
-            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
-        }
-
-        #region "キー操作時の処理"
+        #region "ユーザー操作時処理: キー操作時の処理"
 
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
         {
             if (Keys.IsKeyCursor(e.Key))
             {
-                MoveAuxiliaryLine(Keys.ToEnableKeys(e.Key)); ;
+                SetAuxiliaryLineEvent(Keys.ToEnableKeys(e.Key));
+                PublishAuxiliaryLineEvent();
             }
-        }
-
-        /// <summary>
-        /// 補助線をキー入力内容の通りに移動する
-        /// </summary>
-        /// <param name="key"></param>
-        private void MoveAuxiliaryLine(Keys.EnableKeys key)
-        {
-            _auxiliaryController.MoveAuxiliaryLine(key);
-            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
-            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
         }
 
         #endregion
 
-        #region "マウス操作時の処理"
+        #region "ユーザー操作時処理: マウス操作時の処理"
 
         private void xShowImageMouseDown(object sender, MouseButtonEventArgs e)
         {
             // MouseUp時に発行するイベントをセット
             Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            _auxiliaryController.SetMouseDownEvent(pointRelatedAuxiliaryLine);
+            SetAuxiliaryLineEvent(pointRelatedAuxiliaryLine);
         }
 
         private void xShowImageMouseUp(object sender, MouseButtonEventArgs e)
         {
-            // MouseDown時にセットしたイベントを発行
             Point pointRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            _auxiliaryController.PublishMouseDownEvent(pointRelatedAuxiliaryLine);
-
-            // イベント発行結果を画面に反映
-            ReflectStateOfAuxiliaryLineToDisplay();
+            PublishAuxiliaryLineEvent(pointRelatedAuxiliaryLine);
         }
 
         #endregion
 
-        #region "画像ファイル保存 TODO: 実装"
+        #region "ユーザー操作時処理: 画像ファイル保存 TODO: 実装"
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
@@ -151,6 +126,47 @@ namespace MyTrimmingNew
                 // TODO: 画像保存失敗時の例外処理
                 throw ex;
             }
+        }
+
+        #endregion
+
+        #region "内部処理: 補助線操作処理"
+
+        private void SetAuxiliaryLineEvent(Keys.EnableKeys key)
+        {
+            _auxiliaryController.SetEventKeyOperation(key);
+        }
+
+        private void SetAuxiliaryLineEvent(Point mousePoint)
+        {
+            _auxiliaryController.SetEventMouseOperation(mousePoint);
+        }
+
+        private void PublishAuxiliaryLineEvent()
+        {
+            _auxiliaryController.PublishEventKeyOperation();
+
+            // イベント発行結果を画面に反映
+            ReflectStateOfAuxiliaryLineToDisplay();
+        }
+
+        private void PublishAuxiliaryLineEvent(Point mouseRelatedAuxiliaryLine)
+        {
+            //_auxiliaryController.PublishEventMouseOperation(mouseRelatedAuxiliaryLine);
+
+            // イベント発行結果を画面に反映
+            ReflectStateOfAuxiliaryLineToDisplay();
+        }
+
+        /// <summary>
+        /// 現在の補助線の状態を画面に反映する
+        /// </summary>
+        private void ReflectStateOfAuxiliaryLineToDisplay()
+        {
+            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
+            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
+            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
+            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
         }
 
         #endregion

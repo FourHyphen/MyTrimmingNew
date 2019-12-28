@@ -14,8 +14,7 @@ namespace MyTrimmingNew
                                    int heightRatio = 9,
                                    int auxiliaryLineThickness = 1)
         {
-            AuxiliaryWidthRatio = widthRatio;
-            AuxiliaryHeightRatio = heightRatio;
+            AuxiliaryRatio = (double)widthRatio / (double)heightRatio;
 
             if (ic.DisplayImageWidth > ic.DisplayImageHeight)
             {
@@ -47,7 +46,7 @@ namespace MyTrimmingNew
             {
                 return _auxiliaryLeftRelativeImage;
             }
-            private set
+            set
             {
                 _auxiliaryLeftRelativeImage = FitInRangeAuxiliaryLeftRelativeImage(value);
             }
@@ -61,7 +60,7 @@ namespace MyTrimmingNew
             {
                 return _auxiliaryTopRelativeImage;
             }
-            private set
+            set
             {
                 _auxiliaryTopRelativeImage = FitInRangeAuxiliaryTopRelativeImage(value);
             }
@@ -73,17 +72,7 @@ namespace MyTrimmingNew
 
         public int AuxiliaryHeight { get; private set; }
 
-        private int AuxiliaryWidthRatio { get; set; }
-
-        private int AuxiliaryHeightRatio { get; set; }
-
-        public double AuxiliaryRatio
-        {
-            get
-            {
-                return (double)AuxiliaryWidthRatio / (double)AuxiliaryHeightRatio;
-            }
-        }
+        public double AuxiliaryRatio { get; private set; }
 
         public int DisplayImageWidth { get; private set; }
 
@@ -92,26 +81,6 @@ namespace MyTrimmingNew
         public string GetLineSizeString()
         {
             return "矩形: 横" + AuxiliaryWidth.ToString() + "x縦" + AuxiliaryHeight.ToString();
-        }
-
-        public void MoveAuxiliaryLine(Keys.EnableKeys key)
-        {
-            if (key == Keys.EnableKeys.Up)
-            {
-                AuxiliaryTopRelativeImage--;
-            }
-            else if (key == Keys.EnableKeys.Down)
-            {
-                AuxiliaryTopRelativeImage++;
-            }
-            else if (key == Keys.EnableKeys.Right)
-            {
-                AuxiliaryLeftRelativeImage++;
-            }
-            else if (key == Keys.EnableKeys.Left)
-            {
-                AuxiliaryLeftRelativeImage--;
-            }
         }
 
         private int FitInRangeAuxiliaryTopRelativeImage(int toMoveTop)
@@ -200,19 +169,25 @@ namespace MyTrimmingNew
 
         private KindMouseDownPoint MouseDownPoint { get; set; }
 
-        internal void SetMouseDownEvent(Point pointRelatedAuxiliaryLine)
+        private IAuxiliaryLineKeyOperation AuxiliaryLineKeyOperation { get; set; }
+
+        //private IAuxiliary AuxiliaryLineMouseOperation { get; set; }
+
+        public void SetEventKeyOperation(Keys.EnableKeys key)
+        {
+            AuxiliaryLineKeyOperation = AuxiliaryLineKeyOperationFactory.Create(this, key);
+        }
+
+        public void SetEventMouseOperation(Point pointRelatedAuxiliaryLine)
         {
             // マウス押下場所によって補助線の操作内容を決定
             MouseDownPoint = GetKindMouseDownPoint(pointRelatedAuxiliaryLine);
 
-            if (MouseDownPoint == KindMouseDownPoint.AuxiliaryLineRightBottom)
-            {
-                // TODO: MouseUp時にPublishする内容をセット
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            // TODO: MouseUp時にPublishする内容をセット
+            //  -> 四隅でのサイズ変更と中央選択でのマウスでの矩形移動、の両方を扱いたい！
+            //      -> そしてこれはMouseDownと深い関わりがあるのでは？
+            //         MouseDownに変更があったとき、どこまでその余波が出る？
+            //AuxiliaryLineMoveOrChangeSizeMethod = Factory(MouseDownPoint);
         }
 
         private KindMouseDownPoint GetKindMouseDownPoint(Point mouse)
@@ -265,8 +240,14 @@ namespace MyTrimmingNew
             return (minusBasePoint < mouseDownPoint && mouseDownPoint < plusBasePoint);
         }
 
-        internal void PublishMouseDownEvent(Point pointRelatedAuxiliaryLine)
+        public void PublishEventKeyOperation()
         {
+            AuxiliaryLineKeyOperation.Execute();
+        }
+
+        public void PublishEventMouseOperation(Point pointRelatedAuxiliaryLine)
+        {
+            //AuxiliaryLineMoveOrChangeSizeMethod.Execute();
             throw new NotImplementedException();
         }
     }
