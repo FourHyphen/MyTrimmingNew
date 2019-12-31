@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyTrimmingNew
 {
@@ -15,9 +16,20 @@ namespace MyTrimmingNew
             AC = ac;
         }
 
-        public void Execute(object object_key)
+        public void Execute(object o)
         {
-            Keys.EnableKeys key = (Keys.EnableKeys)object_key;
+            if (o is Keys.EnableKeys)
+            {
+                MoveByKey((Keys.EnableKeys)o);
+            }
+            else if(o is Point)
+            {
+                MoveByMouse((Point)o);
+            }
+        }
+
+        private void MoveByKey(Keys.EnableKeys key)
+        {
             if (key == Keys.EnableKeys.Up)
             {
                 AC.AuxiliaryTopRelativeImage--;
@@ -34,6 +46,11 @@ namespace MyTrimmingNew
             {
                 AC.AuxiliaryLeftRelativeImage--;
             }
+        }
+
+        private void MoveByMouse(Point p)
+        {
+
         }
     }
 }

@@ -11,15 +11,22 @@ namespace MyTrimmingNew
     {
         public IAuxiliaryLineOperation Create(AuxiliaryController ac)
         {
-            // TODO: いずれMouseでのMove操作も必要になる
-            //        -> そのときでも終点だけ必要だからこのインタフェースでも大丈夫なのか...？
             return new AuxiliaryLineMove(ac);
         }
 
         public IAuxiliaryLineOperation Create(AuxiliaryController ac, 
                                               Point coordinateRelatedAuxiliaryLine)
         {
-            return new AuxiliaryLineChangeSize(ac, coordinateRelatedAuxiliaryLine);
+            Mouse.KindMouseDownAuxiliaryLineArea area = Mouse.GetKindMouseDownAuxiliaryLineArea(ac,
+                                                                                                coordinateRelatedAuxiliaryLine);
+            if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
+            {
+                return new AuxiliaryLineMove(ac);
+            }
+            else
+            {
+                return new AuxiliaryLineChangeSize(ac, coordinateRelatedAuxiliaryLine);
+            }
         }
     }
 }

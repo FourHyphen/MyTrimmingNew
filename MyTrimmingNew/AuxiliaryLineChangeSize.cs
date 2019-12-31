@@ -9,77 +9,17 @@ namespace MyTrimmingNew
 {
     class AuxiliaryLineChangeSize : IAuxiliaryLineOperation
     {
-        private enum KindMouseDownArea
-        {
-            AuxiliaryLineLeftTop,
-            AuxiliaryLineRightTop,
-            AuxiliaryLineRightBottom,
-            AuxiliaryLineLeftBottom,
-            AuxiliaryLineInside,
-            Else
-        }
-
         private AuxiliaryController AC { get; set; }
 
         private Point MouseDownCoordinate { get; set; }
 
-        private KindMouseDownArea MouseDownArea { get; set; }
+        private Mouse.KindMouseDownAuxiliaryLineArea MouseDownArea { get; set; }
 
         public AuxiliaryLineChangeSize(AuxiliaryController ac, Point mouseDownCoordinate)
         {
             AC = ac;
             MouseDownCoordinate = mouseDownCoordinate;
-            MouseDownArea = GetKindMouseDownArea();
-        }
-
-        private KindMouseDownArea GetKindMouseDownArea()
-        {
-            int mouseX = (int)MouseDownCoordinate.X;
-            int mouseY = (int)MouseDownCoordinate.Y;
-            bool isInRangeLeft = IsInRangeMouseDownArea(mouseX, 0);
-            bool isInRangeRight = IsInRangeMouseDownArea(mouseX, AC.AuxiliaryWidth);
-            bool isInRangeTop = IsInRangeMouseDownArea(mouseY, 0);
-            bool isInRangeBottom = IsInRangeMouseDownArea(mouseY, AC.AuxiliaryHeight);
-
-            // 補助線の4隅の点のいずれか
-            if (isInRangeLeft)
-            {
-                if (isInRangeTop)
-                {
-                    return KindMouseDownArea.AuxiliaryLineLeftTop;
-                }
-                else if (isInRangeBottom)
-                {
-                    return KindMouseDownArea.AuxiliaryLineLeftBottom;
-                }
-            }
-            else if (isInRangeRight)
-            {
-                if (isInRangeTop)
-                {
-                    return KindMouseDownArea.AuxiliaryLineRightTop;
-                }
-                else if (isInRangeBottom)
-                {
-                    return KindMouseDownArea.AuxiliaryLineRightBottom;
-                }
-            }
-
-            // 4隅の点ではないが、補助線の内側
-            if ((0 < mouseX && mouseX < AC.AuxiliaryWidth) &&
-                (0 < mouseY && mouseY < AC.AuxiliaryHeight))
-            {
-                return KindMouseDownArea.AuxiliaryLineInside;
-            }
-
-            return KindMouseDownArea.Else;
-        }
-
-        private bool IsInRangeMouseDownArea(int mouseDownCoordinate, int baseCoordinate)
-        {
-            int minusBasePoint = baseCoordinate - Constant.MouseDownPointMargin;
-            int plusBasePoint = baseCoordinate + Constant.MouseDownPointMargin;
-            return (minusBasePoint < mouseDownCoordinate && mouseDownCoordinate < plusBasePoint);
+            MouseDownArea = Mouse.GetKindMouseDownAuxiliaryLineArea(AC, MouseDownCoordinate);
         }
 
         public void Execute(object operation)
@@ -88,7 +28,7 @@ namespace MyTrimmingNew
             int mouseMoveX = (int)mouseUpCoordinate.X - (int)MouseDownCoordinate.X;
             int mouseMoveY = (int)mouseUpCoordinate.Y - (int)MouseDownCoordinate.Y;
 
-            if (MouseDownArea == KindMouseDownArea.AuxiliaryLineRightBottom)
+            if (MouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.RightBottom)
             {
                 ExecuteWhereOperationBottomRight(mouseMoveX, mouseMoveY);
             }
