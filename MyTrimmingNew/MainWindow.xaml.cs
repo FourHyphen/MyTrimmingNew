@@ -19,6 +19,9 @@ namespace MyTrimmingNew
     public partial class MainWindow : Window
     {
         private ImageController _imageController;
+        private ShowImageObserver _showImageObserver;
+        private ShowImageLengthObserver _showImageLength;
+
         private AuxiliaryController _auxiliaryController;
         private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
         private AuxiliaryLineLengthObserver _auxiliaryLineLength;
@@ -50,11 +53,6 @@ namespace MyTrimmingNew
             DisplayAuxiliaryLine();
         }
 
-        /// <summary>
-        /// TODO: 実装をプログラミングしてないか？
-        ///        -> 補助線と同じようにObserver適用すればContentとかの描画をここに書かずに済む
-        /// </summary>
-        /// <param name="imageFilePath"></param>
         private void DisplayImageInfo(string imageFilePath)
         {
             try
@@ -62,8 +60,8 @@ namespace MyTrimmingNew
                 _imageController = new ImageController(imageFilePath,
                                                        (int)Width - Constant.FixCanvasWidth,
                                                        (int)Height - Constant.FixCanvasHeight);
-                xShowImage.Source = _imageController.GetImage();
-                xOriginalImageLength.Content = _imageController.GetImageSizeString();
+                _showImageObserver = new ShowImageObserver(xShowImage, _imageController);
+                _showImageLength = new ShowImageLengthObserver(xOriginalImageLength, _imageController);
             }
             catch (Exception ex)
             {
@@ -72,7 +70,6 @@ namespace MyTrimmingNew
         }
 
         /// <summary>
-        /// 切り抜き補助矩形初期化
         /// TODO: 比率を16:9固定ではなく4:3とかの任意比率に対応する
         /// TODO: 比率の初期値どうする？config.ini管理？
         /// </summary>

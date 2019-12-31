@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace MyTrimmingNew
 {
-    public class ImageController
+    public class ImageController : Subject
     {
         private System.IO.FileInfo _imageInfo;
         private WindowSize _windowSize;
@@ -35,11 +35,6 @@ namespace MyTrimmingNew
             return common.Image.CreateBitmapSourceImage(BitmapImage,
                                                         _windowSize.ImageFitWindowWidth,
                                                         _windowSize.ImageFitWindowHeight);
-        }
-
-        public string GetImageSizeString()
-        {
-            return "オリジナル画像: 横" + OriginalImageWidth.ToString() + "x縦" + OriginalImageHeight.ToString();
         }
 
         public string SaveNameExample

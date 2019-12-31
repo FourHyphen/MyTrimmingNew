@@ -132,6 +132,8 @@ namespace MyTrimmingNew
                 return;
             }
             AuxiliaryLineOperation.Execute(operation);
+
+            // 登録Observerに変更を通知
             Notify();
         }
     }

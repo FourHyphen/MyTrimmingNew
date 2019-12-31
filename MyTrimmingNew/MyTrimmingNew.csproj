@@ -96,6 +96,8 @@
     <Compile Include="IVisualComponentObserver.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="AuxiliaryLineRectangleObserver.cs" />
+    <Compile Include="ShowImageLengthObserver.cs" />
+    <Compile Include="ShowImageObserver.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="WindowSize.cs" />
     <Page Include="MainWindow.xaml">
