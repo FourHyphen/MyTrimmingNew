@@ -20,6 +20,8 @@ namespace MyTrimmingNew
     {
         private ImageController _imageController;
         private AuxiliaryController _auxiliaryController;
+        private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
+        private AuxiliaryLineLengthObserver _auxiliaryLineLength;
 
         public MainWindow()
         {
@@ -50,6 +52,7 @@ namespace MyTrimmingNew
 
         /// <summary>
         /// TODO: 実装をプログラミングしてないか？
+        ///        -> 補助線と同じようにObserver適用すればContentとかの描画をここに書かずに済む
         /// </summary>
         /// <param name="imageFilePath"></param>
         private void DisplayImageInfo(string imageFilePath)
@@ -76,8 +79,8 @@ namespace MyTrimmingNew
         private void DisplayAuxiliaryLine()
         {
             _auxiliaryController = new AuxiliaryController(_imageController);
-            ReflectStateOfAuxiliaryLineToDisplay();
-            xAuxiliaryLineLength.Content = _auxiliaryController.GetLineSizeString();
+            _auxiliaryLineRectangle = new AuxiliaryLineRectangleObserver(xAuxiliaryLine, _auxiliaryController);
+            _auxiliaryLineLength = new AuxiliaryLineLengthObserver(xAuxiliaryLineLength, _auxiliaryController);
         }
 
         #endregion
@@ -145,20 +148,6 @@ namespace MyTrimmingNew
         private void PublishAuxiliaryLineEvent(object operation)
         {
             _auxiliaryController.PublishEvent(operation);
-
-            // イベント発行結果を画面に反映
-            ReflectStateOfAuxiliaryLineToDisplay();
-        }
-
-        /// <summary>
-        /// 現在の補助線の状態を画面に反映する
-        /// </summary>
-        private void ReflectStateOfAuxiliaryLineToDisplay()
-        {
-            Canvas.SetLeft(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryLeftRelativeImage);
-            Canvas.SetTop(xAuxiliaryLine, (double)_auxiliaryController.AuxiliaryTopRelativeImage);
-            xAuxiliaryLine.Width = _auxiliaryController.AuxiliaryWidth;
-            xAuxiliaryLine.Height = _auxiliaryController.AuxiliaryHeight;
         }
 
         #endregion

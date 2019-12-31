@@ -10,7 +10,7 @@ namespace MyTrimmingNew
     /// <summary>
     /// TODO: ちょっといろいろPublicにし過ぎでは？
     /// </summary>
-    public class AuxiliaryController
+    public class AuxiliaryController : Subject
     {
         public AuxiliaryController(ImageController ic,
                                    int widthRatio = 16,
@@ -81,11 +81,6 @@ namespace MyTrimmingNew
 
         public int DisplayImageHeight { get; private set; }
 
-        public string GetLineSizeString()
-        {
-            return "矩形: 横" + AuxiliaryWidth.ToString() + "x縦" + AuxiliaryHeight.ToString();
-        }
-
         private int FitInRangeAuxiliaryTopRelativeImage(int toMoveTop)
         {
             if (toMoveTop < 0)
@@ -137,6 +132,7 @@ namespace MyTrimmingNew
                 return;
             }
             AuxiliaryLineOperation.Execute(operation);
+            Notify();
         }
     }
 }

@@ -88,11 +88,15 @@
     <Compile Include="AuxiliaryLineMove.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
+    <Compile Include="AuxiliaryLineLengthObserver.cs" />
     <Compile Include="IAuxiliaryLineOperation.cs" />
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
+    <Compile Include="IVisualComponentObserver.cs" />
     <Compile Include="Keys.cs" />
+    <Compile Include="AuxiliaryLineRectangleObserver.cs" />
+    <Compile Include="Subject.cs" />
     <Compile Include="WindowSize.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
