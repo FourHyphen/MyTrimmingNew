@@ -11,9 +11,19 @@ namespace MyTrimmingNew
     {
         private AuxiliaryController AC { get; set; }
 
+        private Point MoveStartPoint { get; set; }
+
         public AuxiliaryLineMove(AuxiliaryController ac)
         {
+            // TODO: MoveStartPointはマウスによる移動時のみ値が入る
+            //        -> MoveとChangeSizeで分けたけど、マウスかKeyか、で分けた方が良いのでは？
             AC = ac;
+        }
+
+        public AuxiliaryLineMove(AuxiliaryController ac, Point moveStartPoint)
+        {
+            AC = ac;
+            MoveStartPoint = moveStartPoint;
         }
 
         public void Execute(object o)
@@ -48,9 +58,13 @@ namespace MyTrimmingNew
             }
         }
 
-        private void MoveByMouse(Point p)
+        private void MoveByMouse(Point moveFinishPoint)
         {
+            int moveDistanceX = (int)(moveFinishPoint.X - MoveStartPoint.X);
+            int moveDistanceY = (int)(moveFinishPoint.Y - MoveStartPoint.Y);
 
+            AC.AuxiliaryLeftRelativeImage += moveDistanceX;
+            AC.AuxiliaryTopRelativeImage += moveDistanceY;
         }
     }
 }

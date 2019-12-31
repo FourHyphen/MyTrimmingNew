@@ -88,10 +88,10 @@ namespace MyTrimmingNew
                 return 0;
             }
 
-            int maxOriginTop = DisplayImageHeight - AuxiliaryHeight - AuxiliaryLineThickness;
+            int maxOriginTop = DisplayImageHeight - AuxiliaryHeight - AuxiliaryLineThickness + 1;
             if (toMoveTop > maxOriginTop)
             {
-                return AuxiliaryTopRelativeImage;
+                return maxOriginTop;
             }
 
             return toMoveTop;
@@ -104,10 +104,10 @@ namespace MyTrimmingNew
                 return 0;
             }
 
-            int maxOriginLeft = DisplayImageWidth - AuxiliaryWidth - AuxiliaryLineThickness;
+            int maxOriginLeft = DisplayImageWidth - AuxiliaryWidth - AuxiliaryLineThickness + 1;
             if (toMoveLeft > maxOriginLeft)
             {
-                return AuxiliaryLeftRelativeImage;
+                return maxOriginLeft;
             }
 
             return toMoveLeft;

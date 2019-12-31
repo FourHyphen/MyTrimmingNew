@@ -21,7 +21,7 @@ namespace MyTrimmingNew
                                                                                                 coordinateRelatedAuxiliaryLine);
             if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
             {
-                return new AuxiliaryLineMove(ac);
+                return new AuxiliaryLineMove(ac, coordinateRelatedAuxiliaryLine);
             }
             else
             {
