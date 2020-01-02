@@ -5,9 +5,9 @@ using MyTrimmingNew;
 namespace TestMyTrimmingNew
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTestClassAuxiliaryController
     {
-        #region "テスト: 補助線矩形: 初期化"
+        #region "初期化"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -43,7 +43,7 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region "テスト: 補助線矩形: 移動: カーソルキー操作"
+        #region "移動: カーソルキー操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -130,7 +130,7 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region "テスト: 補助線矩形: 移動: マウス操作"
+        #region "移動: マウス操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -244,7 +244,7 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region "テスト: 補助線矩形: 拡大/縮小: 右下点操作"
+        #region "拡大/縮小: 右下点操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -390,7 +390,7 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region "テスト: 補助線矩形: 拡大/縮小: 左下点操作"
+        #region "拡大/縮小: 左下点操作"
 
         //[TestMethod]
         //[DeploymentItem(@".\Resource\test001.jpg")]
