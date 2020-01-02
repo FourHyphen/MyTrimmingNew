@@ -36,40 +36,40 @@ namespace MyTrimmingNew
 
         public void ExecuteWhereOperationBottomRight(int changeWidth, int changeHeight)
         {
-            // widthとheight、基準にする変更サイズに合わせてRatioの通りにサイズを変更する
-            int newWidth = AC.AuxiliaryWidth + changeWidth;
-            int newHeight = AC.AuxiliaryHeight + changeHeight;
-            if (BaseWidthWhenChangeSize(changeWidth, changeHeight))
+            // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
+            int changeSizeWidth = changeWidth;
+            int changeSizeHeight = changeHeight;
+            if (BaseWidthWhenChangeSize(changeSizeWidth, changeSizeHeight))
             {
-                newHeight = CalcAuxiliaryLineHeightWithFitRatio(newWidth);
+                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
             }
             else
             {
-                newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
+                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
             }
 
-            int maxWidth = AC.DisplayImageWidth - AC.AuxiliaryLeftRelativeImage;
-            int maxHeight = AC.DisplayImageHeight - AC.AuxiliaryTopRelativeImage;
+            int maxChangeSizeWidth = AC.DisplayImageWidth - AC.AuxiliaryWidth - AC.AuxiliaryLeftRelativeImage - AC.AuxiliaryLineThickness + 1;
+            int maxChangeSizeHeight = AC.DisplayImageHeight - AC.AuxiliaryHeight - AC.AuxiliaryTopRelativeImage - AC.AuxiliaryLineThickness + 1;
 
             // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if (newWidth < 0 || newHeight < 0)
+            if ((AC.AuxiliaryWidth+changeSizeWidth) < 0 || (AC.AuxiliaryHeight+changeSizeHeight) < 0)
             {
                 return;
             }
             // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
-            else if (newWidth > maxWidth)
+            else if (changeSizeWidth > maxChangeSizeWidth)
             {
-                newWidth = maxWidth;
-                newHeight = CalcAuxiliaryLineHeightWithFitRatio(newWidth);
+                changeSizeWidth = maxChangeSizeWidth;
+                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
             }
-            else if(newHeight > maxHeight)
+            else if(changeSizeHeight > maxChangeSizeHeight)
             {
-                newHeight = maxHeight;
-                newWidth = CalcAuxiliaryLineWidthWithFitRatio(newHeight);
+                changeSizeHeight = maxChangeSizeHeight;
+                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
             }
 
-            AC.AuxiliaryWidth = newWidth;
-            AC.AuxiliaryHeight = newHeight;
+            AC.AuxiliaryWidth += changeSizeWidth;
+            AC.AuxiliaryHeight += changeSizeHeight;
         }
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)

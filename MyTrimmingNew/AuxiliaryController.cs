@@ -69,7 +69,7 @@ namespace MyTrimmingNew
             }
         }
 
-        private int AuxiliaryLineThickness { get; set; }
+        public int AuxiliaryLineThickness { get; private set; }
 
         public int AuxiliaryWidth { get; set; }
 
