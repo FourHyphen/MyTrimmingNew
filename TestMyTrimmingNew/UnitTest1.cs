@@ -18,6 +18,8 @@ namespace TestMyTrimmingNew
 
         private const int _auxiliaryLineThickness = 1;
 
+        #region "共通処理: クラスインスタンス化等"
+
         private ImageController GetDisplayImage(string filePath)
         {
             return new ImageController(filePath, _windowInitWidth, _windowInitHeight);
@@ -31,21 +33,9 @@ namespace TestMyTrimmingNew
             return new AuxiliaryController(ic, widthRatio, heightRatio, _auxiliaryLineThickness);
         }
 
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestSuccessOfCreateBitmapAfterNewImage()
-        {
-            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
-            Assert.IsNotNull(img.BitmapImage);
-        }
+        #endregion
 
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestNotEqualOfImageNameAndSaveNameExample()
-        {
-            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
-            Assert.AreNotEqual(System.IO.Path.GetFileName(_testResourceImage001Path), img.SaveNameExample);
-        }
+        #region "テスト: 画像共通処理クラス: 画像サイズ変更"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -60,6 +50,34 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(newWidth, newImg.Width);
             Assert.AreEqual(newHeight, newImg.Height);
         }
+
+        #endregion
+
+        #region "テスト: 表示画像クラス: 初期化"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestSuccessOfCreateBitmapAfterNewImage()
+        {
+            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
+            Assert.IsNotNull(img.BitmapImage);
+        }
+
+        #endregion
+
+        #region "テスト: 表示画像クラス: 別名保存名"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNotEqualOfImageNameAndSaveNameExample()
+        {
+            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
+            Assert.AreNotEqual(System.IO.Path.GetFileName(_testResourceImage001Path), img.SaveNameExample);
+        }
+
+        #endregion
+
+        #region "テスト: 補助線矩形: 初期化"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -92,6 +110,10 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(_windowInitHeight, ac.AuxiliaryHeight);
         }
+
+        #endregion
+
+        #region "テスト: 補助線矩形: 移動: カーソルキー操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -175,6 +197,124 @@ namespace TestMyTrimmingNew
             ac.PublishEvent(right);
             Assert.AreEqual(maxRightRange, ac.AuxiliaryLeftRelativeImage);
         }
+
+        #endregion
+
+        #region "テスト: 補助線矩形: 移動: マウス操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectAuxiliaryLineLeftAndTopIfMoveByMouse()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            // まず矩形を小さくして移動テストできるようにする(Width基準とする)
+            int mouseUpPixelX = -(ac.AuxiliaryWidth / 2);
+            int mouseUpPixelY = -5;
+            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseUpPixelX;
+            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseUpPixelY;
+            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
+            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
+            ac.SetEvent(mouseDown);
+            ac.PublishEvent(mouseUp);
+
+            // 右下方向テスト
+            int moveX = 100;
+            int moveY = 80;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 左上方向テスト
+            moveX = -50;
+            moveY = -70;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 左下方向テスト
+            moveX = -20;
+            moveY = 40;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 右上方向テスト
+            moveX = 40;
+            moveY = 20;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+        }
+
+        private void MoveAuxiliaryLine(AuxiliaryController ac,
+                                       int moveX,
+                                       int moveY)
+        {
+            int startMovePointX = ac.AuxiliaryLeftRelativeImage + (ac.AuxiliaryWidth / 2);
+            int startMovePointY = ac.AuxiliaryTopRelativeImage + (ac.AuxiliaryHeight / 2);
+            int finishMovePointX = startMovePointX + moveX;
+            int finishMovePointY = startMovePointY + moveY;
+            System.Windows.Point startMovePoint = new System.Windows.Point(startMovePointX, startMovePointY);
+            System.Windows.Point finishMovePoint = new System.Windows.Point(finishMovePointX, finishMovePointY);
+
+            int correctLeft = ac.AuxiliaryLeftRelativeImage + moveX;
+            int correctTop = ac.AuxiliaryTopRelativeImage + moveY;
+            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistance()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+                                                             widthRatio,
+                                                             heightRatio);
+
+            // 補助線矩形を大きく移動しようとして矩形が画像からはみ出る場合、画像一杯までの移動に制限する
+            // テストとして選ぶ値の基準: ディスプレイより大きい距離を移動しようとするなら、確実に画像からはみ出る
+            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryWidth / 2, ac.AuxiliaryHeight / 2);
+            int tooMoveX = 3000;
+            int tooMoveY = 3000;
+
+            // 左上方向テスト
+            System.Windows.Point finishMovePoint = new System.Windows.Point(-tooMoveX, -tooMoveY);
+            int correctLeft = 0;
+            int correctTop = 0;
+            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+
+            // 右上方向テスト
+            finishMovePoint = new System.Windows.Point(tooMoveX, -tooMoveY);
+            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
+            correctTop = 0;
+            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+
+            // 左下方向テスト
+            finishMovePoint = new System.Windows.Point(-tooMoveX, tooMoveY);
+            correctLeft = 0;
+            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
+            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+
+            // 右下方向テスト
+            finishMovePoint = new System.Windows.Point(tooMoveX, tooMoveY);
+            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
+            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
+            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+        }
+
+        private void MoveAuxiliaryLine(AuxiliaryController ac,
+                                       System.Windows.Point startPoint,
+                                       System.Windows.Point finishPoint,
+                                       int correctLeftAfterMove,
+                                       int correctTopAfterMove)
+        {
+            ac.SetEvent(startPoint);
+            ac.PublishEvent(finishPoint);
+            Assert.AreEqual(ac.AuxiliaryLeftRelativeImage, correctLeftAfterMove);
+            Assert.AreEqual(ac.AuxiliaryTopRelativeImage, correctTopAfterMove);
+        }
+
+        #endregion
+
+        #region "テスト: 補助線矩形: 拡大/縮小: 右下点操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -318,114 +458,37 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
         }
 
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestCorrectAuxiliaryLineLeftAndTopIfMoveByMouse()
-        {
-            int widthRatio = 16;
-            int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+        #endregion
 
-            // まず矩形を小さくして移動テストできるようにする(Width基準とする)
-            int mouseUpPixelX = -(ac.AuxiliaryWidth / 2);
-            int mouseUpPixelY = -5;
-            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseUpPixelX;
-            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseUpPixelY;
-            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
-            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
-            ac.SetEvent(mouseDown);
-            ac.PublishEvent(mouseUp);
+        #region "テスト: 補助線矩形: 拡大/縮小: 左下点操作"
 
-            // 右下方向テスト
-            int moveX = 100;
-            int moveY = 80;
-            MoveAuxiliaryLine(ac, moveX, moveY);
+        //[TestMethod]
+        //[DeploymentItem(@".\Resource\test001.jpg")]
+        //public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereBottomLeft()
+        //{
+        //    int widthRatio = 16;
+        //    int heightRatio = 9;
+        //    AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
+        //                                                     widthRatio,
+        //                                                     heightRatio);
 
-            // 左上方向テスト
-            moveX = -50;
-            moveY = -70;
-            MoveAuxiliaryLine(ac, moveX, moveY);
+        //    // Width基準でHeightを変更するよう、Width >> height となる値を設定
+        //    int willDecreaseWidthPixel = -100;
+        //    int willDecreaseHeightPixel = -5;
+        //    ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+        //                                           willDecreaseWidthPixel,
+        //                                           willDecreaseHeightPixel,
+        //                                           true);
 
-            // 左下方向テスト
-            moveX = -20;
-            moveY = 40;
-            MoveAuxiliaryLine(ac, moveX, moveY);
+        //    // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+        //    willDecreaseWidthPixel = -5;
+        //    willDecreaseHeightPixel = -100;
+        //    ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+        //                                           willDecreaseWidthPixel,
+        //                                           willDecreaseHeightPixel,
+        //                                           false);
+        //}
 
-            // 右上方向テスト
-            moveX = 40;
-            moveY = 20;
-            MoveAuxiliaryLine(ac, moveX, moveY);
-        }
-
-        private void MoveAuxiliaryLine(AuxiliaryController ac,
-                                       int moveX,
-                                       int moveY)
-        {
-            int startMovePointX = ac.AuxiliaryLeftRelativeImage + (ac.AuxiliaryWidth / 2);
-            int startMovePointY = ac.AuxiliaryTopRelativeImage + (ac.AuxiliaryHeight / 2);
-            int finishMovePointX = startMovePointX + moveX;
-            int finishMovePointY = startMovePointY + moveY;
-            System.Windows.Point startMovePoint = new System.Windows.Point(startMovePointX, startMovePointY);
-            System.Windows.Point finishMovePoint = new System.Windows.Point(finishMovePointX, finishMovePointY);
-
-            int correctLeft = ac.AuxiliaryLeftRelativeImage + moveX;
-            int correctTop = ac.AuxiliaryTopRelativeImage + moveY;
-            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
-        }
-
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistance()
-        {
-            int widthRatio = 16;
-            int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
-
-            // 補助線矩形を大きく移動しようとして矩形が画像からはみ出る場合、画像一杯までの移動に制限する
-            // テストとして選ぶ値の基準: ディスプレイより大きい距離を移動しようとするなら、確実に画像からはみ出る
-            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryWidth / 2, ac.AuxiliaryHeight / 2);
-            int tooMoveX = 3000;
-            int tooMoveY = 3000;
-
-            // 左上方向テスト
-            System.Windows.Point finishMovePoint = new System.Windows.Point(-tooMoveX, -tooMoveY);
-            int correctLeft = 0;
-            int correctTop = 0;
-            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
-
-            // 右上方向テスト
-            finishMovePoint = new System.Windows.Point(tooMoveX, -tooMoveY);
-            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
-            correctTop = 0;
-            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
-
-            // 左下方向テスト
-            finishMovePoint = new System.Windows.Point(-tooMoveX, tooMoveY);
-            correctLeft = 0;
-            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
-            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
-
-            // 右下方向テスト
-            finishMovePoint = new System.Windows.Point(tooMoveX, tooMoveY);
-            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
-            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
-            MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
-        }
-
-        private void MoveAuxiliaryLine(AuxiliaryController ac,
-                                       System.Windows.Point startPoint,
-                                       System.Windows.Point finishPoint,
-                                       int correctLeftAfterMove,
-                                       int correctTopAfterMove)
-        {
-            ac.SetEvent(startPoint);
-            ac.PublishEvent(finishPoint);
-            Assert.AreEqual(ac.AuxiliaryLeftRelativeImage, correctLeftAfterMove);
-            Assert.AreEqual(ac.AuxiliaryTopRelativeImage, correctTopAfterMove);
-        }
+        #endregion
     }
 }
