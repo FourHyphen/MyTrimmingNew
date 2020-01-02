@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MyTrimmingNew
+namespace MyTrimmingNew.AuxiliaryLine
 {
     class AuxiliaryLineChangeSize : IAuxiliaryLineOperation
     {
@@ -32,54 +32,17 @@ namespace MyTrimmingNew
             // 例) 右下点のX方向操作 -> 正なら拡大、負なら縮小
             // 例) 左下点のX方向操作 -> 負なら拡大、正なら縮小
             //                           -> 符号反転し、拡大を意図しているなら正になるようにする
+            AuxiliaryLineChangeSizeTemplate changeSizeLogic = null;
             if (MouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.RightBottom)
             {
-                ExecuteWhereOperationBottomRight(mouseMoveX, mouseMoveY);
+                changeSizeLogic = new AuxiliaryLineChangeSizeBottomRight(AC);
+                changeSizeLogic.Execute(mouseMoveX, mouseMoveY);
             }
             else if(MouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftBottom)
             {
-                ExecuteWhereOperationBottomLeft(-mouseMoveX, mouseMoveY);
+                mouseMoveX = -mouseMoveX;
+                ExecuteWhereOperationBottomLeft(mouseMoveX, mouseMoveY);
             }
-        }
-
-        /// <param name="changeWidth">正 -> 拡大を意図</param>
-        /// <param name="changeHeight">正 -> 拡大を意図</param>
-        public void ExecuteWhereOperationBottomRight(int changeWidth, int changeHeight)
-        {
-            // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
-            int changeSizeWidth = changeWidth;
-            int changeSizeHeight = changeHeight;
-            if (BaseWidthWhenChangeSize(changeSizeWidth, changeSizeHeight))
-            {
-                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
-            }
-            else
-            {
-                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
-            }
-
-            int maxChangeSizeWidth = AC.DisplayImageWidth - AC.AuxiliaryWidth - AC.AuxiliaryLeftRelativeImage - AC.AuxiliaryLineThickness + 1;
-            int maxChangeSizeHeight = AC.DisplayImageHeight - AC.AuxiliaryHeight - AC.AuxiliaryTopRelativeImage - AC.AuxiliaryLineThickness + 1;
-
-            // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if ((AC.AuxiliaryWidth+changeSizeWidth) < 0 || (AC.AuxiliaryHeight+changeSizeHeight) < 0)
-            {
-                return;
-            }
-            // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
-            else if (changeSizeWidth > maxChangeSizeWidth)
-            {
-                changeSizeWidth = maxChangeSizeWidth;
-                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
-            }
-            else if(changeSizeHeight > maxChangeSizeHeight)
-            {
-                changeSizeHeight = maxChangeSizeHeight;
-                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
-            }
-
-            AC.AuxiliaryWidth += changeSizeWidth;
-            AC.AuxiliaryHeight += changeSizeHeight;
         }
 
         /// <param name="changeWidth">正 -> 拡大を意図</param>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 
-namespace MyTrimmingNew
+namespace MyTrimmingNew.AuxiliaryLine
 {
     class AuxiliaryLineRectangleObserver : IVisualComponentObserver
     {

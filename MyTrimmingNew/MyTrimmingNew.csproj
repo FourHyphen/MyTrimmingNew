@@ -83,19 +83,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AuxiliaryController.cs" />
-    <Compile Include="AuxiliaryLineChangeSize.cs" />
-    <Compile Include="AuxiliaryLineOperationFactory.cs" />
-    <Compile Include="AuxiliaryLineMove.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSize.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTemplate.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineOperationFactory.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineMove.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeBottomRight.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="AuxiliaryLineLengthObserver.cs" />
-    <Compile Include="IAuxiliaryLineOperation.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineLengthObserver.cs" />
+    <Compile Include="AuxiliaryLine\IAuxiliaryLineOperation.cs" />
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
     <Compile Include="IVisualComponentObserver.cs" />
     <Compile Include="Keys.cs" />
-    <Compile Include="AuxiliaryLineRectangleObserver.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineRectangleObserver.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="ShowImageLengthObserver.cs" />
     <Compile Include="ShowImageObserver.cs" />
