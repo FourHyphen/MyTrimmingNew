@@ -50,10 +50,10 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
 
             // 新しいパラメーターをセット
-            SetAuxiliaryLeft(changeSizeWidth);
-            SetAuxiliaryTop(changeSizeHeight);
             SetAuxiliaryWidth(changeSizeWidth);
             SetAuxiliaryHeight(changeSizeHeight);
+            SetAuxiliaryLeft(changeSizeWidth);
+            SetAuxiliaryTop(changeSizeHeight);
         }
 
         public abstract int GetMaxChangeSizeWidth();
