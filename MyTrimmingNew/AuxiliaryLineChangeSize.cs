@@ -11,29 +11,39 @@ namespace MyTrimmingNew
     {
         private AuxiliaryController AC { get; set; }
 
-        private Point MouseDownCoordinate { get; set; }
+        private Point MouseDownRelatedAuxiliaryLine { get; set; }
 
         private Mouse.KindMouseDownAuxiliaryLineArea MouseDownArea { get; set; }
 
-        public AuxiliaryLineChangeSize(AuxiliaryController ac, Point mouseDownCoordinate)
+        public AuxiliaryLineChangeSize(AuxiliaryController ac, Point CoordinateRelatedAuxiliaryLine)
         {
             AC = ac;
-            MouseDownCoordinate = mouseDownCoordinate;
-            MouseDownArea = Mouse.GetKindMouseDownAuxiliaryLineArea(AC, MouseDownCoordinate);
+            MouseDownRelatedAuxiliaryLine = CoordinateRelatedAuxiliaryLine;
+            MouseDownArea = Mouse.GetKindMouseDownAuxiliaryLineArea(AC, MouseDownRelatedAuxiliaryLine);
         }
 
         public void Execute(object operation)
         {
-            Point mouseUpCoordinate = (Point)operation;
-            int mouseMoveX = (int)mouseUpCoordinate.X - (int)MouseDownCoordinate.X;
-            int mouseMoveY = (int)mouseUpCoordinate.Y - (int)MouseDownCoordinate.Y;
+            Point mouseUpCoordinateRelatedAuxiliaryLine = (Point)operation;
+            int mouseMoveX = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
+            int mouseMoveY = (int)mouseUpCoordinateRelatedAuxiliaryLine.Y - (int)MouseDownRelatedAuxiliaryLine.Y;
 
+            // 意図した拡大/縮小のサイズになるよう符号を合わせてから処理実行
+            // 例) 右下点のX方向操作 -> 正なら拡大、負なら縮小
+            // 例) 左下点のX方向操作 -> 負なら拡大、正なら縮小
+            //                           -> 符号反転し、拡大を意図しているなら正になるようにする
             if (MouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.RightBottom)
             {
                 ExecuteWhereOperationBottomRight(mouseMoveX, mouseMoveY);
             }
+            else if(MouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftBottom)
+            {
+                ExecuteWhereOperationBottomLeft(-mouseMoveX, mouseMoveY);
+            }
         }
 
+        /// <param name="changeWidth">正 -> 拡大を意図</param>
+        /// <param name="changeHeight">正 -> 拡大を意図</param>
         public void ExecuteWhereOperationBottomRight(int changeWidth, int changeHeight)
         {
             // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
@@ -70,6 +80,47 @@ namespace MyTrimmingNew
 
             AC.AuxiliaryWidth += changeSizeWidth;
             AC.AuxiliaryHeight += changeSizeHeight;
+        }
+
+        /// <param name="changeWidth">正 -> 拡大を意図</param>
+        /// <param name="changeHeight">正 -> 拡大を意図</param>
+        public void ExecuteWhereOperationBottomLeft(int changeWidth, int changeHeight)
+        {
+            // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
+            int changeSizeWidth = changeWidth;
+            int changeSizeHeight = changeHeight;
+            if (BaseWidthWhenChangeSize(changeSizeWidth, changeSizeHeight))
+            {
+                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
+            }
+            else
+            {
+                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
+            }
+
+            int maxChangeSizeWidth = AC.AuxiliaryLeftRelativeImage - AC.AuxiliaryLineThickness + 1;
+            int maxChangeSizeHeight = AC.DisplayImageHeight - AC.AuxiliaryHeight - AC.AuxiliaryTopRelativeImage - AC.AuxiliaryLineThickness + 1;
+
+            // 左下点を思いっきり右や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
+            if ((-changeSizeWidth > AC.AuxiliaryWidth) || (AC.AuxiliaryHeight + changeSizeHeight) < 0)
+            {
+                return;
+            }
+            // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
+            else if (changeSizeWidth > maxChangeSizeWidth)
+            {
+                changeSizeWidth = maxChangeSizeWidth;
+                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
+            }
+            else if (changeSizeHeight > maxChangeSizeHeight)
+            {
+                changeSizeHeight = maxChangeSizeHeight;
+                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
+            }
+
+            AC.AuxiliaryWidth += changeSizeWidth;
+            AC.AuxiliaryHeight += changeSizeHeight;
+            AC.AuxiliaryLeftRelativeImage -= changeSizeWidth;
         }
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
