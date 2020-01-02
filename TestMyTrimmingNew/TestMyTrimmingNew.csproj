@@ -76,6 +76,7 @@
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestClassCommonImage.cs" />
+    <Compile Include="UnitTestClassImageController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

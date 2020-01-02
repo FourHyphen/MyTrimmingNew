@@ -7,30 +7,6 @@ namespace TestMyTrimmingNew
     [TestClass]
     public class UnitTest1
     {
-        #region "テスト: 表示画像クラス: 初期化"
-
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestSuccessOfCreateBitmapAfterNewImage()
-        {
-            MyTrimmingNew.ImageController img = Common.GetDisplayImage(Common.TestResourceImage001Path);
-            Assert.IsNotNull(img.BitmapImage);
-        }
-
-        #endregion
-
-        #region "テスト: 表示画像クラス: 別名保存名"
-
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestNotEqualOfImageNameAndSaveNameExample()
-        {
-            MyTrimmingNew.ImageController img = Common.GetDisplayImage(Common.TestResourceImage001Path);
-            Assert.AreNotEqual(System.IO.Path.GetFileName(Common.TestResourceImage001Path), img.SaveNameExample);
-        }
-
-        #endregion
-
         #region "テスト: 補助線矩形: 初期化"
 
         [TestMethod]
