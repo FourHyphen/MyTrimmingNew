@@ -452,6 +452,35 @@ namespace TestMyTrimmingNew
                                                    false);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeBottomLeft()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
+            // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
+            //  -> まず補助線矩形を画像より小さくする
+            int willDecreaseWidthPixel = 100;
+            int willDecreaseHeightPixel = -5;
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+                                                   willDecreaseWidthPixel,
+                                                   willDecreaseHeightPixel,
+                                                   true);
+
+            // 実際に画像からはみ出るような操作をする
+            int willIncreaseWidthPixel = -200;
+            int willIncreaseHeightPixel = 10;
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+                                                   willIncreaseWidthPixel,
+                                                   willIncreaseHeightPixel,
+                                                   true);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereBottomLeft(AuxiliaryController ac,
                                                             int mouseMoveWidthPixel,
                                                             int mouseMoveHeightPixel,
