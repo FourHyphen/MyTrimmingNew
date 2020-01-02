@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Drawing;
 using MyTrimmingNew;
 
 namespace TestMyTrimmingNew
@@ -8,58 +7,13 @@ namespace TestMyTrimmingNew
     [TestClass]
     public class UnitTest1
     {
-        // TODO: リソース管理すればDeploymentItemと共有できるか？
-        private const string _testResourceImage001Path = @".\Resource\test001.jpg";
-        private const string _testResourceImage002Path = @".\Resource\test002.jpg";
-
-        // TODO: リソース管理してxaml側と数字を共有する
-        private const int _windowInitWidth = 800;
-        private const int _windowInitHeight = 600;
-
-        private const int _auxiliaryLineThickness = 1;
-
-        #region "共通処理: クラスインスタンス化等"
-
-        private ImageController GetDisplayImage(string filePath)
-        {
-            return new ImageController(filePath, _windowInitWidth, _windowInitHeight);
-        }
-
-        private AuxiliaryController GetAuxiliaryController(string filePath, int widthRatio, int heightRatio)
-        {
-            ImageController ic = new ImageController(filePath,
-                                                     _windowInitWidth,
-                                                     _windowInitHeight);
-            return new AuxiliaryController(ic, widthRatio, heightRatio, _auxiliaryLineThickness);
-        }
-
-        #endregion
-
-        #region "テスト: 画像共通処理クラス: 画像サイズ変更"
-
-        [TestMethod]
-        [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestEqualOfChangedImageSizeWidthAndHeight()
-        {
-            // 数字の根拠無し
-            int newWidth = 600;
-            int newHeight = 350;
-
-            Bitmap img = new Bitmap(_testResourceImage001Path);
-            Bitmap newImg = MyTrimmingNew.common.Image.CreateBitmap(img, newWidth, newHeight);
-            Assert.AreEqual(newWidth, newImg.Width);
-            Assert.AreEqual(newHeight, newImg.Height);
-        }
-
-        #endregion
-
         #region "テスト: 表示画像クラス: 初期化"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestSuccessOfCreateBitmapAfterNewImage()
         {
-            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
+            MyTrimmingNew.ImageController img = Common.GetDisplayImage(Common.TestResourceImage001Path);
             Assert.IsNotNull(img.BitmapImage);
         }
 
@@ -71,8 +25,8 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNotEqualOfImageNameAndSaveNameExample()
         {
-            MyTrimmingNew.ImageController img = GetDisplayImage(_testResourceImage001Path);
-            Assert.AreNotEqual(System.IO.Path.GetFileName(_testResourceImage001Path), img.SaveNameExample);
+            MyTrimmingNew.ImageController img = Common.GetDisplayImage(Common.TestResourceImage001Path);
+            Assert.AreNotEqual(System.IO.Path.GetFileName(Common.TestResourceImage001Path), img.SaveNameExample);
         }
 
         #endregion
@@ -85,13 +39,13 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             double ratio = (double)widthRatio / (double)heightRatio;
-            int fittedHeight = (int)((double)_windowInitWidth / ratio);
-            Assert.AreEqual(_windowInitWidth, ac.AuxiliaryWidth);
+            int fittedHeight = (int)((double)Common.WindowInitWidth / ratio);
+            Assert.AreEqual(Common.WindowInitWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
         }
 
@@ -101,14 +55,14 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage002Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage002Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             double ratio = (double)widthRatio / (double)heightRatio;
-            int fittedWidth = (int)((double)_windowInitHeight / ratio);
+            int fittedWidth = (int)((double)Common.WindowInitHeight / ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(_windowInitHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(Common.WindowInitHeight, ac.AuxiliaryHeight);
         }
 
         #endregion
@@ -121,9 +75,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Up);
@@ -136,9 +90,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             int enableDownRange = ac.DisplayImageHeight - ac.AuxiliaryHeight;
             Keys.EnableKeys down = Keys.EnableKeys.Down;
@@ -149,7 +103,7 @@ namespace TestMyTrimmingNew
                 Assert.AreEqual(i, ac.AuxiliaryTopRelativeImage);
             }
 
-            int maxDownRange = enableDownRange - _auxiliaryLineThickness + 1;
+            int maxDownRange = enableDownRange - Common.AuxiliaryLineThickness + 1;
             Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
 
             ac.PublishEvent(down);
@@ -162,9 +116,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Left);
@@ -177,9 +131,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryWidth;
             Keys.EnableKeys right = Keys.EnableKeys.Right;
@@ -191,7 +145,7 @@ namespace TestMyTrimmingNew
                 Assert.AreEqual(i, ac.AuxiliaryLeftRelativeImage);
             }
 
-            int maxRightRange = enableRightRange - _auxiliaryLineThickness + 1;
+            int maxRightRange = enableRightRange - Common.AuxiliaryLineThickness + 1;
             Assert.AreEqual(maxRightRange, ac.AuxiliaryLeftRelativeImage);
 
             ac.PublishEvent(right);
@@ -208,9 +162,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             // まず矩形を小さくして移動テストできるようにする(Width基準とする)
             int mouseUpPixelX = -(ac.AuxiliaryWidth / 2);
@@ -265,9 +219,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             // 補助線矩形を大きく移動しようとして矩形が画像からはみ出る場合、画像一杯までの移動に制限する
             // テストとして選ぶ値の基準: ディスプレイより大きい距離を移動しようとするなら、確実に画像からはみ出る
@@ -322,9 +276,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
             int willDecreaseWidthPixel = -100;
@@ -349,9 +303,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             // 原点が変わるような操作の場合(= 右下点を思いっきり左や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
@@ -376,9 +330,9 @@ namespace TestMyTrimmingNew
         {
             int widthRatio = 16;
             int heightRatio = 9;
-            AuxiliaryController ac = GetAuxiliaryController(_testResourceImage001Path,
-                                                             widthRatio,
-                                                             heightRatio);
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
 
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             int willDecreaseWidthPixel = -100;
