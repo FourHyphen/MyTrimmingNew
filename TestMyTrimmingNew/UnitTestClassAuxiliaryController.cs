@@ -425,6 +425,33 @@ namespace TestMyTrimmingNew
                                                    false);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereBottomLeft()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 原点が変わるような操作の場合(= 左下点を思いっきり右や上に引っ張る操作)、サイズを変更しない
+            // TODO: 対応する？
+            int willDecreaseWidthPixel = -1200;
+            int willDecreaseHeightPixel = -10;
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+                                                   willDecreaseWidthPixel,
+                                                   willDecreaseHeightPixel,
+                                                   true);
+
+            willDecreaseWidthPixel = -10;
+            willDecreaseHeightPixel = -1200;
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
+                                                   willDecreaseWidthPixel,
+                                                   willDecreaseHeightPixel,
+                                                   false);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereBottomLeft(AuxiliaryController ac,
                                                             int mouseMoveWidthPixel,
                                                             int mouseMoveHeightPixel,
@@ -458,7 +485,7 @@ namespace TestMyTrimmingNew
 
             int maxChangeSizeWidth = beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
             int maxChangeSizeHeight = ac.DisplayImageHeight - beforeHeight - beforeTopRelativeImage - Common.AuxiliaryLineThickness + 1;
-            if ((changeSizeWidth > beforeWidth) || (changeSizeHeight > beforeHeight))
+            if ((-changeSizeWidth > beforeWidth) || (-changeSizeHeight > beforeHeight))
             {
                 // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
                 changeSizeWidth = 0;
