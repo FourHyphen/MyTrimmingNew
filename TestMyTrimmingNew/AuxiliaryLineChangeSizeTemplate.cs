@@ -7,9 +7,9 @@ namespace TestMyTrimmingNew
     abstract class AuxiliaryLineChangeSizeTemplate
     {
         public AuxiliaryLineTestData ChangeSize(AuxiliaryController ac,
-                                                int mouseMoveWidthPixel,
-                                                int mouseMoveHeightPixel,
-                                                bool isWidthMuchLongerThanHeight)
+                                                int changeSizeWidthPixel,
+                                                int changeSizeHeightPixel,
+                                                bool isChangeSizeWidthMuchLongerThanChangeSizeHeight)
         {
             // 操作前の値を保持
             int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
@@ -18,17 +18,17 @@ namespace TestMyTrimmingNew
             int beforeHeight = ac.AuxiliaryHeight;
 
             // 操作
-            double mouseUpX = GetMouseUpX(ac, mouseMoveWidthPixel);
-            double mouseUpY = GetMouseUpY(ac, mouseMoveHeightPixel);
+            double mouseUpX = GetMouseUpX(ac, changeSizeWidthPixel);
+            double mouseUpY = GetMouseUpY(ac, changeSizeHeightPixel);
             Point mouseDown = GetMouseDownPoint(ac);
             Point mouseUp = new Point(mouseUpX, mouseUpY);
             ac.SetEvent(mouseDown);
             ac.PublishEvent(mouseUp);
 
             // X方向操作距離とY方向操作距離を、矩形の縦横比率に合わせる
-            int changeSizeWidth = mouseMoveWidthPixel;
-            int changeSizeHeight = mouseMoveHeightPixel;
-            if (isWidthMuchLongerThanHeight)
+            int changeSizeWidth = changeSizeWidthPixel;
+            int changeSizeHeight = changeSizeHeightPixel;
+            if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
             {
                 changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
             }
@@ -48,7 +48,7 @@ namespace TestMyTrimmingNew
             else if (changeSizeWidth > maxChangeSizeWidth || changeSizeHeight > maxChangeHeight)
             {
                 // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
-                if (isWidthMuchLongerThanHeight)
+                if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
                 {
                     changeSizeWidth = maxChangeSizeWidth;
                     changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
@@ -69,10 +69,10 @@ namespace TestMyTrimmingNew
         }
 
         public abstract double GetMouseUpX(AuxiliaryController ac,
-                                           int mouseMoveWidthPixel);
+                                           int changeSizeWidthPixel);
 
         public abstract double GetMouseUpY(AuxiliaryController ac,
-                                           int mouseMoveHeightPixel);
+                                           int changeSizeHeightPixel);
 
         public abstract Point GetMouseDownPoint(AuxiliaryController ac);
 

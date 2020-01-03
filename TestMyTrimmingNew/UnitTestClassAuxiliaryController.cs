@@ -285,19 +285,8 @@ namespace TestMyTrimmingNew
 
             // 原点が変わるような操作の場合(= 右下点を思いっきり左や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
-            int willDecreaseWidthPixel = -1200;
-            int willDecreaseHeightPixel = -10;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willDecreaseWidthPixel,
-                                                    willDecreaseHeightPixel,
-                                                    true);
-
-            willDecreaseWidthPixel = -10;
-            willDecreaseHeightPixel = -1200;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willDecreaseWidthPixel,
-                                                    willDecreaseHeightPixel,
-                                                    false);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -1200, -10, true);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -10, -1200, false);
         }
 
         [TestMethod]
@@ -313,31 +302,22 @@ namespace TestMyTrimmingNew
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
             //  -> まず補助線矩形を画像より小さくする
-            int willDecreaseWidthPixel = -100;
-            int willDecreaseHeightPixel = -5;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willDecreaseWidthPixel,
-                                                    willDecreaseHeightPixel,
-                                                    true);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -100, -5, true);
 
             // 実際に画像からはみ出るような操作をする
-            int willIncreaseWidthPixel = 200;
-            int willIncreaseHeightPixel = 10;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willIncreaseWidthPixel,
-                                                    willIncreaseHeightPixel,
-                                                    true);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, 200, 10, true);
         }
 
         private void ChangeAuxiliaryLineSizeWhereBottomRight(AuxiliaryController ac,
-                                                             int mouseMoveWidthPixel,
-                                                             int mouseMoveHeightPixel,
+                                                             int changeSizeWidth,
+                                                             int changeSizeHeight,
                                                              bool isWidthMuchLongerThanHeight)
         {
-            AuxiliaryLineTestData testData = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
-                                                                                         mouseMoveWidthPixel,
-                                                                                         mouseMoveHeightPixel,
-                                                                                         isWidthMuchLongerThanHeight);
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
+                                                                      changeSizeWidth,
+                                                                      changeSizeHeight,
+                                                                      isWidthMuchLongerThanHeight);
             Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
             Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
@@ -359,20 +339,10 @@ namespace TestMyTrimmingNew
                                                                    heightRatio);
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
-            int willDecreaseWidthPixel = -100;
-            int willDecreaseHeightPixel = -5;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willDecreaseWidthPixel,
-                                                   willDecreaseHeightPixel,
-                                                   true);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -100, -5, true);
 
             // Height基準でWidthを変更するよう、Height >> Width となる値を設定
-            willDecreaseWidthPixel = -5;
-            willDecreaseHeightPixel = -100;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willDecreaseWidthPixel,
-                                                   willDecreaseHeightPixel,
-                                                   false);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -5, -100, false);
         }
 
         [TestMethod]
@@ -387,19 +357,8 @@ namespace TestMyTrimmingNew
 
             // 原点が変わるような操作の場合(= 左下点を思いっきり右や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
-            int willDecreaseWidthPixel = -1200;
-            int willDecreaseHeightPixel = -10;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willDecreaseWidthPixel,
-                                                   willDecreaseHeightPixel,
-                                                   true);
-
-            willDecreaseWidthPixel = -10;
-            willDecreaseHeightPixel = -1200;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willDecreaseWidthPixel,
-                                                   willDecreaseHeightPixel,
-                                                   false);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -1200, -10, true);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -10, -1200, false);
         }
 
         [TestMethod]
@@ -415,31 +374,22 @@ namespace TestMyTrimmingNew
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
             //  -> まず補助線矩形を画像より小さくする
-            int willDecreaseWidthPixel = -100;
-            int willDecreaseHeightPixel = -5;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willDecreaseWidthPixel,
-                                                   willDecreaseHeightPixel,
-                                                   true);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -100, -5, true);
 
             // 実際に画像からはみ出るような操作をする
-            int willIncreaseWidthPixel = 200;
-            int willIncreaseHeightPixel = 10;
-            ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
-                                                   willIncreaseWidthPixel,
-                                                   willIncreaseHeightPixel,
-                                                   true);
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, 200, 10, true);
         }
 
         private void ChangeAuxiliaryLineSizeWhereBottomLeft(AuxiliaryController ac,
-                                                            int mouseMoveWidthPixel,
-                                                            int mouseMoveHeightPixel,
+                                                            int changeSizeWidth,
+                                                            int changeSizeHeight,
                                                             bool isWidthMuchLongerThanHeight)
         {
-            AuxiliaryLineTestData testData = new AuxiliaryLineChangeSizeBottomLeft().ChangeSize(ac,
-                                                                                                mouseMoveWidthPixel,
-                                                                                                mouseMoveHeightPixel,
-                                                                                                isWidthMuchLongerThanHeight);
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineChangeSizeBottomLeft().ChangeSize(ac,
+                                                                     changeSizeWidth,
+                                                                     changeSizeHeight,
+                                                                     isWidthMuchLongerThanHeight);
             Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
             Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);

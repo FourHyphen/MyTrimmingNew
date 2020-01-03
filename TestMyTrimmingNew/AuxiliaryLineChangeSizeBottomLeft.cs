@@ -6,15 +6,16 @@ namespace TestMyTrimmingNew
     class AuxiliaryLineChangeSizeBottomLeft : AuxiliaryLineChangeSizeTemplate
     {
         public override double GetMouseUpX(AuxiliaryController ac,
-                                           int mouseMoveWidthPixel)
+                                           int changeSizeWidthPixel)
         {
-            return ac.AuxiliaryLeftRelativeImage - (double)mouseMoveWidthPixel;
+            // 矩形拡大のために動かす方向 = Left値が減る方向
+            return ac.AuxiliaryLeftRelativeImage - (double)changeSizeWidthPixel;
         }
 
         public override double GetMouseUpY(AuxiliaryController ac,
-                                           int mouseMoveHeightPixel)
+                                           int changeSizeHeightPixel)
         {
-            return ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
+            return ac.AuxiliaryHeight + (double)changeSizeHeightPixel;
         }
 
         public override Point GetMouseDownPoint(AuxiliaryController ac)
@@ -55,6 +56,7 @@ namespace TestMyTrimmingNew
                                                                    int changeSizeWidth,
                                                                    int changeSizeHeight)
         {
+            // 左下点操作の場合、原点はLeftだけ変わる
             return new AuxiliaryLineTestData(beforeLeftRelativeImage - changeSizeWidth,
                                              beforeTopRelativeImage,
                                              beforeWidth + changeSizeWidth,

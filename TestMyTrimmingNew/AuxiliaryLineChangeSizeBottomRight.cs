@@ -7,14 +7,15 @@ namespace TestMyTrimmingNew
     class AuxiliaryLineChangeSizeBottomRight : AuxiliaryLineChangeSizeTemplate
     {
         public override double GetMouseUpX(AuxiliaryController ac,
-                                           int mouseMoveWidthPixel)
+                                           int changeSizeWidthPixel)
         {
-            return (ac.AuxiliaryWidth + (double)mouseMoveWidthPixel);
+            return (ac.AuxiliaryWidth + (double)changeSizeWidthPixel);
         }
 
-        public override double GetMouseUpY(AuxiliaryController ac, int mouseMoveHeightPixel)
+        public override double GetMouseUpY(AuxiliaryController ac,
+                                           int changeSizeHeightPixel)
         {
-            return (ac.AuxiliaryHeight + (double)mouseMoveHeightPixel);
+            return (ac.AuxiliaryHeight + (double)changeSizeHeightPixel);
         }
 
         public override Point GetMouseDownPoint(AuxiliaryController ac)
@@ -49,17 +50,17 @@ namespace TestMyTrimmingNew
         }
 
         public override AuxiliaryLineTestData GetAuxiliaryTestData(int beforeLeftRelativeImage,
-                                                               int beforeTopRelativeImage,
-                                                               int beforeWidth,
-                                                               int beforeHeight,
-                                                               int changeSizeWidth,
-                                                               int changeSizeHeight)
+                                                                   int beforeTopRelativeImage,
+                                                                   int beforeWidth,
+                                                                   int beforeHeight,
+                                                                   int changeSizeWidth,
+                                                                   int changeSizeHeight)
         {
             // 右下点操作であれば、原点は変わらない
             return new AuxiliaryLineTestData(beforeLeftRelativeImage,
-                                         beforeTopRelativeImage,
-                                         beforeWidth + changeSizeWidth,
-                                         beforeHeight + changeSizeHeight);
+                                             beforeTopRelativeImage,
+                                             beforeWidth + changeSizeWidth,
+                                             beforeHeight + changeSizeHeight);
         }
     }
 }
