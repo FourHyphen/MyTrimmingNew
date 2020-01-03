@@ -398,6 +398,8 @@ namespace TestMyTrimmingNew
 
         #endregion
 
+        #region "拡大/縮小: 右上点操作"
+
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereTopRight()
@@ -415,6 +417,41 @@ namespace TestMyTrimmingNew
             ChangeAuxiliaryLineSizeWhereTopRight(ac, -5, -100, false);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereTopRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 原点が変わるような操作の場合(= 左下点を思いっきり右や上に引っ張る操作)、サイズを変更しない
+            // TODO: 対応する？
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -1200, -10, true);
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -10, -1200, false);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeTopRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
+            // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
+            //  -> まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, 200, 10, true);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereTopRight(AuxiliaryController ac,
                                                           int changeSizeWidth,
                                                           int changeSizeHeight,
@@ -430,5 +467,7 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
         }
+
+        #endregion
     }
 }
