@@ -22,14 +22,11 @@ namespace MyTrimmingNew.AuxiliaryLine
         public void Execute(object operation)
         {
             Point mouseUpCoordinateRelatedAuxiliaryLine = (Point)operation;
-            int mouseMoveX = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
-            int mouseMoveY = (int)mouseUpCoordinateRelatedAuxiliaryLine.Y - (int)MouseDownRelatedAuxiliaryLine.Y;
+            int changeSizeWidth = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
+            int changeSizeHeight = (int)mouseUpCoordinateRelatedAuxiliaryLine.Y - (int)MouseDownRelatedAuxiliaryLine.Y;
             Mouse.KindMouseDownAuxiliaryLineArea mouseDownArea = Mouse.GetKindMouseDownAuxiliaryLineArea(AC, MouseDownRelatedAuxiliaryLine);
 
-            // 意図した拡大/縮小のサイズになるよう符号を合わせてから処理実行
-            // 例) 右下点のX方向操作 -> 正なら拡大、負なら縮小
-            // 例) 左下点のX方向操作 -> 負なら拡大、正なら縮小
-            //                           -> 符号反転し、拡大を意図しているなら正になるようにする
+            // 拡大を意図しているなら正に、縮小を意図しているなら負になるよう符号を合わせてから処理実行
             AuxiliaryLineChangeSizeTemplate changeSizeLogic = null;
             if (mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.RightBottom)
             {
@@ -37,11 +34,16 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
             else if(mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftBottom)
             {
-                mouseMoveX = -mouseMoveX;
+                changeSizeWidth = -changeSizeWidth;
                 changeSizeLogic = new AuxiliaryLineChangeSizeBottomLeft(AC);
             }
+            else if (mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.RightTop)
+            {
+                changeSizeHeight = -changeSizeHeight;
+                changeSizeLogic = new AuxiliaryLineChangeSizeTopRight(AC);
+            }
 
-            changeSizeLogic.Execute(mouseMoveX, mouseMoveY);
+            changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);
         }
     }
 }

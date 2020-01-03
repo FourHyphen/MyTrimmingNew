@@ -397,5 +397,38 @@ namespace TestMyTrimmingNew
         }
 
         #endregion
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereTopRight()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // Width基準でHeightを変更するよう、Width >> height となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
+
+            // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -5, -100, false);
+        }
+
+        private void ChangeAuxiliaryLineSizeWhereTopRight(AuxiliaryController ac,
+                                                          int changeSizeWidth,
+                                                          int changeSizeHeight,
+                                                          bool isWidthMuchLongerThanHeight)
+        {
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineChangeSizeTopRight().ChangeSize(ac,
+                                                                   changeSizeWidth,
+                                                                   changeSizeHeight,
+                                                                   isWidthMuchLongerThanHeight);
+            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+        }
     }
 }
