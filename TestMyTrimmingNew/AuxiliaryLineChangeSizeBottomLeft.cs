@@ -1,32 +1,32 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using MyTrimmingNew;
 
 namespace TestMyTrimmingNew
 {
-    class AuxiliaryLineChangeSizeBottomRight : AuxiliaryLineChangeSizeTemplate
+    class AuxiliaryLineChangeSizeBottomLeft : AuxiliaryLineChangeSizeTemplate
     {
         public override double GetMouseUpX(AuxiliaryController ac,
                                            int mouseMoveWidthPixel)
         {
-            return (ac.AuxiliaryWidth + (double)mouseMoveWidthPixel);
+            return ac.AuxiliaryLeftRelativeImage - (double)mouseMoveWidthPixel;
         }
 
-        public override double GetMouseUpY(AuxiliaryController ac, int mouseMoveHeightPixel)
+        public override double GetMouseUpY(AuxiliaryController ac,
+                                           int mouseMoveHeightPixel)
         {
-            return (ac.AuxiliaryHeight + (double)mouseMoveHeightPixel);
+            return ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
         }
 
         public override Point GetMouseDownPoint(AuxiliaryController ac)
         {
-            return new Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
+            return new Point(0, (double)ac.AuxiliaryHeight);
         }
 
         public override int GetMaxChangeSizeWidth(AuxiliaryController ac,
                                                   int beforeWidth,
                                                   int beforeLeftRelativeImage)
         {
-            return ac.DisplayImageWidth - beforeWidth - beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
+            return beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
         }
 
         public override int GetMaxChangeSizeHeight(AuxiliaryController ac,
@@ -41,7 +41,7 @@ namespace TestMyTrimmingNew
                                                            int changeSizeWidth,
                                                            int changeSizeHeight)
         {
-            if (((beforeWidth + changeSizeWidth) < 0) || ((beforeHeight + changeSizeHeight) < 0))
+            if ((-changeSizeWidth > beforeWidth) || (-changeSizeHeight > beforeHeight))
             {
                 return true;
             }
@@ -49,17 +49,16 @@ namespace TestMyTrimmingNew
         }
 
         public override AuxiliaryLineTestData GetAuxiliaryTestData(int beforeLeftRelativeImage,
-                                                               int beforeTopRelativeImage,
-                                                               int beforeWidth,
-                                                               int beforeHeight,
-                                                               int changeSizeWidth,
-                                                               int changeSizeHeight)
+                                                                   int beforeTopRelativeImage,
+                                                                   int beforeWidth,
+                                                                   int beforeHeight,
+                                                                   int changeSizeWidth,
+                                                                   int changeSizeHeight)
         {
-            // 右下点操作であれば、原点は変わらない
-            return new AuxiliaryLineTestData(beforeLeftRelativeImage,
-                                         beforeTopRelativeImage,
-                                         beforeWidth + changeSizeWidth,
-                                         beforeHeight + changeSizeHeight);
+            return new AuxiliaryLineTestData(beforeLeftRelativeImage - changeSizeWidth,
+                                             beforeTopRelativeImage,
+                                             beforeWidth + changeSizeWidth,
+                                             beforeHeight + changeSizeHeight);
         }
     }
 }

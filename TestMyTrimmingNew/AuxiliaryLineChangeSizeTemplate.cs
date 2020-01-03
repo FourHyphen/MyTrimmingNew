@@ -26,8 +26,8 @@ namespace TestMyTrimmingNew
             ac.PublishEvent(mouseUp);
 
             // X方向操作距離とY方向操作距離を、矩形の縦横比率に合わせる
-            int changeSizeWidth = GetInitChangeSizeWidth(mouseMoveWidthPixel);
-            int changeSizeHeight = GetInitChangeSizeHeight(mouseMoveHeightPixel);
+            int changeSizeWidth = mouseMoveWidthPixel;
+            int changeSizeHeight = mouseMoveHeightPixel;
             if (isWidthMuchLongerThanHeight)
             {
                 changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
@@ -75,10 +75,6 @@ namespace TestMyTrimmingNew
                                            int mouseMoveHeightPixel);
 
         public abstract Point GetMouseDownPoint(AuxiliaryController ac);
-
-        public abstract int GetInitChangeSizeWidth(int changeSizeWidth);
-
-        public abstract int GetInitChangeSizeHeight(int changeSizeHeight);
 
         public abstract int GetMaxChangeSizeWidth(AuxiliaryController ac,
                                                   int beforeWidth,

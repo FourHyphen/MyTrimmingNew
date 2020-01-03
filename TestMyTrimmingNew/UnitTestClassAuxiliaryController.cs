@@ -359,7 +359,7 @@ namespace TestMyTrimmingNew
                                                                    heightRatio);
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
-            int willDecreaseWidthPixel = 100;
+            int willDecreaseWidthPixel = -100;
             int willDecreaseHeightPixel = -5;
             ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
                                                    willDecreaseWidthPixel,
@@ -415,7 +415,7 @@ namespace TestMyTrimmingNew
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
             //  -> まず補助線矩形を画像より小さくする
-            int willDecreaseWidthPixel = 100;
+            int willDecreaseWidthPixel = -100;
             int willDecreaseHeightPixel = -5;
             ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
                                                    willDecreaseWidthPixel,
@@ -423,7 +423,7 @@ namespace TestMyTrimmingNew
                                                    true);
 
             // 実際に画像からはみ出るような操作をする
-            int willIncreaseWidthPixel = -200;
+            int willIncreaseWidthPixel = 200;
             int willIncreaseHeightPixel = 10;
             ChangeAuxiliaryLineSizeWhereBottomLeft(ac,
                                                    willIncreaseWidthPixel,
@@ -436,65 +436,14 @@ namespace TestMyTrimmingNew
                                                             int mouseMoveHeightPixel,
                                                             bool isWidthMuchLongerThanHeight)
         {
-            // 操作前の値を保持
-            int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
-            int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
-
-            // 操作
-            double mouseUpX = (double)ac.AuxiliaryLeftRelativeImage + (double)mouseMoveWidthPixel;
-            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
-            System.Windows.Point mouseDownRelatedAuxiliaryLine = new System.Windows.Point(0, (double)ac.AuxiliaryHeight);
-            System.Windows.Point mouseUpRelatedAuxiliaryLine = new System.Windows.Point(mouseUpX, mouseUpY);
-            ac.SetEvent(mouseDownRelatedAuxiliaryLine);
-            ac.PublishEvent(mouseUpRelatedAuxiliaryLine);
-
-            // X方向操作距離とY方向操作距離を、矩形の縦横比率に合わせる
-            int changeSizeWidth = -mouseMoveWidthPixel;
-            int changeSizeHeight = mouseMoveHeightPixel;
-            if (isWidthMuchLongerThanHeight)
-            {
-                changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-            }
-            else
-            {
-                changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-            }
-
-            int maxChangeSizeWidth = beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
-            int maxChangeSizeHeight = ac.DisplayImageHeight - beforeHeight - beforeTopRelativeImage - Common.AuxiliaryLineThickness + 1;
-            if ((-changeSizeWidth > beforeWidth) || (-changeSizeHeight > beforeHeight))
-            {
-                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
-                changeSizeWidth = 0;
-                changeSizeHeight = 0;
-            }
-            else if (changeSizeWidth > maxChangeSizeWidth || changeSizeHeight > maxChangeSizeHeight)
-            {
-                // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
-                if (isWidthMuchLongerThanHeight)
-                {
-                    changeSizeWidth = maxChangeSizeWidth;
-                    changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-                }
-                else
-                {
-                    changeSizeHeight = maxChangeSizeHeight;
-                    changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-                }
-            }
-
-            // 左下の点の操作であれば、原点はLeftだけ変わる
-            int expectLeft = beforeLeftRelativeImage - changeSizeWidth;
-            Assert.AreEqual(expectLeft, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
-
-            // 変更後サイズの確認
-            int expectWidth = beforeWidth + changeSizeWidth;
-            int expectHeight = beforeHeight + changeSizeHeight;
-            Assert.AreEqual(expectWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(expectHeight, ac.AuxiliaryHeight);
+            AuxiliaryLineTestData testData = new AuxiliaryLineChangeSizeBottomLeft().ChangeSize(ac,
+                                                                                                mouseMoveWidthPixel,
+                                                                                                mouseMoveHeightPixel,
+                                                                                                isWidthMuchLongerThanHeight);
+            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
         }
 
         #endregion
