@@ -334,64 +334,14 @@ namespace TestMyTrimmingNew
                                                              int mouseMoveHeightPixel,
                                                              bool isWidthMuchLongerThanHeight)
         {
-            // 操作前の値を保持
-            int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
-            int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
-
-            // 操作
-            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseMoveWidthPixel;
-            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseMoveHeightPixel;
-            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
-            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
-            ac.SetEvent(mouseDown);
-            ac.PublishEvent(mouseUp);
-
-            // X方向操作距離とY方向操作距離を、矩形の縦横比率に合わせる
-            int changeSizeWidth = mouseMoveWidthPixel;
-            int changeSizeHeight = mouseMoveHeightPixel;
-            if (isWidthMuchLongerThanHeight)
-            {
-                changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-            }
-            else
-            {
-                changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-            }
-
-            int maxChangeSizeWidth = ac.DisplayImageWidth - beforeWidth - beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
-            int maxChangeHeight = ac.DisplayImageHeight - beforeHeight - beforeTopRelativeImage - Common.AuxiliaryLineThickness + 1;
-            if (((beforeWidth+changeSizeWidth) < 0) || ((beforeHeight + changeSizeHeight) < 0))
-            {
-                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
-                changeSizeWidth = 0;
-                changeSizeHeight = 0;
-            }
-            else if(changeSizeWidth > maxChangeSizeWidth || changeSizeHeight > maxChangeHeight)
-            {
-                // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
-                if (isWidthMuchLongerThanHeight)
-                {
-                    changeSizeWidth = maxChangeSizeWidth;
-                    changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-                }
-                else
-                {
-                    changeSizeHeight = maxChangeHeight;
-                    changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
-                }
-            }
-
-            // 右下の点の操作であれば、原点は変わらないのが正解
-            Assert.AreEqual(beforeLeftRelativeImage, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(beforeTopRelativeImage, ac.AuxiliaryTopRelativeImage);
-
-            // 変更後サイズの確認
-            int expectSizeWidth = beforeWidth + changeSizeWidth;
-            int expectSizeHeight = beforeHeight + changeSizeHeight;
-            Assert.AreEqual(expectSizeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(expectSizeHeight, ac.AuxiliaryHeight);
+            AuxiliaryLineTestData testData = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
+                                                                                         mouseMoveWidthPixel,
+                                                                                         mouseMoveHeightPixel,
+                                                                                         isWidthMuchLongerThanHeight);
+            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
         }
 
         #endregion
