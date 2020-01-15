@@ -86,6 +86,7 @@
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSize.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeBottomLeft.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTemplate.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTopLeft.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTopRight.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineOperationFactory.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineMove.cs" />

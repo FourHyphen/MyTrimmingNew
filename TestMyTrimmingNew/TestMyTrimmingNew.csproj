@@ -75,6 +75,7 @@
     <Compile Include="AuxiliaryLineChangeSizeBottomLeft.cs" />
     <Compile Include="AuxiliaryLineChangeSizeBottomRight.cs" />
     <Compile Include="AuxiliaryLineChangeSizeTemplate.cs" />
+    <Compile Include="AuxiliaryLineChangeSizeTopLeft.cs" />
     <Compile Include="AuxiliaryLineChangeSizeTopRight.cs" />
     <Compile Include="AuxiliaryLineTestData.cs" />
     <Compile Include="Common.cs" />

@@ -32,7 +32,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             {
                 changeSizeLogic = new AuxiliaryLineChangeSizeBottomRight(AC);
             }
-            else if(mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftBottom)
+            else if (mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftBottom)
             {
                 changeSizeWidth = -changeSizeWidth;
                 changeSizeLogic = new AuxiliaryLineChangeSizeBottomLeft(AC);
@@ -41,6 +41,12 @@ namespace MyTrimmingNew.AuxiliaryLine
             {
                 changeSizeHeight = -changeSizeHeight;
                 changeSizeLogic = new AuxiliaryLineChangeSizeTopRight(AC);
+            }
+            else if (mouseDownArea == Mouse.KindMouseDownAuxiliaryLineArea.LeftTop)
+            {
+                changeSizeWidth = -changeSizeWidth;
+                changeSizeHeight = -changeSizeHeight;
+                changeSizeLogic = new AuxiliaryLineChangeSizeTopLeft(AC);
             }
 
             changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);

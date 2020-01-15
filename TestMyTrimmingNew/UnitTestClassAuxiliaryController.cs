@@ -469,5 +469,77 @@ namespace TestMyTrimmingNew
         }
 
         #endregion
+
+        #region "拡大/縮小: 左上点操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereTopLeft()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // Width基準でHeightを変更するよう、Width >> height となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -100, -5, true);
+
+            // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -5, -100, false);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereTopLeft()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 原点が変わるような操作の場合(= 左上点を思いっきり右や上に引っ張る操作)、サイズを変更しない
+            // TODO: 対応する？
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -1200, -10, true);
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -10, -1200, false);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeTopLeft()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
+            // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
+            //  -> まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -100, -5, true);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, 200, 10, true);
+        }
+
+        private void ChangeAuxiliaryLineSizeWhereTopLeft(AuxiliaryController ac,
+                                                         int changeSizeWidth,
+                                                         int changeSizeHeight,
+                                                         bool isWidthMuchLongerThanHeight)
+        {
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineChangeSizeTopLeft().ChangeSize(ac,
+                                                                  changeSizeWidth,
+                                                                  changeSizeHeight,
+                                                                  isWidthMuchLongerThanHeight);
+            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+        }
+
+        #endregion
     }
 }
