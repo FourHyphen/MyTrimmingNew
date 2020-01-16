@@ -72,7 +72,7 @@ namespace MyTrimmingNew
             //       (次の保存試行の結果と混ざるというか誤解させそう)
             try
             {
-                //image.Save(filePath);
+                //common.Image.SaveTrimImage(filePath);
                 SaveResult = true;
             }
             catch (Exception ex)

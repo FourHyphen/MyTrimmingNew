@@ -60,5 +60,42 @@ namespace MyTrimmingNew.common
             g.Dispose();
             return reductionImage;
         }
+
+        /// <summary>
+        /// 切り抜き画像保存
+        /// 切り抜き範囲の原点指定は画像を親とした相対値としてください
+        /// TODO: 例外処理の実装、ユーザーから見て、保存失敗したときはシステムにどうして欲しい？
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="seemingOriginX"></param>
+        /// <param name="seemingOriginY"></param>
+        /// <param name="seemingWidth"></param>
+        /// <param name="seemingHeight"></param>
+        /// <returns></returns>
+        public static void SaveTrimImage(Bitmap image,
+                                         String filePath,
+                                         int seemingOriginX,
+                                         int seemingOriginY,
+                                         int seemingWidth,
+                                         int seemingHeight,
+                                         double ratio)
+        {
+            // 1/1スケール画像上の切り抜き範囲
+            int originX = (int)((double)seemingOriginX / ratio);
+            int originY = (int)((double)seemingOriginY / ratio);
+            int trimWidth = (int)((double)seemingWidth / ratio);
+            int trimHeight = (int)((double)seemingHeight / ratio);
+
+            // 切り抜き画像作成
+            Bitmap trimImage = new Bitmap(trimWidth, trimHeight);
+            Graphics g = Graphics.FromImage(trimImage);
+            Rectangle trim = new Rectangle(originX, originY, trimWidth, trimHeight);
+            Rectangle draw = new Rectangle(0, 0, trim.Width, trim.Height);
+            g.DrawImage(image, draw, trim, GraphicsUnit.Pixel);
+            g.Dispose();
+
+            // 保存
+            trimImage.Save(filePath);
+        }
     }
 }
