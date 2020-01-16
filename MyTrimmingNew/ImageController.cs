@@ -25,6 +25,8 @@ namespace MyTrimmingNew
 
         public int DisplayImageHeight { get { return _windowSize.ImageFitWindowHeight; } }
 
+        public bool SaveResult { get; internal set; }
+
         /// <summary>
         /// 表示用画像
         /// </summary>
@@ -55,19 +57,15 @@ namespace MyTrimmingNew
         /// <summary>
         /// 画像を保存する一連の処理を実行する
         /// </summary>
-        /// <returns>
-        /// True: 画像を保存した
-        /// False: 画像を保存しなかった(ユーザーがキャンセルした)
-        /// </returns>
         /// <exception>
         /// 画像保存エラー
         /// </exception>
-        public bool Save(System.Windows.Controls.Primitives.StatusBarItem SaveResultField)
+        public void Save()
         {
             string filePath = ImageFileSaveDialog.GetInstance(SaveNameExample, DirPath).Show();
             if (filePath == "")
             {
-                return false;
+                return;
             }
 
             // TODO: 保存結果の表示後、何かユーザー操作があったタイミングで結果表示しない方が良さそう
@@ -75,14 +73,14 @@ namespace MyTrimmingNew
             try
             {
                 //image.Save(filePath);
-                SaveResultField.Content = "保存に成功しました";
+                SaveResult = true;
             }
             catch (Exception ex)
             {
-                SaveResultField.Content = "保存に失敗しました";
+                SaveResult = false;
             }
 
-            return true;
+            Notify();
         }
     }
 }

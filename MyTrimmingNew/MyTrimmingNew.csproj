@@ -98,6 +98,7 @@
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
+    <Compile Include="ImageSaveResultFieldObserver.cs" />
     <Compile Include="IVisualComponentObserver.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineRectangleObserver.cs" />

@@ -22,6 +22,7 @@ namespace MyTrimmingNew
         private ImageController _imageController;
         private ShowImageObserver _showImageObserver;
         private ShowImageLengthObserver _showImageLength;
+        private ImageSaveResultFieldObserver _imageSaveResult;
 
         private AuxiliaryController _auxiliaryController;
         private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
@@ -45,13 +46,12 @@ namespace MyTrimmingNew
 
         /// <summary>
         /// 各種データを表示する
-        /// 表示順は画像情報 → 補助線情報とすること
         /// </summary>
         /// <param name="filePath"></param>
         private void DisplayInfo(string filePath)
         {
             DisplayImageInfo(filePath);
-            DisplayAuxiliaryLine();
+            DisplayAuxiliaryLine(_imageController);
         }
 
         private void DisplayImageInfo(string imageFilePath)
@@ -63,6 +63,7 @@ namespace MyTrimmingNew
                                                        (int)Height - Constant.FixCanvasHeight);
                 _showImageObserver = new ShowImageObserver(xShowImage, _imageController);
                 _showImageLength = new ShowImageLengthObserver(xOriginalImageLength, _imageController);
+                _imageSaveResult = new ImageSaveResultFieldObserver(xSaveResult, _imageController);
             }
             catch (Exception ex)
             {
@@ -74,9 +75,9 @@ namespace MyTrimmingNew
         /// TODO: 比率を16:9固定ではなく4:3とかの任意比率に対応する
         /// TODO: 比率の初期値どうする？config.ini管理？
         /// </summary>
-        private void DisplayAuxiliaryLine()
+        private void DisplayAuxiliaryLine(ImageController ic)
         {
-            _auxiliaryController = new AuxiliaryController(_imageController);
+            _auxiliaryController = new AuxiliaryController(ic);
             _auxiliaryLineRectangle = new AuxiliaryLineRectangleObserver(xAuxiliaryLine, _auxiliaryController);
             _auxiliaryLineLength = new AuxiliaryLineLengthObserver(xAuxiliaryLineLength, _auxiliaryController);
         }
@@ -119,7 +120,7 @@ namespace MyTrimmingNew
         {
             try
             {
-                _imageController.Save(xSaveResult);
+                _imageController.Save();
 
             }
             catch (Exception ex)

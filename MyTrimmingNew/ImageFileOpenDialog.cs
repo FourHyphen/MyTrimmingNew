@@ -37,7 +37,6 @@ namespace MyTrimmingNew
         private void Init()
         {
             // TODO: 表示文字列は全て外部管理(setting.ini？)したい
-            // TODO: これ消せるか確認したら消す: _ofd.InitialDirectory = _nowInitialDir;
             _ofd.FileName = "";
             _ofd.Filter = "Imageファイル(*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png|すべてのファイル(*.*)|*.*";
             _ofd.FilterIndex = 1;
