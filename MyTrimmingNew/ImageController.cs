@@ -60,7 +60,7 @@ namespace MyTrimmingNew
         /// <exception>
         /// 画像保存エラー
         /// </exception>
-        public void Save()
+        public void Save(AuxiliaryController ac)
         {
             string filePath = ImageFileSaveDialog.GetInstance(SaveNameExample, DirPath).Show();
             if (filePath == "")
@@ -72,7 +72,13 @@ namespace MyTrimmingNew
             //       (次の保存試行の結果と混ざるというか誤解させそう)
             try
             {
-                //common.Image.SaveTrimImage(filePath);
+                common.Image.SaveTrimImage(BitmapImage,
+                                           filePath,
+                                           ac.AuxiliaryLeftRelativeImage,
+                                           ac.AuxiliaryTopRelativeImage,
+                                           ac.AuxiliaryWidth,
+                                           ac.AuxiliaryHeight,
+                                           _windowSize.ImageFitWindowRatio);
                 SaveResult = true;
             }
             catch (Exception ex)

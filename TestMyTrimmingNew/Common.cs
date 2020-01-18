@@ -16,14 +16,14 @@ namespace TestMyTrimmingNew
 
         public static ImageController GetDisplayImage(string filePath)
         {
-            return new ImageController(filePath, WindowInitWidth, WindowInitHeight);
+            return new ImageController(filePath,
+                                       WindowInitWidth - Constant.FixCanvasWidth,
+                                       WindowInitHeight - Constant.FixCanvasHeight);
         }
 
         public static AuxiliaryController GetAuxiliaryController(string filePath, int widthRatio, int heightRatio)
         {
-            ImageController ic = new ImageController(filePath,
-                                                     WindowInitWidth,
-                                                     WindowInitHeight);
+            ImageController ic = GetDisplayImage(filePath);
             return new AuxiliaryController(ic, widthRatio, heightRatio, AuxiliaryLineThickness);
         }
 

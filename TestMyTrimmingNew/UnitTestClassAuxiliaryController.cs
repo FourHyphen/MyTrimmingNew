@@ -20,8 +20,9 @@ namespace TestMyTrimmingNew
                                                                    heightRatio);
 
             double ratio = (double)widthRatio / (double)heightRatio;
-            int fittedHeight = (int)((double)Common.WindowInitWidth / ratio);
-            Assert.AreEqual(Common.WindowInitWidth, ac.AuxiliaryWidth);
+            int fittedWidth = Common.WindowInitWidth - Constant.FixCanvasWidth;
+            int fittedHeight = (int)((double)fittedWidth / ratio);
+            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
         }
 
@@ -36,9 +37,10 @@ namespace TestMyTrimmingNew
                                                                    heightRatio);
 
             double ratio = (double)widthRatio / (double)heightRatio;
-            int fittedWidth = (int)((double)Common.WindowInitHeight / ratio);
+            int fittedHeight = Common.WindowInitHeight - Constant.FixCanvasHeight;
+            int fittedWidth = (int)((double)fittedHeight / ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(Common.WindowInitHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
         }
 
         #endregion

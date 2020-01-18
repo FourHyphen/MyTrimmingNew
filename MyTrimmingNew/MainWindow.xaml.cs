@@ -114,13 +114,13 @@ namespace MyTrimmingNew
 
         #endregion
 
-        #region "ユーザー操作時処理: 画像ファイル保存 TODO: 実装"
+        #region "ユーザー操作時処理: 画像ファイル保存"
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _imageController.Save();
+                _imageController.Save(_auxiliaryController);
 
             }
             catch (Exception ex)

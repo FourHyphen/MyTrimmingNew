@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTrimmingNew
 {
-    class Constant
+    public class Constant
     {
         // TODO: 各種パラメーターを画面の要素から取得できないか？
         private static int _menuItemHeight = 20;

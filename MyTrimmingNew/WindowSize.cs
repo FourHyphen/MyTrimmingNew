@@ -28,28 +28,28 @@ namespace MyTrimmingNew
         /// <summary>
         /// windowに画像全部が表示されるよう、画像の縦横比率を維持しつつ縮小するサイズを求める
         /// ex) windowサイズ横1000 * 縦800に横2160 * 縦3000の画像を表示する場合、
-        ///     ・横縮小率: 2160 / 1000 = 2.16 | 画像サイズ 横1000 * 縦1388
-        ///     ・縦縮小率: 3000 /  800 = 3.75 | 画像サイズ 横 576 * 縦 800
+        ///     ・横縮小率: 1000 / 2160 = 0.46 | 画像サイズ 横1000 * 縦1388
+        ///     ・縦縮小率:  800 / 3000 = 0.27 | 画像サイズ 横 576 * 縦 800
         ///     となり、横576 * 縦800に縮小すれば画像全部が表示される
         /// </summary>
         private void CalcImageSizeWindowFit(int imageWidth, int imageHeight)
         {
             double width = (double)imageWidth;
             double height = (double)imageHeight;
-            double widthReductionRatio = width / (double)WindowWidth;
-            double heightReductionRatio = height / (double)WindowHeight;
+            double widthReductionRatio = (double)WindowWidth / width;
+            double heightReductionRatio = (double)WindowHeight / height;
 
-            if (widthReductionRatio < heightReductionRatio)
+            if (widthReductionRatio > heightReductionRatio)
             {
                 ImageFitWindowRatio = heightReductionRatio;
-                ImageFitWindowWidth = (int)((double)imageWidth / ImageFitWindowRatio);
+                ImageFitWindowWidth = (int)((double)imageWidth * ImageFitWindowRatio);
                 ImageFitWindowHeight = WindowHeight;
             }
             else
             {
                 ImageFitWindowRatio = widthReductionRatio;
                 ImageFitWindowWidth = WindowWidth;
-                ImageFitWindowHeight = (int)((double)imageHeight / ImageFitWindowRatio);
+                ImageFitWindowHeight = (int)((double)imageHeight * ImageFitWindowRatio);
             }
         }
     }
