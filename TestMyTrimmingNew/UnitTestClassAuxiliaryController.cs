@@ -37,8 +37,8 @@ namespace TestMyTrimmingNew
                                                                    heightRatio);
 
             double ratio = (double)widthRatio / (double)heightRatio;
-            int fittedHeight = Common.WindowInitHeight - Constant.FixCanvasHeight;
-            int fittedWidth = (int)((double)fittedHeight / ratio);
+            int fittedWidth = ac.DisplayImageWidth;
+            int fittedHeight = (int)((double)ac.DisplayImageWidth / ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
         }
