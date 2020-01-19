@@ -81,6 +81,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="UnitTestClassAuxiliaryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestClassAuxiliaryControllerHeightRatioLargerThanWidthRatio.cs" />
     <Compile Include="UnitTestClassCommonImage.cs" />
     <Compile Include="UnitTestClassImageController.cs" />
   </ItemGroup>

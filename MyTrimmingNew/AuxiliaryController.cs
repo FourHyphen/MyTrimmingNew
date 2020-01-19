@@ -20,9 +20,16 @@ namespace MyTrimmingNew
         {
             AuxiliaryRatio = (double)widthRatio / (double)heightRatio;
 
-            // TODO: 比率が縦長の場合はこれだとNG
-            AuxiliaryWidth = ic.DisplayImageWidth;
-            AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
+            if (widthRatio > heightRatio)
+            {
+                AuxiliaryWidth = ic.DisplayImageWidth;
+                AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
+            }
+            else
+            {
+                AuxiliaryHeight = ic.DisplayImageHeight;
+                AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);
+            }
 
             DisplayImageWidth = ic.DisplayImageWidth;
             DisplayImageHeight = ic.DisplayImageHeight;
