@@ -18,7 +18,7 @@ namespace MyTrimmingNew
             StatusBarItem = sbi;
             IC = ic;
             IC.Attach(this);
-            Draw(IC);
+            DrawInitStr();
         }
 
         public void Update(object o)
@@ -28,6 +28,11 @@ namespace MyTrimmingNew
             {
                 Draw(ic);
             }
+        }
+
+        private void DrawInitStr()
+        {
+            StatusBarItem.Content = "ここに保存結果が表示されます";
         }
 
         private void Draw(ImageController ic)
