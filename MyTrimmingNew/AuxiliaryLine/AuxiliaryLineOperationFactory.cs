@@ -20,7 +20,12 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             Mouse.KindMouseDownAuxiliaryLineArea area = Mouse.GetKindMouseDownAuxiliaryLineArea(ac,
                                                                                                 coordinateRelatedAuxiliaryLine);
-            if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
+
+            if (area == Mouse.KindMouseDownAuxiliaryLineArea.Else)
+            {
+                return null;
+            }
+            else if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
             {
                 return new AuxiliaryLineMove(ac, coordinateRelatedAuxiliaryLine);
             }

@@ -543,5 +543,32 @@ namespace TestMyTrimmingNew
         }
 
         #endregion
+
+        #region "その他: 補助線矩形外でのマウス操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoProcessingAuxiliaryLineIfMouseDownOuterAuxiliaryLine()
+        {
+            int widthRatio = 16;
+            int heightRatio = 9;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path,
+                                                                   widthRatio,
+                                                                   heightRatio);
+
+            // 補助線を縮小して補助線外部のスペースを作り、そのスペースでテストする
+            int sizeChangeWidth = -100;
+            int sizeChangeHeight = -5;
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, sizeChangeWidth, sizeChangeHeight, true);
+
+            double mouseDownX = ac.DisplayImageWidth + (sizeChangeWidth/2);
+            double mouseDownY = ac.DisplayImageHeight + (sizeChangeHeight/2);
+            System.Windows.Point mouseDown = new System.Windows.Point(mouseDownX, mouseDownY);
+            System.Windows.Point mouseUp = mouseDown;
+            ac.SetEvent(mouseDown);
+            ac.PublishEvent(mouseUp);
+        }
+
+        #endregion
     }
 }
