@@ -67,7 +67,7 @@ namespace MyTrimmingNew
             }
             catch (Exception ex)
             {
-                // TODO: 画像オープン失敗時の例外処理
+                ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageOpen);
             }
         }
 
@@ -121,12 +121,11 @@ namespace MyTrimmingNew
             try
             {
                 _imageController.Save(_auxiliaryController);
-
+                ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.SuccessImageSave);
             }
             catch (Exception ex)
             {
-                // TODO: 画像保存失敗時の例外処理
-                throw ex;
+                ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageSave);
             }
         }
 

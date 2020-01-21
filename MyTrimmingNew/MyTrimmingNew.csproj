@@ -64,6 +64,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -98,6 +99,7 @@
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />
+    <Compile Include="ImageProcessResultMessageBox.cs" />
     <Compile Include="ImageSaveResultFieldObserver.cs" />
     <Compile Include="IVisualComponentObserver.cs" />
     <Compile Include="Keys.cs" />
