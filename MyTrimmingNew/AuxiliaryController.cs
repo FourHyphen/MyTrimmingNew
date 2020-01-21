@@ -18,6 +18,7 @@ namespace MyTrimmingNew
                                    int heightRatio = 9,
                                    int auxiliaryLineThickness = 1)
         {
+            ImageController = ic;
             AuxiliaryRatio = (double)widthRatio / (double)heightRatio;
 
             if (widthRatio > heightRatio)
@@ -30,9 +31,6 @@ namespace MyTrimmingNew
                 AuxiliaryHeight = ic.DisplayImageHeight;
                 AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);
             }
-
-            DisplayImageWidth = ic.DisplayImageWidth;
-            DisplayImageHeight = ic.DisplayImageHeight;
 
             // 初期値は画像の原点に合わせる
             AuxiliaryLeftRelativeImage = 0;
@@ -78,9 +76,11 @@ namespace MyTrimmingNew
 
         public double AuxiliaryRatio { get; private set; }
 
-        public int DisplayImageWidth { get; private set; }
+        private ImageController ImageController { get; set; }
 
-        public int DisplayImageHeight { get; private set; }
+        public int DisplayImageWidth { get { return ImageController.DisplayImageWidth; } }
+
+        public int DisplayImageHeight { get { return ImageController.DisplayImageHeight; } }
 
         private int FitInRangeAuxiliaryTopRelativeImage(int toMoveTop)
         {
