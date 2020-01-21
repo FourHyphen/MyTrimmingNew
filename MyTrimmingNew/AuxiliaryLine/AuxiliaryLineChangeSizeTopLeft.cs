@@ -17,7 +17,6 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public override bool WillChangeAuxilirayOrigin(int changeSizeWidth, int changeSizeHeight)
         {
-            // TODO: TopRightからコピーしてきただけ！
             // 左上点を思いっきり右や下に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
             if ((-changeSizeWidth > AC.AuxiliaryWidth) || (AC.AuxiliaryHeight + changeSizeHeight) < 0)
             {

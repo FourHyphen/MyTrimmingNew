@@ -15,13 +15,13 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public AuxiliaryLineMove(AuxiliaryController ac)
         {
-            // TODO: MoveStartPointはマウスによる移動時のみ値が入る
-            //        -> MoveとChangeSizeで分けたけど、マウスかKeyか、で分けた方が良いのでは？
+            // キー操作による移動
             AC = ac;
         }
 
         public AuxiliaryLineMove(AuxiliaryController ac, Point moveStartPoint)
         {
+            // マウス操作による移動
             AC = ac;
             MoveStartPoint = moveStartPoint;
         }

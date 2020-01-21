@@ -11,6 +11,7 @@ namespace MyTrimmingNew.AuxiliaryLine
     {
         public IAuxiliaryLineOperation Create(AuxiliaryController ac)
         {
+            // キー操作を想定(始点がない)
             return new AuxiliaryLineMove(ac);
         }
 
