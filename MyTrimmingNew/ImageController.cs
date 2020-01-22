@@ -25,8 +25,6 @@ namespace MyTrimmingNew
 
         public int DisplayImageHeight { get { return _windowSize.ImageFitWindowHeight; } }
 
-        public bool SaveResult { get; internal set; }
-
         /// <summary>
         /// 表示用画像
         /// </summary>
@@ -58,7 +56,7 @@ namespace MyTrimmingNew
         /// 画像を保存する一連の処理を実行する
         /// </summary>
         /// <exception>
-        /// 画像保存エラー
+        /// 画像保存失敗例外
         /// </exception>
         public void Save(AuxiliaryController ac)
         {
@@ -68,23 +66,13 @@ namespace MyTrimmingNew
                 return;
             }
 
-            // TODO: 保存結果の表示後、何かユーザー操作があったタイミングで結果表示しない方が良さそう
-            //       (次の保存試行の結果と混ざるというか誤解させそう)
-            try
-            {
-                common.Image.SaveTrimImage(BitmapImage,
-                                           filePath,
-                                           ac.AuxiliaryLeftRelativeImage,
-                                           ac.AuxiliaryTopRelativeImage,
-                                           ac.AuxiliaryWidth,
-                                           ac.AuxiliaryHeight,
-                                           _windowSize.ImageFitWindowRatio);
-                SaveResult = true;
-            }
-            catch (Exception ex)
-            {
-                SaveResult = false;
-            }
+            common.Image.SaveTrimImage(BitmapImage,
+                                       filePath,
+                                       ac.AuxiliaryLeftRelativeImage,
+                                       ac.AuxiliaryTopRelativeImage,
+                                       ac.AuxiliaryWidth,
+                                       ac.AuxiliaryHeight,
+                                       _windowSize.ImageFitWindowRatio);
 
             Notify();
         }

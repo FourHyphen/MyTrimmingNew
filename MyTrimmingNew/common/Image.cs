@@ -64,7 +64,6 @@ namespace MyTrimmingNew.common
         /// <summary>
         /// 切り抜き画像保存
         /// 切り抜き範囲の原点指定は画像を親とした相対値としてください
-        /// TODO: 例外処理の実装、ユーザーから見て、保存失敗したときはシステムにどうして欲しい？
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="seemingOriginX"></param>

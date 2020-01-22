@@ -22,7 +22,6 @@ namespace MyTrimmingNew
         private ImageController _imageController;
         private ShowImageObserver _showImageObserver;
         private ShowImageLengthObserver _showImageLength;
-        private ImageSaveResultFieldObserver _imageSaveResult;
 
         private AuxiliaryController _auxiliaryController;
         private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
@@ -63,7 +62,6 @@ namespace MyTrimmingNew
                                                        (int)Height - Constant.FixCanvasHeight);
                 _showImageObserver = new ShowImageObserver(xShowImage, _imageController);
                 _showImageLength = new ShowImageLengthObserver(xOriginalImageLength, _imageController);
-                _imageSaveResult = new ImageSaveResultFieldObserver(xSaveResult, _imageController);
             }
             catch (Exception ex)
             {
@@ -123,7 +121,7 @@ namespace MyTrimmingNew
                 _imageController.Save(_auxiliaryController);
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.SuccessImageSave);
             }
-            catch (Exception ex)
+            catch
             {
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageSave);
             }
