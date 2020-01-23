@@ -21,6 +21,11 @@ namespace TestMyTrimmingNew
                                        WindowInitHeight - Constant.FixCanvasHeight);
         }
 
+        public static AuxiliaryController GetAuxiliaryControllerImage001RatioTypeW16H9()
+        {
+            return GetAuxiliaryController(TestResourceImage001Path, AuxiliaryController.RatioType.W16H9);
+        }
+
         public static AuxiliaryController GetAuxiliaryController(string filePath, AuxiliaryController.RatioType ratioType)
         {
             ImageController ic = GetDisplayImage(filePath);

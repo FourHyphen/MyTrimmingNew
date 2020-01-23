@@ -46,8 +46,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineOriginAfterInputCursorKeyUpIfAuxiliaryLineOriginTopIsZero()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Up);
@@ -58,8 +57,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineStayInImageAfterInputCursorKeyDownIfAuxiliaryLineBottomIsImageBottom()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             int enableDownRange = ac.DisplayImageHeight - ac.AuxiliaryHeight;
             Keys.EnableKeys down = Keys.EnableKeys.Down;
@@ -81,8 +79,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineOriginAfterInputCursorKeyLeftIfAuxiliaryLineOriginLeftIsZero()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Left);
@@ -93,8 +90,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineStayInImageAfterInputCursorKeyRightIfAuxiliaryLineRightIsImageRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryWidth;
             Keys.EnableKeys right = Keys.EnableKeys.Right;
@@ -121,8 +117,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineLeftAndTopIfMoveByMouse()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // まず矩形を小さくして移動テストできるようにする(Width基準とする)
             int mouseUpPixelX = -(ac.AuxiliaryWidth / 2);
@@ -175,8 +170,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistance()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形を大きく移動しようとして矩形が画像からはみ出る場合、画像一杯までの移動に制限する
             // テストとして選ぶ値の基準: ディスプレイより大きい距離を移動しようとするなら、確実に画像からはみ出る
@@ -229,32 +223,20 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereBottomRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
-            int willDecreaseWidthPixel = -100;
-            int willDecreaseHeightPixel = -5;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willDecreaseWidthPixel,
-                                                    willDecreaseHeightPixel,
-                                                    true);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -100, -5, true);
 
             // Height基準でWidthを変更するよう、Height >> Width となる値を設定
-            willDecreaseWidthPixel = -5;
-            willDecreaseHeightPixel = -100;
-            ChangeAuxiliaryLineSizeWhereBottomRight(ac,
-                                                    willDecreaseWidthPixel,
-                                                    willDecreaseHeightPixel,
-                                                    false);
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -5, -100, false);
         }
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereBottomRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 原点が変わるような操作の場合(= 右下点を思いっきり左や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
@@ -266,8 +248,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeBottomRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
@@ -316,8 +297,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereBottomLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
             ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -100, -5, true);
@@ -330,8 +310,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereBottomLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 原点が変わるような操作の場合(= 左下点を思いっきり右や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
@@ -343,8 +322,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeBottomLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
@@ -379,8 +357,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereTopRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
             ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
@@ -393,8 +370,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereTopRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 原点が変わるような操作の場合(= 左下点を思いっきり右や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
@@ -406,8 +382,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeTopRight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
@@ -442,8 +417,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineParameterAfterOperationThatDecreaseWidthOfAuxiliaryLineWhereTopLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // Width基準でHeightを変更するよう、Width >> height となる値を設定
             ChangeAuxiliaryLineSizeWhereTopLeft(ac, -100, -5, true);
@@ -456,8 +430,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoChangeAuxiliaryLineSizeIfTooLongWhereTopLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 原点が変わるような操作の場合(= 左上点を思いっきり右や上に引っ張る操作)、サイズを変更しない
             // TODO: 対応する？
@@ -469,8 +442,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineFitImageWhenChangeAuxiliaryLineSizeTooLongerThanImageSizeTopLeft()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形が画像からはみ出るような操作の場合、矩形サイズが画像一杯のサイズになるよう制御する
             // ユーザー操作としてあり得るのは画像より小さい補助線矩形を画像一杯に合わせる操作
@@ -505,8 +477,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoProcessingAuxiliaryLineIfMouseDownOuterAuxiliaryLine()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
-            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線を縮小して補助線外部のスペースを作り、そのスペースでテストする
             int sizeChangeWidth = -100;
