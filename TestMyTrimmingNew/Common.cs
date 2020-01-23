@@ -21,11 +21,10 @@ namespace TestMyTrimmingNew
                                        WindowInitHeight - Constant.FixCanvasHeight);
         }
 
-        public static AuxiliaryController GetAuxiliaryController(string filePath, int widthRatio, int heightRatio)
+        public static AuxiliaryController GetAuxiliaryController(string filePath, AuxiliaryController.RatioType ratioType)
         {
             ImageController ic = GetDisplayImage(filePath);
-            return new AuxiliaryController(ic, widthRatio, heightRatio, AuxiliaryLineThickness);
+            return new AuxiliaryController(ic, ratioType, AuxiliaryLineThickness);
         }
-
     }
 }

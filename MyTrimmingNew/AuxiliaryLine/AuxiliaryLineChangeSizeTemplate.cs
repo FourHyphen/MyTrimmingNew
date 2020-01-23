@@ -22,11 +22,11 @@ namespace MyTrimmingNew.AuxiliaryLine
             int changeSizeHeight = changeHeight;
             if (BaseWidthWhenChangeSize(changeSizeWidth, changeSizeHeight))
             {
-                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
+                changeSizeHeight = CalcAuxiliaryLineHeight(changeSizeHeight, changeSizeWidth);
             }
             else
             {
-                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
+                changeSizeWidth = CalcAuxiliaryLineWidth(changeSizeWidth, changeSizeHeight);
             }
 
             int maxChangeSizeWidth = GetMaxChangeSizeWidth();
@@ -41,12 +41,12 @@ namespace MyTrimmingNew.AuxiliaryLine
             else if (changeSizeWidth > maxChangeSizeWidth)
             {
                 changeSizeWidth = maxChangeSizeWidth;
-                changeSizeHeight = CalcAuxiliaryLineHeightWithFitRatio(changeSizeWidth);
+                changeSizeHeight = CalcAuxiliaryLineHeight(changeSizeHeight, changeSizeWidth);
             }
             else if (changeSizeHeight > maxChangeSizeHeight)
             {
                 changeSizeHeight = maxChangeSizeHeight;
-                changeSizeWidth = CalcAuxiliaryLineWidthWithFitRatio(changeSizeHeight);
+                changeSizeWidth = CalcAuxiliaryLineWidth(changeSizeWidth, changeSizeHeight);
             }
 
             // 新しいパラメーターをセット
@@ -72,19 +72,43 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
         {
-            int baseWidthChangeHeight = CalcAuxiliaryLineHeightWithFitRatio(willChangeWidth);
+            int baseWidthChangeHeight = CalcAuxiliaryLineHeight(willChangeHeight, willChangeWidth);
             return (Math.Abs(baseWidthChangeHeight) > Math.Abs(willChangeHeight));
         }
 
-        private int CalcAuxiliaryLineWidthWithFitRatio(int newAuxiliaryHeight)
+        private int CalcAuxiliaryLineWidth(int nowAuxiliaryWidth, int newAuxiliaryHeight)
         {
-            double newWidth = (double)newAuxiliaryHeight * AC.AuxiliaryRatio;
+            if(AC.AuxiliaryRatio == null)
+            {
+                return nowAuxiliaryWidth;
+            }
+            else
+            {
+                return CalcAuxiliaryLineWidthWithFitRatio(newAuxiliaryHeight, (double)AC.AuxiliaryRatio);
+            }
+        }
+
+        private int CalcAuxiliaryLineWidthWithFitRatio(int newAuxiliaryHeight, double auxiliaryRatio)
+        {
+            double newWidth = (double)newAuxiliaryHeight * auxiliaryRatio;
             return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
         }
 
-        private int CalcAuxiliaryLineHeightWithFitRatio(int newAuxiliaryWidth)
+        private int CalcAuxiliaryLineHeight(int nowAuxiliaryHeight, int newAuxiliaryWidth)
         {
-            double newHeight = (double)newAuxiliaryWidth / AC.AuxiliaryRatio;
+            if (AC.AuxiliaryRatio == null)
+            {
+                return nowAuxiliaryHeight;
+            }
+            else
+            {
+                return CalcAuxiliaryLineHeightWithFitRatio(newAuxiliaryWidth, (double)AC.AuxiliaryRatio);
+            }
+        }
+
+        private int CalcAuxiliaryLineHeightWithFitRatio(int newAuxiliaryWidth, double auxiliaryRatio)
+        {
+            double newHeight = (double)newAuxiliaryWidth / auxiliaryRatio;
             return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
         }
     }

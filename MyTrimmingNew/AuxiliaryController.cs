@@ -13,30 +13,94 @@ namespace MyTrimmingNew
     /// </summary>
     public class AuxiliaryController : Subject
     {
-        public AuxiliaryController(ImageController ic,
-                                   int widthRatio = 16,
-                                   int heightRatio = 9,
-                                   int auxiliaryLineThickness = 1)
+        public enum RatioType
         {
-            ImageController = ic;
-            AuxiliaryRatio = (double)widthRatio / (double)heightRatio;
+            W16H9,
+            W4H3,
+            W9H16,
+            W1H1,
+            NoDefined
+        }
 
-            if (widthRatio > heightRatio)
+        public int? WidthRatio(RatioType type)
+        {
+            if (type == RatioType.W16H9)
             {
-                AuxiliaryWidth = ic.DisplayImageWidth;
-                AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
+                return 16;
+            }
+            else if (type == RatioType.W4H3)
+            {
+                return 4;
+            }
+            else if (type == RatioType.W1H1)
+            {
+                return 1;
+            }
+            else if (type == RatioType.W9H16)
+            {
+                return 9;
             }
             else
             {
+                return null;
+            }
+        }
+
+        public int? HeightRatio(RatioType type)
+        {
+            if (type == RatioType.W16H9)
+            {
+                return 9;
+            }
+            else if (type == RatioType.W4H3)
+            {
+                return 3;
+            }
+            else if (type == RatioType.W1H1)
+            {
+                return 1;
+            }
+            else if (type == RatioType.W9H16)
+            {
+                return 16;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public AuxiliaryController(ImageController ic,
+                                   RatioType ratioType = RatioType.W16H9,
+                                   int auxiliaryLineThickness = 1)
+        {
+            ImageController = ic;
+            int? widthRatio = WidthRatio(ratioType);
+            int? heightRatio = HeightRatio(ratioType);
+            if (widthRatio == null || heightRatio == null){
+                AuxiliaryRatio = null;
+                AuxiliaryWidth = ic.DisplayImageWidth;
                 AuxiliaryHeight = ic.DisplayImageHeight;
-                AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);
+            }
+            else
+            {
+                AuxiliaryRatio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
+                if (widthRatio > heightRatio)
+                {
+                    AuxiliaryWidth = ic.DisplayImageWidth;
+                    AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
+                }
+                else
+                {
+                    AuxiliaryHeight = ic.DisplayImageHeight;
+                    AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);
+                }
             }
 
             // 初期値は画像の原点に合わせる
             AuxiliaryLeftRelativeImage = 0;
             AuxiliaryTopRelativeImage = 0;
 
-            // TODO: 線の太さを変更できるようにする
             AuxiliaryLineThickness = 1;
         }
 
@@ -74,7 +138,7 @@ namespace MyTrimmingNew
 
         public int AuxiliaryHeight { get; set; }
 
-        public double AuxiliaryRatio { get; private set; }
+        public double? AuxiliaryRatio { get; private set; }
 
         private ImageController ImageController { get; set; }
 

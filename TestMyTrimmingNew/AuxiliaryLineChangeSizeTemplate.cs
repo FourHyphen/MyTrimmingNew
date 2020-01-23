@@ -30,11 +30,11 @@ namespace TestMyTrimmingNew
             int changeSizeHeight = changeSizeHeightPixel;
             if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
             {
-                changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
             }
             else
             {
-                changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
             }
 
             int maxChangeSizeWidth = GetMaxChangeSizeWidth(ac, beforeWidth, beforeLeftRelativeImage);
@@ -51,12 +51,12 @@ namespace TestMyTrimmingNew
                 if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
                 {
                     changeSizeWidth = maxChangeSizeWidth;
-                    changeSizeHeight = (int)Math.Round((double)changeSizeWidth / ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                    changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
                 }
                 else
                 {
                     changeSizeHeight = maxChangeHeight;
-                    changeSizeWidth = (int)Math.Round((double)changeSizeHeight * ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                    changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
                 }
             }
 
@@ -75,6 +75,30 @@ namespace TestMyTrimmingNew
                                            int changeSizeHeightPixel);
 
         public abstract Point GetMouseDownPoint(AuxiliaryController ac);
+
+        private int CalcAuxiliaryHeight(int nowHeight, int newWidth, AuxiliaryController ac)
+        {
+            if (ac.AuxiliaryRatio == null)
+            {
+                return nowHeight;
+            }
+            else
+            {
+                return (int)Math.Round((double)newWidth / (double)ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+            }
+        }
+
+        private int CalcAuxiliaryWidth(int nowWidth, int newHeight, AuxiliaryController ac)
+        {
+            if (ac.AuxiliaryRatio == null)
+            {
+                return nowWidth;
+            }
+            else
+            {
+                return (int)Math.Round((double)newHeight * (double)ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+            }
+        }
 
         public abstract int GetMaxChangeSizeWidth(AuxiliaryController ac,
                                                   int beforeWidth,
