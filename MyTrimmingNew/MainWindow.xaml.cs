@@ -70,14 +70,37 @@ namespace MyTrimmingNew
         }
 
         /// <summary>
-        /// TODO: 比率を16:9固定ではなく4:3とかの任意比率に対応する
         /// TODO: 比率の初期値どうする？config.ini管理？
         /// </summary>
-        private void DisplayAuxiliaryLine(ImageController ic)
+        private void DisplayAuxiliaryLine(ImageController ic, AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9)
         {
-            _auxiliaryController = new AuxiliaryController(ic);
+            _auxiliaryController = new AuxiliaryController(ic, ratioType:ratioType);
             _auxiliaryLineRectangle = new AuxiliaryLineRectangleObserver(xAuxiliaryLine, _auxiliaryController);
             _auxiliaryLineLength = new AuxiliaryLineLengthObserver(xAuxiliaryLineLength, _auxiliaryController);
+        }
+
+        #endregion
+
+        #region "ユーザー操作時処理: 設定変更"
+
+        private void menuSettingsRatioW16H9_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayAuxiliaryLine(_imageController, ratioType: AuxiliaryController.RatioType.W16H9);
+        }
+
+        private void menuSettingsRatioW4H3_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayAuxiliaryLine(_imageController, ratioType: AuxiliaryController.RatioType.W4H3);
+        }
+
+        private void menuSettingsRatioW9H16_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayAuxiliaryLine(_imageController, ratioType: AuxiliaryController.RatioType.W9H16);
+        }
+
+        private void menuSettingsRatioNoDefined_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayAuxiliaryLine(_imageController, ratioType: AuxiliaryController.RatioType.NoDefined);
         }
 
         #endregion

@@ -77,6 +77,7 @@ namespace MyTrimmingNew
             ImageController = ic;
             int? widthRatio = WidthRatio(ratioType);
             int? heightRatio = HeightRatio(ratioType);
+
             if (widthRatio == null || heightRatio == null){
                 AuxiliaryRatio = null;
                 AuxiliaryWidth = ic.DisplayImageWidth;
@@ -85,12 +86,11 @@ namespace MyTrimmingNew
             else
             {
                 AuxiliaryRatio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
-                if (widthRatio > heightRatio)
-                {
-                    AuxiliaryWidth = ic.DisplayImageWidth;
-                    AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
-                }
-                else
+                AuxiliaryWidth = ic.DisplayImageWidth;
+                AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
+
+                // 矩形比率に合わせてサイズ算出後、画像からはみ出た場合に補正
+                if (AuxiliaryHeight > ic.DisplayImageHeight)
                 {
                     AuxiliaryHeight = ic.DisplayImageHeight;
                     AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);

@@ -11,7 +11,7 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestCorrectWidthAndHeightOfInitAuxiliaryLineIfImageWidthLongerThanImageHeight()
+        public void TestCorrectWidthAndHeightOfInitAuxiliaryLineRatioW16H9IfImageWidthLongerThanImageHeight()
         {
             AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
@@ -21,6 +21,25 @@ namespace TestMyTrimmingNew
             int fittedHeight = (int)((double)fittedWidth / ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectWidthAndHeightOfInitAuxiliaryLineRatioW4H3IfImageWidthLongerThanImageHeight()
+        {
+            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W4H3;
+            AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
+
+            double ratio = (double)ac.WidthRatio(ratioType) / (double)ac.HeightRatio(ratioType);
+            int fittedHeight = ac.DisplayImageHeight;
+            int fittedWidth = (int)((double)fittedHeight * ratio);
+            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+        }
+
+        private void Fit(AuxiliaryController ac, AuxiliaryController.RatioType ratioType)
+        {
+
         }
 
         [TestMethod]
