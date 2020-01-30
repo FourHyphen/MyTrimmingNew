@@ -101,7 +101,7 @@ namespace MyTrimmingNew
             AuxiliaryLeftRelativeImage = 0;
             AuxiliaryTopRelativeImage = 0;
 
-            AuxiliaryLineThickness = 1;
+            AuxiliaryLineThickness = auxiliaryLineThickness;
         }
 
         private int _auxiliaryLeftRelativeImage;
