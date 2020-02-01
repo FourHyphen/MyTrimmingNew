@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
-    class AuxiliaryLineMove : IAuxiliaryLineOperation
+    class AuxiliaryLineMove : AuxiliaryLineCommand
     {
         private AuxiliaryController AC { get; set; }
 
@@ -65,6 +65,11 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             AC.AuxiliaryLeftRelativeImage += moveDistanceX;
             AC.AuxiliaryTopRelativeImage += moveDistanceY;
+        }
+
+        public void UnExecute()
+        {
+
         }
     }
 }

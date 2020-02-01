@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
-    class AuxiliaryLineChangeSize : IAuxiliaryLineOperation
+    class AuxiliaryLineChangeSize : AuxiliaryLineCommand
     {
         private AuxiliaryController AC { get; set; }
 
@@ -50,6 +50,11 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
 
             changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);
+        }
+
+        public void UnExecute()
+        {
+
         }
     }
 }

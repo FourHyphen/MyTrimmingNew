@@ -494,6 +494,19 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoCrashAuxiliaryLineWhenCallPublishEventBeforeAnySetEvent()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 何もEventを設定していない状態でクラッシュしないことを確認する
+            double mouseUpX = ac.DisplayImageWidth / 2;
+            double mouseUpY = ac.DisplayImageHeight + 30;
+            System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
+            ac.PublishEvent(mouseUp);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestNoProcessingAuxiliaryLineIfMouseDownOuterAuxiliaryLine()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();

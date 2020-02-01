@@ -102,6 +102,7 @@ namespace MyTrimmingNew
             AuxiliaryTopRelativeImage = 0;
 
             AuxiliaryLineThickness = auxiliaryLineThickness;
+            AuxiliaryLineCommandList = new AuxiliaryLineCommandList();
         }
 
         private int _auxiliaryLeftRelativeImage;
@@ -178,28 +179,29 @@ namespace MyTrimmingNew
             return toMoveLeft;
         }
 
-        private IAuxiliaryLineOperation AuxiliaryLineOperation { get; set; }
+        private AuxiliaryLineCommandList AuxiliaryLineCommandList { get; set; }
 
         public void SetEvent()
         {
-            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this);
+            AuxiliaryLineCommandList.Append(new AuxiliaryLineOperationFactory().Create(this));
         }
 
         public void SetEvent(Point coordinateRelatedAuxiliaryLine)
         {
-            AuxiliaryLineOperation = new AuxiliaryLineOperationFactory().Create(this, coordinateRelatedAuxiliaryLine);
+            AuxiliaryLineCommandList.Append(new AuxiliaryLineOperationFactory().Create(this, coordinateRelatedAuxiliaryLine));
         }
 
         public void PublishEvent(object operation)
         {
-            if (AuxiliaryLineOperation == null)
-            {
-                return;
-            }
-            AuxiliaryLineOperation.Execute(operation);
+            AuxiliaryLineCommandList.Execute(operation);
 
             // 登録Observerに変更を通知
             Notify();
+        }
+
+        public void CancelEvent()
+        {
+
         }
     }
 }

@@ -89,13 +89,15 @@
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTemplate.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTopLeft.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeTopRight.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineCommandList.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineNoneOperation.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineOperationFactory.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineMove.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeBottomRight.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineLengthObserver.cs" />
-    <Compile Include="AuxiliaryLine\IAuxiliaryLineOperation.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineCommand.cs" />
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />
     <Compile Include="ImageFileSaveDialog.cs" />

@@ -9,21 +9,21 @@ namespace MyTrimmingNew.AuxiliaryLine
 {
     class AuxiliaryLineOperationFactory
     {
-        public IAuxiliaryLineOperation Create(AuxiliaryController ac)
+        public AuxiliaryLineCommand Create(AuxiliaryController ac)
         {
             // キー操作を想定(始点がない)
             return new AuxiliaryLineMove(ac);
         }
 
-        public IAuxiliaryLineOperation Create(AuxiliaryController ac, 
-                                              Point coordinateRelatedAuxiliaryLine)
+        public AuxiliaryLineCommand Create(AuxiliaryController ac, 
+                                           Point coordinateRelatedAuxiliaryLine)
         {
             Mouse.KindMouseDownAuxiliaryLineArea area = Mouse.GetKindMouseDownAuxiliaryLineArea(ac,
                                                                                                 coordinateRelatedAuxiliaryLine);
 
             if (area == Mouse.KindMouseDownAuxiliaryLineArea.Else)
             {
-                return null;
+                return new AuxiliaryLineNoneOperation();
             }
             else if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
             {

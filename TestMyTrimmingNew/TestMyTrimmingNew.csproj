@@ -84,6 +84,7 @@
     <Compile Include="UnitTestClassAuxiliaryControllerHeightRatioLargerThanWidthRatio.cs" />
     <Compile Include="UnitTestClassCommonImage.cs" />
     <Compile Include="UnitTestClassImageController.cs" />
+    <Compile Include="UnitTestFunctionUndoRedoAuxiliaryOperation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
