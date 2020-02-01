@@ -36,17 +36,20 @@ namespace MyTrimmingNew.AuxiliaryLine
             {
                 CommandList.RemoveAt(CommandListIndex);
                 CommandListIndex--;
+                return;
             }
-            else
-            {
-                CommandList[CommandListIndex].Execute(operation);
-            }
+
+            // TODO: 
+            // 間にUnExecuteを挟んでいる場合、今の操作内容で現在Indexのを上書きし、それを最新とする
+            // (整合の取れなくなった操作内容を削除する)
+            // 判別はCommandListIndexとCommandList.Countの差で可能
+            CommandList[CommandListIndex].Execute(operation);
         }
 
         public void UnExecute()
         {
-            //CommandList[CommandListIndex].UnExecute();
-            //CommandListIndex--;
+            CommandList[CommandListIndex].UnExecute();
+            CommandListIndex--;
         }
     }
 }

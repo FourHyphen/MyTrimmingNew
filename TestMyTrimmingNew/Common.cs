@@ -1,4 +1,6 @@
 ﻿using MyTrimmingNew;
+using static MyTrimmingNew.AuxiliaryLine.AuxiliaryLineParameter;
+
 namespace TestMyTrimmingNew
 {
     class Common
@@ -23,10 +25,10 @@ namespace TestMyTrimmingNew
 
         public static AuxiliaryController GetAuxiliaryControllerImage001RatioTypeW16H9()
         {
-            return GetAuxiliaryController(TestResourceImage001Path, AuxiliaryController.RatioType.W16H9);
+            return GetAuxiliaryController(TestResourceImage001Path, RatioType.W16H9);
         }
 
-        public static AuxiliaryController GetAuxiliaryController(string filePath, AuxiliaryController.RatioType ratioType)
+        public static AuxiliaryController GetAuxiliaryController(string filePath, RatioType ratioType)
         {
             ImageController ic = GetDisplayImage(filePath);
             return new AuxiliaryController(ic, ratioType, AuxiliaryLineThickness);

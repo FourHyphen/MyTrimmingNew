@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyTrimmingNew;
+using static MyTrimmingNew.AuxiliaryLine.AuxiliaryLineParameter;
 
 namespace TestMyTrimmingNew
 {
@@ -13,10 +14,10 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectWidthAndHeightOfInitAuxiliaryLineRatioW16H9IfImageWidthLongerThanImageHeight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
+            RatioType ratioType = RatioType.W16H9;
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
 
-            double ratio = (double)ac.WidthRatio(ratioType) / (double)ac.HeightRatio(ratioType);
+            double ratio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
             int fittedWidth = Common.WindowInitWidth - Constant.FixCanvasWidth;
             int fittedHeight = (int)((double)fittedWidth / ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
@@ -27,29 +28,24 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectWidthAndHeightOfInitAuxiliaryLineRatioW4H3IfImageWidthLongerThanImageHeight()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W4H3;
+            RatioType ratioType = RatioType.W4H3;
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
 
-            double ratio = (double)ac.WidthRatio(ratioType) / (double)ac.HeightRatio(ratioType);
+            double ratio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
             int fittedHeight = ac.DisplayImageHeight;
             int fittedWidth = (int)((double)fittedHeight * ratio);
             Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
             Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
         }
 
-        private void Fit(AuxiliaryController ac, AuxiliaryController.RatioType ratioType)
-        {
-
-        }
-
         [TestMethod]
         [DeploymentItem(@".\Resource\test002.jpg")]
         public void TestCorrectWidthAndHeightOfInitAuxiliaryLineIfImageHeightLongerThanImageWidth()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.W16H9;
+            RatioType ratioType = RatioType.W16H9;
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage002Path, ratioType);
 
-            double ratio = (double)ac.WidthRatio(ratioType) / (double)ac.HeightRatio(ratioType);
+            double ratio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
 
             int fittedWidth = ac.DisplayImageWidth;
             int fittedHeight = (int)((double)ac.DisplayImageWidth / ratio);
@@ -282,7 +278,7 @@ namespace TestMyTrimmingNew
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineSizeIfNoDefineRatio()
         {
-            AuxiliaryController.RatioType ratioType = AuxiliaryController.RatioType.NoDefined;
+            RatioType ratioType = RatioType.NoDefined;
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
 
             // 縮小

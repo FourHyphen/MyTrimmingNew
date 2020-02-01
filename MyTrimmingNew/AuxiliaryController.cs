@@ -13,171 +13,77 @@ namespace MyTrimmingNew
     /// </summary>
     public class AuxiliaryController : Subject
     {
-        public enum RatioType
-        {
-            W16H9,
-            W4H3,
-            W9H16,
-            W1H1,
-            NoDefined
-        }
-
-        public int? WidthRatio(RatioType type)
-        {
-            if (type == RatioType.W16H9)
-            {
-                return 16;
-            }
-            else if (type == RatioType.W4H3)
-            {
-                return 4;
-            }
-            else if (type == RatioType.W1H1)
-            {
-                return 1;
-            }
-            else if (type == RatioType.W9H16)
-            {
-                return 9;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public int? HeightRatio(RatioType type)
-        {
-            if (type == RatioType.W16H9)
-            {
-                return 9;
-            }
-            else if (type == RatioType.W4H3)
-            {
-                return 3;
-            }
-            else if (type == RatioType.W1H1)
-            {
-                return 1;
-            }
-            else if (type == RatioType.W9H16)
-            {
-                return 16;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        private AuxiliaryLineParameter Parameter { get; set; }
 
         public AuxiliaryController(ImageController ic,
-                                   RatioType ratioType = RatioType.W16H9,
+                                   AuxiliaryLineParameter.RatioType ratioType = AuxiliaryLineParameter.RatioType.W16H9,
                                    int auxiliaryLineThickness = 1)
         {
             ImageController = ic;
-            int? widthRatio = WidthRatio(ratioType);
-            int? heightRatio = HeightRatio(ratioType);
-
-            if (widthRatio == null || heightRatio == null){
-                AuxiliaryRatio = null;
-                AuxiliaryWidth = ic.DisplayImageWidth;
-                AuxiliaryHeight = ic.DisplayImageHeight;
-            }
-            else
-            {
-                AuxiliaryRatio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
-                AuxiliaryWidth = ic.DisplayImageWidth;
-                AuxiliaryHeight = (int)((double)ic.DisplayImageWidth / AuxiliaryRatio);
-
-                // 矩形比率に合わせてサイズ算出後、画像からはみ出た場合に補正
-                if (AuxiliaryHeight > ic.DisplayImageHeight)
-                {
-                    AuxiliaryHeight = ic.DisplayImageHeight;
-                    AuxiliaryWidth = (int)((double)ic.DisplayImageHeight * AuxiliaryRatio);
-                }
-            }
-
-            // 初期値は画像の原点に合わせる
-            AuxiliaryLeftRelativeImage = 0;
-            AuxiliaryTopRelativeImage = 0;
-
-            AuxiliaryLineThickness = auxiliaryLineThickness;
+            Parameter = new AuxiliaryLineParameter(ic.DisplayImageWidth,
+                                                   ic.DisplayImageHeight,
+                                                   ratioType,
+                                                   auxiliaryLineThickness);
             AuxiliaryLineCommandList = new AuxiliaryLineCommandList();
         }
-
-        private int _auxiliaryLeftRelativeImage;
 
         public int AuxiliaryLeftRelativeImage
         {
             get
             {
-                return _auxiliaryLeftRelativeImage;
+                return Parameter.Left;
             }
             set
             {
-                _auxiliaryLeftRelativeImage = FitInRangeAuxiliaryLeftRelativeImage(value);
+                Parameter.Left = value;
             }
         }
-
-        private int _auxiliaryTopRelativeImage;
 
         public int AuxiliaryTopRelativeImage
         {
             get
             {
-                return _auxiliaryTopRelativeImage;
+                return Parameter.Top;
             }
             set
             {
-                _auxiliaryTopRelativeImage = FitInRangeAuxiliaryTopRelativeImage(value);
+                Parameter.Top = value;
             }
         }
 
-        public int AuxiliaryLineThickness { get; private set; }
+        public int AuxiliaryWidth
+        {
+            get
+            {
+                return Parameter.Width;
+            }
+            set
+            {
+                Parameter.Width = value;
+            }
+        }
 
-        public int AuxiliaryWidth { get; set; }
+        public int AuxiliaryHeight
+        {
+            get
+            {
+                return Parameter.Height;
+            }
+            set
+            {
+                Parameter.Height = value;
+            }
+        }
 
-        public int AuxiliaryHeight { get; set; }
+        public double? AuxiliaryRatio { get { return Parameter.Ratio; } }
 
-        public double? AuxiliaryRatio { get; private set; }
+        public int AuxiliaryLineThickness { get { return Parameter.Thickness; } }
 
         private ImageController ImageController { get; set; }
 
         public int DisplayImageWidth { get { return ImageController.DisplayImageWidth; } }
 
         public int DisplayImageHeight { get { return ImageController.DisplayImageHeight; } }
-
-        private int FitInRangeAuxiliaryTopRelativeImage(int toMoveTop)
-        {
-            if (toMoveTop < 0)
-            {
-                return 0;
-            }
-
-            int maxOriginTop = DisplayImageHeight - AuxiliaryHeight - AuxiliaryLineThickness + 1;
-            if (toMoveTop > maxOriginTop)
-            {
-                return maxOriginTop;
-            }
-
-            return toMoveTop;
-        }
-
-        private int FitInRangeAuxiliaryLeftRelativeImage(int toMoveLeft)
-        {
-            if (toMoveLeft < 0)
-            {
-                return 0;
-            }
-
-            int maxOriginLeft = DisplayImageWidth - AuxiliaryWidth - AuxiliaryLineThickness + 1;
-            if (toMoveLeft > maxOriginLeft)
-            {
-                return maxOriginLeft;
-            }
-
-            return toMoveLeft;
-        }
 
         private AuxiliaryLineCommandList AuxiliaryLineCommandList { get; set; }
 

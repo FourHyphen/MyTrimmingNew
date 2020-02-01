@@ -94,6 +94,7 @@
     <Compile Include="AuxiliaryLine\AuxiliaryLineOperationFactory.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineMove.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineChangeSizeBottomRight.cs" />
+    <Compile Include="AuxiliaryLine\AuxiliaryLineParameter.cs" />
     <Compile Include="common\Image.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineLengthObserver.cs" />
