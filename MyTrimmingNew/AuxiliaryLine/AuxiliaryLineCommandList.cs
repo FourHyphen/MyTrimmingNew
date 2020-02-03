@@ -48,6 +48,11 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public void UnExecute()
         {
+            if(CommandListIndex < 0)
+            {
+                return;
+            }
+
             CommandList[CommandListIndex].UnExecute();
             CommandListIndex--;
         }

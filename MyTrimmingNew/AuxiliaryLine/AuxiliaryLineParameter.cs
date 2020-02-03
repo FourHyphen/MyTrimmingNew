@@ -55,23 +55,21 @@ namespace MyTrimmingNew.AuxiliaryLine
             Thickness = thickness;
         }
 
-        private AuxiliaryLineParameter()
+        private AuxiliaryLineParameter(AuxiliaryLineParameter copy)
         {
-
+            ImageWidth = copy.ImageWidth;
+            ImageHeight = copy.ImageHeight;
+            Width = copy.Width;
+            Height = copy.Height;
+            Top = copy.Top;
+            Left = copy.Left;
+            Ratio = copy.Ratio;
+            Thickness = copy.Thickness;
         }
 
-        object ICloneable.Clone()
+        public object Clone()
         {
-            AuxiliaryLineParameter alp = new AuxiliaryLineParameter();
-            alp.ImageWidth = ImageWidth;
-            alp.ImageHeight = ImageHeight;
-            alp.Width = Width;
-            alp.Height = Height;
-            alp.Top = Top;
-            alp.Left = Left;
-            alp.Ratio = Ratio;
-            alp.Thickness = Thickness;
-            return alp;
+            return new AuxiliaryLineParameter(this);
         }
 
         public static int? WidthRatio(RatioType type)

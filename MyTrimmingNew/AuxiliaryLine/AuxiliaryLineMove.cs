@@ -9,24 +9,20 @@ namespace MyTrimmingNew.AuxiliaryLine
 {
     class AuxiliaryLineMove : AuxiliaryLineCommand
     {
-        private AuxiliaryController AC { get; set; }
-
         private Point MoveStartPoint { get; set; }
 
-        public AuxiliaryLineMove(AuxiliaryController ac)
+        public AuxiliaryLineMove(AuxiliaryController ac) : base(ac)
         {
             // キー操作による移動
-            AC = ac;
         }
 
-        public AuxiliaryLineMove(AuxiliaryController ac, Point moveStartPoint)
+        public AuxiliaryLineMove(AuxiliaryController ac, Point moveStartPoint) : base(ac)
         {
             // マウス操作による移動
-            AC = ac;
             MoveStartPoint = moveStartPoint;
         }
 
-        public void Execute(object o)
+        public override void ExecuteCore(object o)
         {
             if (o is Keys.EnableKeys)
             {
@@ -65,11 +61,6 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             AC.AuxiliaryLeftRelativeImage += moveDistanceX;
             AC.AuxiliaryTopRelativeImage += moveDistanceY;
-        }
-
-        public void UnExecute()
-        {
-
         }
     }
 }

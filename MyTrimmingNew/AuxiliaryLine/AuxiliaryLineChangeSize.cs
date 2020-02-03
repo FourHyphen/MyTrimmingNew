@@ -9,17 +9,14 @@ namespace MyTrimmingNew.AuxiliaryLine
 {
     class AuxiliaryLineChangeSize : AuxiliaryLineCommand
     {
-        private AuxiliaryController AC { get; set; }
-
         private Point MouseDownRelatedAuxiliaryLine { get; set; }
 
-        public AuxiliaryLineChangeSize(AuxiliaryController ac, Point CoordinateRelatedAuxiliaryLine)
+        public AuxiliaryLineChangeSize(AuxiliaryController ac, Point CoordinateRelatedAuxiliaryLine) : base(ac)
         {
-            AC = ac;
             MouseDownRelatedAuxiliaryLine = CoordinateRelatedAuxiliaryLine;
         }
 
-        public void Execute(object operation)
+        public override void ExecuteCore(object operation)
         {
             Point mouseUpCoordinateRelatedAuxiliaryLine = (Point)operation;
             int changeSizeWidth = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
@@ -50,11 +47,6 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
 
             changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);
-        }
-
-        public void UnExecute()
-        {
-
         }
     }
 }

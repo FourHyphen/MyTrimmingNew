@@ -11,12 +11,12 @@ namespace MyTrimmingNew.AuxiliaryLine
     /// </summary>
     class AuxiliaryLineNoneOperation : AuxiliaryLineCommand
     {
-        public void Execute(object operation)
+        public AuxiliaryLineNoneOperation(AuxiliaryController ac) : base(ac)
         {
 
         }
 
-        public void UnExecute()
+        public override void ExecuteCore(object operation)
         {
 
         }

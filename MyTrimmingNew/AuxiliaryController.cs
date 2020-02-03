@@ -19,12 +19,16 @@ namespace MyTrimmingNew
                                    AuxiliaryLineParameter.RatioType ratioType = AuxiliaryLineParameter.RatioType.W16H9,
                                    int auxiliaryLineThickness = 1)
         {
-            ImageController = ic;
             Parameter = new AuxiliaryLineParameter(ic.DisplayImageWidth,
                                                    ic.DisplayImageHeight,
                                                    ratioType,
                                                    auxiliaryLineThickness);
             AuxiliaryLineCommandList = new AuxiliaryLineCommandList();
+        }
+
+        public AuxiliaryLineParameter CloneParameter()
+        {
+            return (AuxiliaryLineParameter)Parameter.Clone();
         }
 
         public int AuxiliaryLeftRelativeImage
@@ -79,11 +83,9 @@ namespace MyTrimmingNew
 
         public int AuxiliaryLineThickness { get { return Parameter.Thickness; } }
 
-        private ImageController ImageController { get; set; }
+        public int DisplayImageWidth { get { return Parameter.ImageWidth; } }
 
-        public int DisplayImageWidth { get { return ImageController.DisplayImageWidth; } }
-
-        public int DisplayImageHeight { get { return ImageController.DisplayImageHeight; } }
+        public int DisplayImageHeight { get { return Parameter.ImageHeight; } }
 
         private AuxiliaryLineCommandList AuxiliaryLineCommandList { get; set; }
 
@@ -107,7 +109,7 @@ namespace MyTrimmingNew
 
         public void CancelEvent()
         {
-
+            AuxiliaryLineCommandList.UnExecute();
         }
     }
 }

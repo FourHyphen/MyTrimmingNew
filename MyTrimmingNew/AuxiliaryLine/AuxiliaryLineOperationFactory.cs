@@ -23,7 +23,7 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             if (area == Mouse.KindMouseDownAuxiliaryLineArea.Else)
             {
-                return new AuxiliaryLineNoneOperation();
+                return new AuxiliaryLineNoneOperation(ac);
             }
             else if (area == Mouse.KindMouseDownAuxiliaryLineArea.Inside)
             {
