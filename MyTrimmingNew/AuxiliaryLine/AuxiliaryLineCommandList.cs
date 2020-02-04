@@ -15,46 +15,34 @@ namespace MyTrimmingNew.AuxiliaryLine
         public AuxiliaryLineCommandList()
         {
             CommandList = new List<AuxiliaryLineCommand>();
-            CommandListIndex = -1;    // CommandListへの初回Addで0になるような初期値にする
+            CommandListIndex = -1;    // 初回のAddで0になるよう調整
         }
 
-        public void Append(AuxiliaryLineCommand command)
+        public AuxiliaryLineParameter Execute(AuxiliaryController ac,
+                                              AuxiliaryLineCommand command,
+                                              object operation)
         {
-            CommandList.Add(command);
-            CommandListIndex++;
-        }
-
-        public void Execute(object operation)
-        {
-            if (CommandListIndex < 0)
-            {
-                return;
-            }
-
-            // 何もしないcommand(special case obj)チェック
-            if (CommandList[CommandListIndex].GetType().Name == "AuxiliaryLineNoneOperation")
-            {
-                CommandList.RemoveAt(CommandListIndex);
-                CommandListIndex--;
-                return;
-            }
-
             // TODO: 
             // 間にUnExecuteを挟んでいる場合、今の操作内容で現在Indexのを上書きし、それを最新とする
             // (整合の取れなくなった操作内容を削除する)
-            // 判別はCommandListIndexとCommandList.Countの差で可能
-            CommandList[CommandListIndex].Execute(operation);
+            // 判別はListIndexとList.Countの差で可能
+            CommandList.Add(command);
+            CommandListIndex++;
+
+            return command.Execute(operation);
         }
 
-        public void UnExecute()
+        public AuxiliaryLineParameter UnExecute(AuxiliaryController ac)
         {
             if(CommandListIndex < 0)
             {
-                return;
+                return ac.CloneParameter();
             }
 
-            CommandList[CommandListIndex].UnExecute();
+            AuxiliaryLineParameter old = CommandList[CommandListIndex].BeforeParameter;
             CommandListIndex--;
+
+            return old;
         }
     }
 }

@@ -26,6 +26,16 @@ namespace MyTrimmingNew
             AuxiliaryLineCommandList = new AuxiliaryLineCommandList();
         }
 
+        public AuxiliaryLineParameter CreateMemento()
+        {
+            return CloneParameter();
+        }
+
+        public void SetMemento(AuxiliaryLineParameter memento)
+        {
+            Parameter = memento;
+        }
+
         public AuxiliaryLineParameter CloneParameter()
         {
             return (AuxiliaryLineParameter)Parameter.Clone();
@@ -37,7 +47,7 @@ namespace MyTrimmingNew
             {
                 return Parameter.Left;
             }
-            set
+            private set
             {
                 Parameter.Left = value;
             }
@@ -49,7 +59,7 @@ namespace MyTrimmingNew
             {
                 return Parameter.Top;
             }
-            set
+            private set
             {
                 Parameter.Top = value;
             }
@@ -61,7 +71,7 @@ namespace MyTrimmingNew
             {
                 return Parameter.Width;
             }
-            set
+            private set
             {
                 Parameter.Width = value;
             }
@@ -73,7 +83,7 @@ namespace MyTrimmingNew
             {
                 return Parameter.Height;
             }
-            set
+            private set
             {
                 Parameter.Height = value;
             }
@@ -89,19 +99,26 @@ namespace MyTrimmingNew
 
         private AuxiliaryLineCommandList AuxiliaryLineCommandList { get; set; }
 
+        private AuxiliaryLineCommand AuxiliaryLineCommand { get; set; }
+
         public void SetEvent()
         {
-            AuxiliaryLineCommandList.Append(new AuxiliaryLineOperationFactory().Create(this));
+            AuxiliaryLineCommand = new AuxiliaryLineOperationFactory().Create(this);
         }
 
         public void SetEvent(Point coordinateRelatedAuxiliaryLine)
         {
-            AuxiliaryLineCommandList.Append(new AuxiliaryLineOperationFactory().Create(this, coordinateRelatedAuxiliaryLine));
+            AuxiliaryLineCommand = new AuxiliaryLineOperationFactory().Create(this, coordinateRelatedAuxiliaryLine);
         }
 
         public void PublishEvent(object operation)
         {
-            AuxiliaryLineCommandList.Execute(operation);
+            if(AuxiliaryLineCommand == null)
+            {
+                return;
+            }
+
+            Parameter = AuxiliaryLineCommandList.Execute(this, AuxiliaryLineCommand, operation);
 
             // 登録Observerに変更を通知
             Notify();
@@ -109,7 +126,10 @@ namespace MyTrimmingNew
 
         public void CancelEvent()
         {
-            AuxiliaryLineCommandList.UnExecute();
+            Parameter = AuxiliaryLineCommandList.UnExecute(this);
+
+            // 登録Observerに変更を通知
+            Notify();
         }
     }
 }

@@ -25,24 +25,24 @@ namespace MyTrimmingNew.AuxiliaryLine
             return false;
         }
 
-        public override void SetAuxiliaryLeft(int changeSizeWidth)
+        public override int GetNewAuxiliaryLeft(int changeSizeWidth)
         {
-            AC.AuxiliaryLeftRelativeImage -= changeSizeWidth;
+            return AC.AuxiliaryLeftRelativeImage - changeSizeWidth;
         }
 
-        public override void SetAuxiliaryTop(int changeSizeHeight)
+        public override int GetNewAuxiliaryTop(int changeSizeHeight)
         {
-            AC.AuxiliaryTopRelativeImage -= changeSizeHeight;
+            return AC.AuxiliaryTopRelativeImage - changeSizeHeight;
         }
 
-        public override void SetAuxiliaryWidth(int changeSizeWidth)
+        public override int GetNewAuxiliaryWidth(int changeSizeWidth)
         {
-            AC.AuxiliaryWidth += changeSizeWidth;
+            return AC.AuxiliaryWidth + changeSizeWidth;
         }
 
-        public override void SetAuxiliaryHeight(int changeSizeHeight)
+        public override int GetNewAuxiliaryHeight(int changeSizeHeight)
         {
-            AC.AuxiliaryHeight += changeSizeHeight;
+            return AC.AuxiliaryHeight + changeSizeHeight;
         }
     }
 }

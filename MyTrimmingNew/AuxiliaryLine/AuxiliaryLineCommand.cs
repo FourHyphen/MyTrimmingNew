@@ -10,27 +10,19 @@ namespace MyTrimmingNew.AuxiliaryLine
     {
         protected AuxiliaryController AC { get; set; }
 
-        private AuxiliaryLineParameter BeforeParameter { get; set; }
+        public AuxiliaryLineParameter BeforeParameter { get; private set; }
 
         public AuxiliaryLineCommand(AuxiliaryController ac)
         {
             AC = ac;
         }
 
-        public void Execute(object operation)
+        public AuxiliaryLineParameter Execute(object operation)
         {
             BeforeParameter = AC.CloneParameter();
-            ExecuteCore(operation);
+            return ExecuteCore(operation);
         }
 
-        public abstract void ExecuteCore(object operation);
-
-        public void UnExecute()
-        {
-            AC.AuxiliaryWidth = BeforeParameter.Width;
-            AC.AuxiliaryHeight = BeforeParameter.Height;
-            AC.AuxiliaryTopRelativeImage = BeforeParameter.Top;
-            AC.AuxiliaryLeftRelativeImage = BeforeParameter.Left;
-        }
+        public abstract AuxiliaryLineParameter ExecuteCore(object operation);
     }
 }

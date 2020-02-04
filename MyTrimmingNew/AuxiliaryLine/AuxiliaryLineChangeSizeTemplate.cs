@@ -15,8 +15,10 @@ namespace MyTrimmingNew.AuxiliaryLine
             AC = ac;
         }
 
-        public void Execute(int changeWidth, int changeHeight)
+        public AuxiliaryLineParameter Execute(int changeWidth, int changeHeight)
         {
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
             // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
             int changeSizeWidth = changeWidth;
             int changeSizeHeight = changeHeight;
@@ -35,7 +37,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             // 原点が変わるような操作の場合、サイズ変更しない
             if (WillChangeAuxilirayOrigin(changeSizeWidth, changeSizeHeight))
             {
-                return;
+                return newParameter;
             }
             // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
             else if (changeSizeWidth > maxChangeSizeWidth)
@@ -49,11 +51,17 @@ namespace MyTrimmingNew.AuxiliaryLine
                 changeSizeWidth = CalcAuxiliaryLineWidth(changeSizeWidth, changeSizeHeight);
             }
 
-            // 新しいパラメーターをセット
-            SetAuxiliaryWidth(changeSizeWidth);
-            SetAuxiliaryHeight(changeSizeHeight);
-            SetAuxiliaryLeft(changeSizeWidth);
-            SetAuxiliaryTop(changeSizeHeight);
+            // 新しいパラメーターを返す
+            int newWidth = GetNewAuxiliaryWidth(changeSizeWidth);
+            int newHeight = GetNewAuxiliaryHeight(changeSizeHeight);
+            int newLeft = GetNewAuxiliaryLeft(changeSizeWidth);
+            int newTop = GetNewAuxiliaryTop(changeSizeHeight);
+            newParameter.Width = newWidth;
+            newParameter.Height = newHeight;
+            newParameter.Top = newTop;
+            newParameter.Left = newLeft;
+
+            return newParameter;
         }
 
         public abstract int GetMaxChangeSizeWidth();
@@ -62,13 +70,13 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public abstract bool WillChangeAuxilirayOrigin(int changeSizeWidth, int changeSizeHeight);
 
-        public abstract void SetAuxiliaryLeft(int changeSizeWidth);
+        public abstract int GetNewAuxiliaryLeft(int changeSizeWidth);
 
-        public abstract void SetAuxiliaryTop(int changeSizeHeight);
+        public abstract int GetNewAuxiliaryTop(int changeSizeHeight);
 
-        public abstract void SetAuxiliaryWidth(int changeSizeWidth);
+        public abstract int GetNewAuxiliaryWidth(int changeSizeWidth);
 
-        public abstract void SetAuxiliaryHeight(int changeSizeHeight);
+        public abstract int GetNewAuxiliaryHeight(int changeSizeHeight);
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
         {

@@ -16,7 +16,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             MouseDownRelatedAuxiliaryLine = CoordinateRelatedAuxiliaryLine;
         }
 
-        public override void ExecuteCore(object operation)
+        public override AuxiliaryLineParameter ExecuteCore(object operation)
         {
             Point mouseUpCoordinateRelatedAuxiliaryLine = (Point)operation;
             int changeSizeWidth = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
@@ -46,7 +46,7 @@ namespace MyTrimmingNew.AuxiliaryLine
                 changeSizeLogic = new AuxiliaryLineChangeSizeTopLeft(AC);
             }
 
-            changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);
+            return changeSizeLogic.Execute(changeSizeWidth, changeSizeHeight);
         }
     }
 }

@@ -30,26 +30,26 @@ namespace MyTrimmingNew.AuxiliaryLine
             return false;
         }
 
-        public override void SetAuxiliaryLeft(int changeSizeWidth)
+        public override int GetNewAuxiliaryLeft(int changeSizeWidth)
         {
             // 右下点の操作なら原点は変わらない
-            return;
+            return AC.AuxiliaryLeftRelativeImage;
         }
 
-        public override void SetAuxiliaryTop(int changeSizeHeight)
+        public override int GetNewAuxiliaryTop(int changeSizeHeight)
         {
             // 右下点の操作なら原点は変わらない
-            return;
+            return AC.AuxiliaryTopRelativeImage;
         }
 
-        public override void SetAuxiliaryWidth(int changeSizeWidth)
+        public override int GetNewAuxiliaryWidth(int changeSizeWidth)
         {
-            AC.AuxiliaryWidth += changeSizeWidth;
+            return AC.AuxiliaryWidth + changeSizeWidth;
         }
 
-        public override void SetAuxiliaryHeight(int changeSizeHeight)
+        public override int GetNewAuxiliaryHeight(int changeSizeHeight)
         {
-            AC.AuxiliaryHeight += changeSizeHeight;
+            return AC.AuxiliaryHeight + changeSizeHeight;
         }
     }
 }

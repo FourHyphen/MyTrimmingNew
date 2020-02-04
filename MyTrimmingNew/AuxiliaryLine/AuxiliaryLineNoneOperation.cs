@@ -16,9 +16,9 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         }
 
-        public override void ExecuteCore(object operation)
+        public override AuxiliaryLineParameter ExecuteCore(object operation)
         {
-
+            return AC.CloneParameter();
         }
     }
 }

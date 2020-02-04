@@ -22,45 +22,54 @@ namespace MyTrimmingNew.AuxiliaryLine
             MoveStartPoint = moveStartPoint;
         }
 
-        public override void ExecuteCore(object o)
+        public override AuxiliaryLineParameter ExecuteCore(object o)
         {
             if (o is Keys.EnableKeys)
             {
-                MoveByKey((Keys.EnableKeys)o);
+                return MoveByKey((Keys.EnableKeys)o);
             }
             else if(o is Point)
             {
-                MoveByMouse((Point)o);
+                return MoveByMouse((Point)o);
             }
+
+            return AC.CloneParameter();
         }
 
-        private void MoveByKey(Keys.EnableKeys key)
+        private AuxiliaryLineParameter MoveByKey(Keys.EnableKeys key)
         {
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
             if (key == Keys.EnableKeys.Up)
             {
-                AC.AuxiliaryTopRelativeImage--;
+                newParameter.Top--;
             }
             else if (key == Keys.EnableKeys.Down)
             {
-                AC.AuxiliaryTopRelativeImage++;
+                newParameter.Top++;
             }
             else if (key == Keys.EnableKeys.Right)
             {
-                AC.AuxiliaryLeftRelativeImage++;
+                newParameter.Left++;
             }
             else if (key == Keys.EnableKeys.Left)
             {
-                AC.AuxiliaryLeftRelativeImage--;
+                newParameter.Left--;
             }
+
+            return newParameter;
         }
 
-        private void MoveByMouse(Point moveFinishPoint)
+        private AuxiliaryLineParameter MoveByMouse(Point moveFinishPoint)
         {
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
             int moveDistanceX = (int)(moveFinishPoint.X - MoveStartPoint.X);
             int moveDistanceY = (int)(moveFinishPoint.Y - MoveStartPoint.Y);
+            newParameter.Left += moveDistanceX;
+            newParameter.Top += moveDistanceY;
 
-            AC.AuxiliaryLeftRelativeImage += moveDistanceX;
-            AC.AuxiliaryTopRelativeImage += moveDistanceY;
+            return newParameter;
         }
     }
 }
