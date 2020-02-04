@@ -26,68 +26,18 @@ namespace MyTrimmingNew
             AuxiliaryLineCommandList = new AuxiliaryLineCommandList();
         }
 
-        public AuxiliaryLineParameter CreateMemento()
-        {
-            return CloneParameter();
-        }
-
-        public void SetMemento(AuxiliaryLineParameter memento)
-        {
-            Parameter = memento;
-        }
-
         public AuxiliaryLineParameter CloneParameter()
         {
             return (AuxiliaryLineParameter)Parameter.Clone();
         }
 
-        public int AuxiliaryLeftRelativeImage
-        {
-            get
-            {
-                return Parameter.Left;
-            }
-            private set
-            {
-                Parameter.Left = value;
-            }
-        }
+        public int AuxiliaryLeftRelativeImage { get { return Parameter.Left; } }
 
-        public int AuxiliaryTopRelativeImage
-        {
-            get
-            {
-                return Parameter.Top;
-            }
-            private set
-            {
-                Parameter.Top = value;
-            }
-        }
+        public int AuxiliaryTopRelativeImage { get { return Parameter.Top; } }
 
-        public int AuxiliaryWidth
-        {
-            get
-            {
-                return Parameter.Width;
-            }
-            private set
-            {
-                Parameter.Width = value;
-            }
-        }
+        public int AuxiliaryWidth { get { return Parameter.Width; } }
 
-        public int AuxiliaryHeight
-        {
-            get
-            {
-                return Parameter.Height;
-            }
-            private set
-            {
-                Parameter.Height = value;
-            }
-        }
+        public int AuxiliaryHeight { get { return Parameter.Height; } }
 
         public double? AuxiliaryRatio { get { return Parameter.Ratio; } }
 
