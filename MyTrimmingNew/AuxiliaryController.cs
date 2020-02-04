@@ -81,5 +81,13 @@ namespace MyTrimmingNew
             // 登録Observerに変更を通知
             Notify();
         }
+
+        public void RedoEvent()
+        {
+            Parameter = AuxiliaryLineCommandList.ReExecute(this);
+
+            // 登録Observerに変更を通知
+            Notify();
+        }
     }
 }

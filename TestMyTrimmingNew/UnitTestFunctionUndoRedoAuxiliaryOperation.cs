@@ -93,5 +93,21 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
         }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoNoProcessBeforeAtLeastOneOperationCanceled()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            int beforeWidth = ac.AuxiliaryWidth;
+            int beforeHeight = ac.AuxiliaryHeight;
+
+            ac.RedoEvent();
+
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
     }
 }

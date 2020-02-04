@@ -44,5 +44,21 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             return old;
         }
+
+        public AuxiliaryLineParameter ReExecute(AuxiliaryController ac)
+        {
+            if (CommandListIndex < 0)
+            {
+                return ac.CloneParameter();
+            }
+
+            if (CommandListIndex >= CommandList.Count)
+            {
+                return ac.CloneParameter();
+            }
+
+            CommandListIndex++;
+            return CommandList[CommandListIndex].AfterParameter;
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public AuxiliaryLineParameter BeforeParameter { get; private set; }
 
+        public AuxiliaryLineParameter AfterParameter { get; private set; }
+
         public AuxiliaryLineCommand(AuxiliaryController ac)
         {
             AC = ac;
@@ -20,7 +22,8 @@ namespace MyTrimmingNew.AuxiliaryLine
         public AuxiliaryLineParameter Execute(object operation)
         {
             BeforeParameter = AC.CloneParameter();
-            return ExecuteCore(operation);
+            AfterParameter = ExecuteCore(operation);
+            return AfterParameter;
         }
 
         public abstract AuxiliaryLineParameter ExecuteCore(object operation);
