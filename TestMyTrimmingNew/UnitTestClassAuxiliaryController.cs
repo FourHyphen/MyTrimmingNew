@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyTrimmingNew;
+using MyTrimmingNew.AuxiliaryLine;
 using static MyTrimmingNew.AuxiliaryLine.AuxiliaryLineParameter;
 
 namespace TestMyTrimmingNew
@@ -486,7 +488,7 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region "その他: 補助線矩形外でのマウス操作"
+        #region "補助線矩形外操作: マウス操作"
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -521,5 +523,177 @@ namespace TestMyTrimmingNew
         }
 
         #endregion
+
+        #region "Undo: 初期値"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoNoProcessBeforeAtLeastOneOperation()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            int beforeWidth = ac.AuxiliaryWidth;
+            int beforeHeight = ac.AuxiliaryHeight;
+
+            ac.CancelEvent();
+
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        #endregion
+
+        #region "Undo: キー操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoInputCursorKeyDown()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Down);
+            Assert.AreEqual(1, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+
+            ac.CancelEvent();
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoInputCursorKeyUp()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Up);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+
+            ac.CancelEvent();
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoInputCursorKeyLeft()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Left);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+
+            ac.CancelEvent();
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoInputCursorKeyRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 矩形を小さくして、右キーで矩形を移動できるだけのスペースを作る
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
+                                                                      -100,
+                                                                      -5,
+                                                                      true);
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Right);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(1, ac.AuxiliaryLeftRelativeImage);
+
+            ac.CancelEvent();
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        #endregion
+
+        #region "Undo: マウス操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoSizeChangeOperationWhereBottomRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+
+            list.Add(ac.CloneParameter());
+
+            // Width基準でHeightを変更するよう、Width >> height となる値を設定
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -100, -5, true);
+            list.Add(ac.CloneParameter());
+
+            // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -5, -100, false);
+
+            ac.CancelEvent();
+            AreParameterEqual(list[1], ac);
+
+            ac.CancelEvent();
+            AreParameterEqual(list[0], ac);
+        }
+
+        private void AreParameterEqual(AuxiliaryLineParameter expected, AuxiliaryController actual)
+        {
+            Assert.AreEqual(expected.Width, actual.AuxiliaryWidth);
+            Assert.AreEqual(expected.Height, actual.AuxiliaryHeight);
+            Assert.AreEqual(expected.Top, actual.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(expected.Left, actual.AuxiliaryLeftRelativeImage);
+        }
+
+        #endregion
+
+        #region "Redo: 初期値"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoNoProcessBeforeAtLeastOneOperation()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            int beforeWidth = ac.AuxiliaryWidth;
+            int beforeHeight = ac.AuxiliaryHeight;
+
+            ac.RedoEvent();
+
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoNoProcessBeforeAtLeastOneOperationCanceled()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            int beforeWidth = ac.AuxiliaryWidth;
+            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeTop = ac.AuxiliaryTopRelativeImage;
+            int beforeLeft = ac.AuxiliaryLeftRelativeImage;
+
+            // CancelせずにRedoを実行する
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Left);
+            ac.RedoEvent();
+
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(beforeTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(beforeLeft, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        #endregion
+
     }
 }
