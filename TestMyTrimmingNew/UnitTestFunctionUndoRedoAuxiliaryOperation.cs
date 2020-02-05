@@ -96,7 +96,7 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestRedoNoProcessBeforeAtLeastOneOperationCanceled()
+        public void TestRedoNoProcessBeforeAtLeastOneOperation()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
             int beforeWidth = ac.AuxiliaryWidth;
@@ -108,6 +108,27 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
             Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoNoProcessBeforeAtLeastOneOperationCanceled()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            int beforeWidth = ac.AuxiliaryWidth;
+            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeTop = ac.AuxiliaryTopRelativeImage;
+            int beforeLeft = ac.AuxiliaryLeftRelativeImage;
+
+            // CancelせずにRedoを実行する
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Left);
+            ac.RedoEvent();
+
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(beforeTop, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(beforeLeft, ac.AuxiliaryLeftRelativeImage);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace MyTrimmingNew.AuxiliaryLine
                 return ac.CloneParameter();
             }
 
-            if (CommandListIndex >= CommandList.Count)
+            if (CommandListIndex >= (CommandList.Count - 1))
             {
                 return ac.CloneParameter();
             }
