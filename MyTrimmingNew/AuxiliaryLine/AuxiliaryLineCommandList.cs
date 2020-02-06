@@ -15,7 +15,7 @@ namespace MyTrimmingNew.AuxiliaryLine
         public AuxiliaryLineCommandList()
         {
             CommandList = new List<AuxiliaryLineCommand>();
-            CommandListIndex = -1;    // 初回のAddで0になるよう調整
+            CommandListIndex = 0;
         }
 
         public AuxiliaryLineParameter Execute(AuxiliaryController ac,
@@ -34,31 +34,25 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public AuxiliaryLineParameter UnExecute(AuxiliaryController ac)
         {
-            if(CommandListIndex < 0)
+            if(CommandListIndex <= 0)
             {
                 return ac.CloneParameter();
             }
 
-            AuxiliaryLineParameter old = CommandList[CommandListIndex].BeforeParameter;
             CommandListIndex--;
-
-            return old;
+            return CommandList[CommandListIndex].BeforeParameter;
         }
 
         public AuxiliaryLineParameter ReExecute(AuxiliaryController ac)
         {
-            if (CommandListIndex < 0)
+            if (CommandListIndex >= CommandList.Count)
             {
                 return ac.CloneParameter();
             }
 
-            if (CommandListIndex >= (CommandList.Count - 1))
-            {
-                return ac.CloneParameter();
-            }
-
+            AuxiliaryLineParameter redo = CommandList[CommandListIndex].AfterParameter;
             CommandListIndex++;
-            return CommandList[CommandListIndex].AfterParameter;
+            return redo;
         }
     }
 }

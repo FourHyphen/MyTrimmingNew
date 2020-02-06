@@ -760,5 +760,51 @@ namespace TestMyTrimmingNew
 
         #endregion
 
+        #region "Redo: キー操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoInputCursorKeyDown()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+            list.Add(ac.CloneParameter());
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Down);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[0], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[1], ac);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoInputCursorKeyUp()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+            list.Add(ac.CloneParameter());
+
+            // 上キー操作で上に移動するようあらかじめ下に移動しておく
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Down);
+            list.Add(ac.CloneParameter());
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Up);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[1], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[2], ac);
+        }
+
+        #endregion
     }
 }
