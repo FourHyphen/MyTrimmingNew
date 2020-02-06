@@ -806,5 +806,39 @@ namespace TestMyTrimmingNew
         }
 
         #endregion
+
+        #region "Redo: マウス操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestRedoSizeChangeOperationWhereTopRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+            list.Add(ac.CloneParameter());
+
+            // Width基準でHeightを変更するよう、Width >> height となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
+            list.Add(ac.CloneParameter());
+
+            // Height基準でWidthを変更するよう、Height >> Width となる値を設定
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -5, -100, false);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[1], ac);
+
+            ac.CancelEvent();
+            AreParameterEqual(list[0], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[1], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[2], ac);
+        }
+
+
+        #endregion
     }
 }
