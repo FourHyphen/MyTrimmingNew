@@ -22,14 +22,25 @@ namespace MyTrimmingNew.AuxiliaryLine
                                               AuxiliaryLineCommand command,
                                               object operation)
         {
-            // TODO: 
-            // 間にUnExecuteを挟んでいる場合、今の操作内容で現在Indexのを上書きし、それを最新とする
-            // (整合の取れなくなった操作内容を削除する)
-            // 判別はListIndexとList.Countの差で可能
+            if (DoneUnExecuteBefore())
+            {
+                // かつての操作内容を削除し、今の操作内容を最新の履歴とする
+                if (CommandListIndex >= 0)
+                {
+                    CommandList.RemoveRange(CommandListIndex, CommandList.Count - CommandListIndex);
+                }
+            }
+
+            AuxiliaryLineParameter result = command.Execute(operation);
             CommandList.Add(command);
             CommandListIndex++;
 
-            return command.Execute(operation);
+            return result;
+        }
+
+        private bool DoneUnExecuteBefore()
+        {
+            return (CommandListIndex < CommandList.Count);
         }
 
         public AuxiliaryLineParameter UnExecute(AuxiliaryController ac)

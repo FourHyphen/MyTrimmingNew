@@ -840,5 +840,70 @@ namespace TestMyTrimmingNew
 
 
         #endregion
+
+        #region "Undo/Redo: 複雑な操作"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoRedoIfNewOperationAfterUndo()
+        {
+            // 操作 → Undo → 別操作 → Redoしないことを確認する
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+            list.Add(ac.CloneParameter());
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Down);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[0], ac);
+
+            // 適当に別操作
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
+            list[1] = ac.CloneParameter();
+
+            ac.RedoEvent();
+            AreParameterEqual(list[1], ac);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestUndoAndRedo()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+            list.Add(ac.CloneParameter());
+
+            ac.SetEvent();
+            ac.PublishEvent(Keys.EnableKeys.Down);
+            list.Add(ac.CloneParameter());
+
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -100, -5, true);
+            list.Add(ac.CloneParameter());
+
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -5, -100, false);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[2], ac);
+
+            ac.CancelEvent();
+            AreParameterEqual(list[1], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[2], ac);
+
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, 50, 5, true);
+            list.Add(ac.CloneParameter());
+
+            ac.CancelEvent();
+            AreParameterEqual(list[2], ac);
+
+            ac.RedoEvent();
+            AreParameterEqual(list[4], ac);
+        }
+
+        #endregion
     }
 }
