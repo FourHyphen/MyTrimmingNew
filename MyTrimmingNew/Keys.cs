@@ -18,6 +18,8 @@ namespace MyTrimmingNew
             Down,
             Left,
             Right,
+            Cancel,
+            Redo,
             Else
         }
 
@@ -26,7 +28,35 @@ namespace MyTrimmingNew
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static EnableKeys ToEnableKeys(System.Windows.Input.Key key)
+        public static EnableKeys ToEnableKeys(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
+        {
+            EnableKeys keyConbination = ToEnableKeysConbination(key, keyboard);
+            if (keyConbination != EnableKeys.Else)
+            {
+                return keyConbination;
+            }
+
+            return ToEnableKeysOneKey(key);
+        }
+
+        private static EnableKeys ToEnableKeysConbination(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
+        {
+            if (keyboard.Modifiers == ModifierKeys.Control)
+            {
+                if (key == Key.Z)
+                {
+                    return EnableKeys.Cancel;
+                }
+                else if (key == Key.Y)
+                {
+                    return EnableKeys.Redo;
+                }
+            }
+
+            return EnableKeys.Else;
+        }
+
+        private static EnableKeys ToEnableKeysOneKey(System.Windows.Input.Key key)
         {
             if (key == Key.Up)
             {
@@ -44,15 +74,13 @@ namespace MyTrimmingNew
             {
                 return EnableKeys.Right;
             }
-            else
-            {
-                return EnableKeys.Else;
-            }
+
+            return EnableKeys.Else;
         }
 
-        public static bool IsKeyCursor(System.Windows.Input.Key key)
+        public static bool IsKeyCursor(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
         {
-            EnableKeys ekey = ToEnableKeys(key);
+            EnableKeys ekey = ToEnableKeys(key, keyboard);
             return IsKeyCursor(ekey);
         }
 

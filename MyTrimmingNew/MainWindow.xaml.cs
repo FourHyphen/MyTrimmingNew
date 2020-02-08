@@ -109,10 +109,19 @@ namespace MyTrimmingNew
 
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (Keys.IsKeyCursor(e.Key))
+            Keys.EnableKeys keyKind = Keys.ToEnableKeys(e.Key, e.KeyboardDevice);
+            if (Keys.IsKeyCursor(keyKind))
             {
                 SetAuxiliaryLineEvent();
-                PublishAuxiliaryLineEvent(Keys.ToEnableKeys(e.Key));
+                PublishAuxiliaryLineEvent(keyKind);
+            }
+            else if (keyKind == Keys.EnableKeys.Cancel)
+            {
+                CancelAuxiliaryLineEvent();
+            }
+            else if (keyKind == Keys.EnableKeys.Redo)
+            {
+                RedoAuxiliaryLineEvent();
             }
         }
 
@@ -156,17 +165,47 @@ namespace MyTrimmingNew
 
         private void SetAuxiliaryLineEvent()
         {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
             _auxiliaryController.SetEvent();
         }
 
         private void SetAuxiliaryLineEvent(Point mouseDownCoordinate)
         {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
             _auxiliaryController.SetEvent(mouseDownCoordinate);
         }
 
         private void PublishAuxiliaryLineEvent(object operation)
         {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
             _auxiliaryController.PublishEvent(operation);
+        }
+
+        private void CancelAuxiliaryLineEvent()
+        {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
+            _auxiliaryController.CancelEvent();
+        }
+
+        private void RedoAuxiliaryLineEvent()
+        {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
+            _auxiliaryController.RedoEvent();
         }
 
         #endregion
