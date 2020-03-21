@@ -17,107 +17,96 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public AuxiliaryLineParameter Execute(int changeWidth, int changeHeight)
         {
-            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+            AuxiliaryLineParameter nowParameter = AC.CloneParameter();
+            AuxiliaryLineParameter newParameter = null;
 
             // 矩形のRatioに合わせたマウス移動距離を求め、その通りにサイズを変更する
             int changeSizeWidth = changeWidth;
             int changeSizeHeight = changeHeight;
             if (BaseWidthWhenChangeSize(changeSizeWidth, changeSizeHeight))
             {
-                changeSizeHeight = CalcAuxiliaryLineHeight(changeSizeHeight, changeSizeWidth);
+                newParameter = GetNewAuxiliaryLineParameterBaseWidth(changeSizeWidth, changeSizeHeight);
             }
             else
             {
-                changeSizeWidth = CalcAuxiliaryLineWidth(changeSizeWidth, changeSizeHeight);
+                newParameter = GetNewAuxiliaryLineParameterBaseHeight(changeSizeWidth, changeSizeHeight);
             }
-
-            int maxChangeSizeWidth = GetMaxChangeSizeWidth();
-            int maxChangeSizeHeight = GetMaxChangeSizeHeight();
 
             // 原点が変わるような操作の場合、サイズ変更しない
-            if (WillChangeAuxilirayOrigin(changeSizeWidth, changeSizeHeight))
+            if (WillChangeAuxilirayOrigin(newParameter.Left, newParameter.Top, newParameter.Right, newParameter.Bottom))
             {
-                return newParameter;
+                return nowParameter;
             }
-            // 画像からはみ出るような変形の場合、画像一杯までの変形に制限する
-            else if (changeSizeWidth > maxChangeSizeWidth)
-            {
-                changeSizeWidth = maxChangeSizeWidth;
-                changeSizeHeight = CalcAuxiliaryLineHeight(changeSizeHeight, changeSizeWidth);
-            }
-            else if (changeSizeHeight > maxChangeSizeHeight)
-            {
-                changeSizeHeight = maxChangeSizeHeight;
-                changeSizeWidth = CalcAuxiliaryLineWidth(changeSizeWidth, changeSizeHeight);
-            }
-
-            // 新しいパラメーターを返す
-            int newWidth = GetNewAuxiliaryWidth(changeSizeWidth);
-            int newHeight = GetNewAuxiliaryHeight(changeSizeHeight);
-            int newLeft = GetNewAuxiliaryLeft(changeSizeWidth);
-            int newTop = GetNewAuxiliaryTop(changeSizeHeight);
-            newParameter.Width = newWidth;
-            newParameter.Height = newHeight;
-            newParameter.Top = newTop;
-            newParameter.Left = newLeft;
 
             return newParameter;
         }
 
-        public abstract int GetMaxChangeSizeWidth();
+        public abstract bool WillChangeAuxilirayOrigin(int newLeft, int newTop, int newRight, int newBottom);
 
-        public abstract int GetMaxChangeSizeHeight();
+        public abstract AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseWidth(int changeSizeWidth, int changeSizeHeight);
 
-        public abstract bool WillChangeAuxilirayOrigin(int changeSizeWidth, int changeSizeHeight);
-
-        public abstract int GetNewAuxiliaryLeft(int changeSizeWidth);
-
-        public abstract int GetNewAuxiliaryTop(int changeSizeHeight);
-
-        public abstract int GetNewAuxiliaryWidth(int changeSizeWidth);
-
-        public abstract int GetNewAuxiliaryHeight(int changeSizeHeight);
+        public abstract AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseHeight(int changeSizeWidth, int changeSizeHeight);
 
         private bool BaseWidthWhenChangeSize(int willChangeWidth, int willChangeHeight)
         {
-            int baseWidthChangeHeight = CalcAuxiliaryLineHeight(willChangeHeight, willChangeWidth);
+            int baseWidthChangeHeight = CalcHeightChangeSize(willChangeWidth, willChangeHeight);
             return (Math.Abs(baseWidthChangeHeight) > Math.Abs(willChangeHeight));
         }
 
-        private int CalcAuxiliaryLineWidth(int nowAuxiliaryWidth, int newAuxiliaryHeight)
-        {
-            if(AC.AuxiliaryRatio == null)
-            {
-                return nowAuxiliaryWidth;
-            }
-            else
-            {
-                return CalcAuxiliaryLineWidthWithFitRatio(newAuxiliaryHeight, (double)AC.AuxiliaryRatio);
-            }
-        }
-
-        private int CalcAuxiliaryLineWidthWithFitRatio(int newAuxiliaryHeight, double auxiliaryRatio)
-        {
-            double newWidth = (double)newAuxiliaryHeight * auxiliaryRatio;
-            return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
-        }
-
-        private int CalcAuxiliaryLineHeight(int nowAuxiliaryHeight, int newAuxiliaryWidth)
+        protected int CalcWidthChangeSize(int willChangeSizeWidth, int willChangeSizeHeight)
         {
             if (AC.AuxiliaryRatio == null)
             {
-                return nowAuxiliaryHeight;
+                return willChangeSizeWidth;
             }
             else
             {
-                return CalcAuxiliaryLineHeightWithFitRatio(newAuxiliaryWidth, (double)AC.AuxiliaryRatio);
+                return CalcWidthChangeSizeBaseHeight(willChangeSizeHeight, (double)AC.AuxiliaryRatio);
             }
         }
 
-        private int CalcAuxiliaryLineHeightWithFitRatio(int newAuxiliaryWidth, double auxiliaryRatio)
+        private int CalcWidthChangeSizeBaseHeight(int willChangeSizeHeight, double auxiliaryRatio)
         {
-            double newHeight = (double)newAuxiliaryWidth / auxiliaryRatio;
+            double newWidth = (double)willChangeSizeHeight * auxiliaryRatio;
+            return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
+        }
+
+        protected int CalcHeightChangeSize(int willChangeSizeWidth, int willChangeSizeHeight)
+        {
+            if (AC.AuxiliaryRatio == null)
+            {
+                return willChangeSizeHeight;
+            }
+            else
+            {
+                return CalcHeightChangeSizeBaseWidth(willChangeSizeWidth, (double)AC.AuxiliaryRatio);
+            }
+        }
+
+        private int CalcHeightChangeSizeBaseWidth(int willChangeSizeWidth, double auxiliaryRatio)
+        {
+            double newHeight = (double)willChangeSizeWidth / auxiliaryRatio;
             return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
+        }
+
+        protected int GetMinLeft()
+        {
+            return (0 - AC.AuxiliaryLineThickness + 1);
+        }
+
+        protected int GetMinTop()
+        {
+            return (0 - AC.AuxiliaryLineThickness + 1);
+        }
+
+        protected int GetMaxRight()
+        {
+            return (AC.DisplayImageWidth - AC.AuxiliaryLineThickness + 1);
+        }
+
+        protected int GetMaxBottom()
+        {
+            return (AC.DisplayImageHeight - AC.AuxiliaryLineThickness + 1);
         }
     }
 }

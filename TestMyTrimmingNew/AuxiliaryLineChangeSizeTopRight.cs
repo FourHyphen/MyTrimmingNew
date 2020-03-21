@@ -8,7 +8,7 @@ namespace TestMyTrimmingNew
         public override double GetMouseUpX(AuxiliaryController ac,
                                            int changeSizeWidthPixel)
         {
-            return ac.AuxiliaryWidth + (double)changeSizeWidthPixel;
+            return GetAuxiliaryWidth(ac) + (double)changeSizeWidthPixel;
         }
 
         public override double GetMouseUpY(AuxiliaryController ac,
@@ -20,7 +20,7 @@ namespace TestMyTrimmingNew
 
         public override Point GetMouseDownPoint(AuxiliaryController ac)
         {
-            return new Point(ac.AuxiliaryWidth, 0);
+            return new Point(GetAuxiliaryWidth(ac), 0);
         }
 
         public override int GetMaxChangeSizeWidth(AuxiliaryController ac,

@@ -14,8 +14,8 @@ namespace TestMyTrimmingNew
             // 操作前の値を保持
             int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
             int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeWidth = GetAuxiliaryWidth(ac);
+            int beforeHeight = GetAuxiliaryHeight(ac);
 
             // 操作
             double mouseUpX = GetMouseUpX(ac, changeSizeWidthPixel);
@@ -37,17 +37,11 @@ namespace TestMyTrimmingNew
                 changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
             }
 
+            // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
             int maxChangeSizeWidth = GetMaxChangeSizeWidth(ac, beforeWidth, beforeLeftRelativeImage);
             int maxChangeHeight = GetMaxChangeSizeHeight(ac, beforeHeight, beforeTopRelativeImage);
-            if (WillChangeAuxiliaryLineOrigin(beforeWidth, beforeHeight, changeSizeWidth, changeSizeHeight))
+            if (changeSizeWidth > maxChangeSizeWidth)
             {
-                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
-                changeSizeWidth = 0;
-                changeSizeHeight = 0;
-            }
-            else if (changeSizeWidth > maxChangeSizeWidth || changeSizeHeight > maxChangeHeight)
-            {
-                // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
                 if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
                 {
                     changeSizeWidth = maxChangeSizeWidth;
@@ -59,6 +53,32 @@ namespace TestMyTrimmingNew
                     changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
                 }
             }
+            if (changeSizeHeight > maxChangeHeight)
+            {
+                if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
+                {
+                    changeSizeHeight = maxChangeHeight;
+                    changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
+                }
+                else
+                {
+                    changeSizeWidth = maxChangeSizeWidth;
+                    changeSizeHeight = CalcAuxiliaryHeight(changeSizeWidth, changeSizeHeight, ac);
+                }
+            }
+            // 補正してもなお画像からはみ出る場合あり、それを再度補正する
+            if (changeSizeWidth > maxChangeSizeWidth)
+            {
+                changeSizeWidth = maxChangeSizeWidth;
+                changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
+            }
+
+            if (WillChangeAuxiliaryLineOrigin(beforeWidth, beforeHeight, changeSizeWidth, changeSizeHeight))
+            {
+                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
+                changeSizeWidth = 0;
+                changeSizeHeight = 0;
+            }
 
             return GetAuxiliaryTestData(beforeLeftRelativeImage,
                                         beforeTopRelativeImage,
@@ -66,6 +86,16 @@ namespace TestMyTrimmingNew
                                         beforeHeight,
                                         changeSizeWidth,
                                         changeSizeHeight);
+        }
+
+        protected int GetAuxiliaryWidth(AuxiliaryController ac)
+        {
+            return ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
+        }
+
+        protected int GetAuxiliaryHeight(AuxiliaryController ac)
+        {
+            return ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
         }
 
         public abstract double GetMouseUpX(AuxiliaryController ac,

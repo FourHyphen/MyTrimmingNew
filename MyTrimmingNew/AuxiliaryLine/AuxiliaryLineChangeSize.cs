@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -18,7 +18,7 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public override AuxiliaryLineParameter ExecuteCore(object operation)
         {
-            Point mouseUpCoordinateRelatedAuxiliaryLine = (Point)operation;
+            System.Windows.Point mouseUpCoordinateRelatedAuxiliaryLine = (System.Windows.Point)operation;
             int changeSizeWidth = (int)mouseUpCoordinateRelatedAuxiliaryLine.X - (int)MouseDownRelatedAuxiliaryLine.X;
             int changeSizeHeight = (int)mouseUpCoordinateRelatedAuxiliaryLine.Y - (int)MouseDownRelatedAuxiliaryLine.Y;
             Mouse.KindMouseDownAuxiliaryLineArea mouseDownArea = Mouse.GetKindMouseDownAuxiliaryLineArea(AC, MouseDownRelatedAuxiliaryLine);

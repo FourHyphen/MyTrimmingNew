@@ -11,7 +11,7 @@ namespace MyTrimmingNew
         // TODO: 各種パラメーターを画面の要素から取得できないか？
         private static int _menuItemHeight = 20;
         private static int _titleHeight = 18;
-        private static int _statusBarHeight = 18;
+        private static int _statusBarHeight = 34;
         private static int _frameUpper = 4;
         private static int _frameRight = 4;
         private static int _frameLower = 4;

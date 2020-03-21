@@ -27,10 +27,10 @@ namespace TestMyTrimmingNew
         public void TestDisplayImageFitWindowSize001()
         {
             MyTrimmingNew.ImageController ic = Common.GetDisplayImage(Common.TestResourceImage001Path);
-            
-            int ansImageWidth = Common.WindowInitWidth - MyTrimmingNew.Constant.FixCanvasWidth;
-            double ratio = (double)ansImageWidth / (double)ic.BitmapImage.Width;
-            int ansImageHeight = (int)((double)ic.BitmapImage.Height * ratio);
+
+            int ansImageHeight = Common.WindowInitHeight - MyTrimmingNew.Constant.FixCanvasHeight;
+            double ratio = (double)ansImageHeight / (double)ic.BitmapImage.Height;
+            int ansImageWidth = (int)((double)ic.BitmapImage.Width * ratio);
 
             Assert.AreEqual(ansImageWidth, ic.DisplayImageWidth);
             Assert.AreEqual(ansImageHeight, ic.DisplayImageHeight);

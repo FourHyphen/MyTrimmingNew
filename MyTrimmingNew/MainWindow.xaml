@@ -14,6 +14,12 @@
                     <MenuItem Header="開く(_O)" Click="menuFileOpen_Click" />
                     <MenuItem Header="別名保存(_S)" Click="menuFileSave_Click" />
                 </MenuItem>
+                <MenuItem Header="編集(_E)">
+                    <MenuItem Header="補助線矩形の回転(_R)">
+                        <MenuItem Header="+10度(P)" Click="MenuEditRotatePlus10_Click" />
+                        <MenuItem Header="-10度(M)" Click="MenuEditRotateMinus10_Click" />
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="設定(_S)">
                     <MenuItem Header="補助線矩形の比率(_R)">
                         <MenuItem Header="横16x縦9" Click="menuSettingsRatioW16H9_Click" />
@@ -44,13 +50,12 @@
                        VerticalAlignment="Top"/>
 
                 <Canvas>
-                    <Rectangle Name="xAuxiliaryLine"
-                               Canvas.Left="0"
-                               Canvas.Top="0"
-                               Cursor="SizeAll"
-                               Panel.ZIndex="1"
-                               Stroke="Red" 
-                               StrokeThickness="1"/>
+                    <Polyline Name="xAuxiliaryLine"
+                              Cursor="SizeAll"
+                              Panel.ZIndex="1"
+                              Points="0,0 0,0 0,0 0,0 0,0"
+                              Stroke="Red"
+                              StrokeThickness="1"/>
                 </Canvas>
             </Grid>
         </DockPanel>

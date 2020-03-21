@@ -32,7 +32,17 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         private void Draw(AuxiliaryController ac)
         {
-            CC.Content = "矩形: 横" + ac.AuxiliaryWidth.ToString() + "x縦" + ac.AuxiliaryHeight.ToString();
+            string leftTop = GetDrawParameter(ac.AuxiliaryLeftTop, "左上");
+            string rightTop = GetDrawParameter(ac.AuxiliaryRightTop, "右上");
+            string rightBottom = GetDrawParameter(ac.AuxiliaryRightBottom, "右下");
+            string leftBottom = GetDrawParameter(ac.AuxiliaryLeftBottom, "左下");
+            string rect = "矩形: " + leftTop + " / " + rightTop + " / " + rightBottom + " / " + leftBottom;
+            CC.Content = rect;
+        }
+
+        private string GetDrawParameter(System.Drawing.Point p, string point)
+        {
+            return point + "(" + p.X.ToString() + ", " + p.Y.ToString() + ")";
         }
     }
 }

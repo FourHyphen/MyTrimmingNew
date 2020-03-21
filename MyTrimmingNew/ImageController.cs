@@ -68,11 +68,12 @@ namespace MyTrimmingNew
 
             common.Image.SaveTrimImage(BitmapImage,
                                        filePath,
-                                       ac.AuxiliaryLeftRelativeImage,
-                                       ac.AuxiliaryTopRelativeImage,
-                                       ac.AuxiliaryWidth,
-                                       ac.AuxiliaryHeight,
-                                       _windowSize.ImageFitWindowRatio);
+                                       ac.AuxiliaryLeftTop,
+                                       ac.AuxiliaryLeftBottom,
+                                       ac.AuxiliaryRightTop,
+                                       ac.AuxiliaryRightBottom,
+                                       _windowSize.ImageFitWindowRatio,
+                                       ac.AuxiliaryDegree);
 
             Notify();
         }

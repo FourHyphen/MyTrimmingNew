@@ -30,8 +30,8 @@ namespace TestMyTrimmingNew
             double ratio = 0.5;
             int seemingTrimLeft = 200;
             int seemingTrimTop = 300;
-            int seemingTrimWidth = 400;
-            int seemingTrimHeight = 200;
+            int seemingTrimRight = 600;
+            int seemingTrimBottom = 500;
 
             System.IO.File.Delete(Common.TestToSaveTrimImagePath);
 
@@ -40,12 +40,14 @@ namespace TestMyTrimmingNew
                                                      Common.TestToSaveTrimImagePath,
                                                      seemingTrimLeft,
                                                      seemingTrimTop,
-                                                     seemingTrimWidth,
-                                                     seemingTrimHeight,
+                                                     seemingTrimRight,
+                                                     seemingTrimBottom,
                                                      ratio);
 
             Bitmap trimmedImg = new Bitmap(Common.TestToSaveTrimImagePath);
 
+            int seemingTrimWidth = seemingTrimRight - seemingTrimLeft;
+            int seemingTrimHeight = seemingTrimBottom - seemingTrimTop;
             int ansLeft = (int)((double)seemingTrimLeft / ratio);
             int ansTop = (int)((double)seemingTrimTop / ratio);
             int ansTrimWidth = (int)((double)seemingTrimWidth / ratio);
@@ -54,6 +56,41 @@ namespace TestMyTrimmingNew
             Bitmap ansImg = img.Clone(rect, img.PixelFormat);
 
             EqualImage(trimmedImg, ansImg);
+        }
+
+        // TODO: テストが完成するまでignoreにする
+        [TestMethod]
+        [Ignore]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestCorrectImageSizeAfterSaveTrimImageWithRotate()
+        {
+            // 数字の根拠無し
+            double ratio = 0.5;
+            Point seemingLeftTop = new Point(200, 200);
+            Point seemingLeftBottom = new Point(200, 400);
+            Point seemingRightTop = new Point(600, 200);
+            Point seemingRightBottom = new Point(600, 400);
+
+            int degree = 20;
+            Point rotateLeftTop = CalcRotatePoint(seemingLeftTop, degree);
+            Point rotateLeftBottom = CalcRotatePoint(seemingLeftBottom, degree);
+            Point rotateRightTop = CalcRotatePoint(seemingRightTop, degree);
+            Point rotateRightBottom = CalcRotatePoint(seemingRightBottom, degree);
+
+            System.IO.File.Delete(Common.TestToSaveTrimImagePath);
+
+            Bitmap img = new Bitmap(Common.TestResourceImage001Path);
+            MyTrimmingNew.common.Image.SaveTrimImage(img,
+                                                     Common.TestToSaveTrimImagePath,
+                                                     rotateLeftTop,
+                                                     rotateLeftBottom,
+                                                     rotateRightTop,
+                                                     rotateRightBottom,
+                                                     ratio,
+                                                     degree);
+
+            Bitmap trimmedImg = new Bitmap(Common.TestToSaveTrimImagePath);
+            EqualImage(img, trimmedImg, rotateLeftTop, rotateLeftBottom, rotateRightTop, rotateRightBottom, ratio, degree);
         }
 
         private void EqualImage(Bitmap img1, Bitmap img2)
@@ -68,6 +105,32 @@ namespace TestMyTrimmingNew
                     Assert.AreEqual(img1.GetPixel(x, y), img2.GetPixel(x, y));
                 }
             }
+        }
+
+        private Point CalcRotatePoint(Point p, int degree)
+        {
+            double rad = ToRadian(degree);
+            double rotateX = p.X * Math.Cos(rad) - p.Y * Math.Sin(rad);
+            double rotateY = p.Y * Math.Cos(rad) + p.X * Math.Sin(rad);
+            return new Point((int)rotateX, (int)rotateY);
+        }
+
+        private double ToRadian(int degree)
+        {
+            return (double)degree * Math.PI / 180.0;
+        }
+
+        private void EqualImage(Bitmap beforeTrim,
+                                Bitmap afterTrim,
+                                Point trimLeftTop,
+                                Point trimLeftBottom,
+                                Point trimRightTop,
+                                Point trimRightBottom,
+                                double ratio,
+                                int rotateDegree
+                                )
+        {
+            // TODO: 画像の中身をチェックする
         }
     }
 }

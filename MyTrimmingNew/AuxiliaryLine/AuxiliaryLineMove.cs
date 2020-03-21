@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Drawing;
+using MyTrimmingNew.common;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -28,9 +29,13 @@ namespace MyTrimmingNew.AuxiliaryLine
             {
                 return MoveByKey((Keys.EnableKeys)o);
             }
-            else if(o is Point)
+            else if(o is System.Windows.Point)
             {
-                return MoveByMouse((Point)o);
+                return MoveByMouse(Common.ToDrawingPoint((System.Windows.Point)o));
+            }
+            else if (o is System.Drawing.Point)
+            {
+                return MoveByMouse((System.Drawing.Point)o);
             }
 
             return AC.CloneParameter();
@@ -42,19 +47,19 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             if (key == Keys.EnableKeys.Up)
             {
-                newParameter.Top--;
+                newParameter.MoveHeight(-1);
             }
             else if (key == Keys.EnableKeys.Down)
             {
-                newParameter.Top++;
+                newParameter.MoveHeight(1);
             }
             else if (key == Keys.EnableKeys.Right)
             {
-                newParameter.Left++;
+                newParameter.MoveWidth(1);
             }
             else if (key == Keys.EnableKeys.Left)
             {
-                newParameter.Left--;
+                newParameter.MoveWidth(-1);
             }
 
             return newParameter;
@@ -66,8 +71,7 @@ namespace MyTrimmingNew.AuxiliaryLine
 
             int moveDistanceX = (int)(moveFinishPoint.X - MoveStartPoint.X);
             int moveDistanceY = (int)(moveFinishPoint.Y - MoveStartPoint.Y);
-            newParameter.Left += moveDistanceX;
-            newParameter.Top += moveDistanceY;
+            newParameter.Move(moveDistanceX, moveDistanceY);
 
             return newParameter;
         }

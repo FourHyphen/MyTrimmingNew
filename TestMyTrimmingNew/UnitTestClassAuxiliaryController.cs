@@ -20,10 +20,10 @@ namespace TestMyTrimmingNew
             AuxiliaryController ac = Common.GetAuxiliaryController(Common.TestResourceImage001Path, ratioType);
 
             double ratio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
-            int fittedWidth = Common.WindowInitWidth - Constant.FixCanvasWidth;
+            int fittedWidth = ac.DisplayImageWidth;
             int fittedHeight = (int)((double)fittedWidth / ratio);
-            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(fittedWidth, ac.AuxiliaryRight);
+            Assert.AreEqual(fittedHeight, ac.AuxiliaryBottom);
         }
 
         [TestMethod]
@@ -36,8 +36,8 @@ namespace TestMyTrimmingNew
             double ratio = (double)WidthRatio(ratioType) / (double)HeightRatio(ratioType);
             int fittedHeight = ac.DisplayImageHeight;
             int fittedWidth = (int)((double)fittedHeight * ratio);
-            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(fittedWidth, ac.AuxiliaryRight);
+            Assert.AreEqual(fittedHeight, ac.AuxiliaryBottom);
         }
 
         [TestMethod]
@@ -51,8 +51,8 @@ namespace TestMyTrimmingNew
 
             int fittedWidth = ac.DisplayImageWidth;
             int fittedHeight = (int)((double)ac.DisplayImageWidth / ratio);
-            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(fittedWidth, ac.AuxiliaryRight);
+            Assert.AreEqual(fittedHeight, ac.AuxiliaryBottom);
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace TestMyTrimmingNew
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
-            int enableDownRange = ac.DisplayImageHeight - ac.AuxiliaryHeight;
+            int enableDownRange = ac.DisplayImageHeight - ac.AuxiliaryBottom;
             Keys.EnableKeys down = Keys.EnableKeys.Down;
             ac.SetEvent();
             for (int i = 1; i <= enableDownRange; i++)
@@ -109,7 +109,7 @@ namespace TestMyTrimmingNew
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
-            int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryWidth;
+            int enableRightRange = ac.DisplayImageWidth - ac.AuxiliaryRight;
             Keys.EnableKeys right = Keys.EnableKeys.Right;
             ac.SetEvent();
             for (int i = 1; i <= enableRightRange; i++)
@@ -137,11 +137,11 @@ namespace TestMyTrimmingNew
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // まず矩形を小さくして移動テストできるようにする(Width基準とする)
-            int mouseUpPixelX = -(ac.AuxiliaryWidth / 2);
+            int mouseUpPixelX = -(ac.AuxiliaryRight / 2);
             int mouseUpPixelY = -5;
-            double mouseUpX = (double)ac.AuxiliaryWidth + (double)mouseUpPixelX;
-            double mouseUpY = (double)ac.AuxiliaryHeight + (double)mouseUpPixelY;
-            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryWidth, (double)ac.AuxiliaryHeight);
+            double mouseUpX = (double)ac.AuxiliaryRight + (double)mouseUpPixelX;
+            double mouseUpY = (double)ac.AuxiliaryBottom + (double)mouseUpPixelY;
+            System.Windows.Point mouseDown = new System.Windows.Point((double)ac.AuxiliaryRight, (double)ac.AuxiliaryBottom);
             System.Windows.Point mouseUp = new System.Windows.Point(mouseUpX, mouseUpY);
             ac.SetEvent(mouseDown);
             ac.PublishEvent(mouseUp);
@@ -171,8 +171,10 @@ namespace TestMyTrimmingNew
                                        int moveX,
                                        int moveY)
         {
-            int startMovePointX = ac.AuxiliaryLeftRelativeImage + (ac.AuxiliaryWidth / 2);
-            int startMovePointY = ac.AuxiliaryTopRelativeImage + (ac.AuxiliaryHeight / 2);
+            int width = ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
+            int height = ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
+            int startMovePointX = ac.AuxiliaryLeftRelativeImage + (width / 2);
+            int startMovePointY = ac.AuxiliaryTopRelativeImage + (height / 2);
             int finishMovePointX = startMovePointX + moveX;
             int finishMovePointY = startMovePointY + moveY;
             System.Windows.Point startMovePoint = new System.Windows.Point(startMovePointX, startMovePointY);
@@ -185,13 +187,13 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistance()
+        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistanceToLeftTop()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
             // 補助線矩形を大きく移動しようとして矩形が画像からはみ出る場合、画像一杯までの移動に制限する
             // テストとして選ぶ値の基準: ディスプレイより大きい距離を移動しようとするなら、確実に画像からはみ出る
-            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryWidth / 2, ac.AuxiliaryHeight / 2);
+            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryRight / 2, ac.AuxiliaryBottom / 2);
             int tooMoveX = 3000;
             int tooMoveY = 3000;
 
@@ -200,23 +202,53 @@ namespace TestMyTrimmingNew
             int correctLeft = 0;
             int correctTop = 0;
             MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistanceToRightTop()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryRight / 2, ac.AuxiliaryBottom / 2);
+            int tooMoveX = 3000;
+            int tooMoveY = 3000;
 
             // 右上方向テスト
-            finishMovePoint = new System.Windows.Point(tooMoveX, -tooMoveY);
-            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
-            correctTop = 0;
+            System.Windows.Point finishMovePoint = new System.Windows.Point(tooMoveX, -tooMoveY);
+            int correctLeft = ac.DisplayImageWidth - ac.AuxiliaryRight;
+            int correctTop = 0;
             MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistanceToLeftBottom()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryRight / 2, ac.AuxiliaryBottom / 2);
+            int tooMoveX = 3000;
+            int tooMoveY = 3000;
 
             // 左下方向テスト
-            finishMovePoint = new System.Windows.Point(-tooMoveX, tooMoveY);
-            correctLeft = 0;
-            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
+            System.Windows.Point finishMovePoint = new System.Windows.Point(-tooMoveX, tooMoveY);
+            int correctLeft = 0;
+            int correctTop = ac.DisplayImageHeight - ac.AuxiliaryBottom;
             MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageIfMoveByMouseTooFarMoveDistanceToRightBottom()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            System.Windows.Point startMovePoint = new System.Windows.Point(ac.AuxiliaryRight / 2, ac.AuxiliaryBottom / 2);
+            int tooMoveX = 3000;
+            int tooMoveY = 3000;
 
             // 右下方向テスト
-            finishMovePoint = new System.Windows.Point(tooMoveX, tooMoveY);
-            correctLeft = ac.DisplayImageWidth - ac.AuxiliaryWidth;
-            correctTop = ac.DisplayImageHeight - ac.AuxiliaryHeight;
+            System.Windows.Point finishMovePoint = new System.Windows.Point(tooMoveX, tooMoveY);
+            int correctLeft = ac.DisplayImageWidth - ac.AuxiliaryRight;
+            int correctTop = ac.DisplayImageHeight - ac.AuxiliaryBottom;
             MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
         }
 
@@ -278,6 +310,44 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeWidthSizeTooLongerThanImageSizeBottomRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像下に近いとき、横方向に大きく拡大して矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -5, -200, false);
+
+            // 次に画像下に寄せる
+            int moveX = 0;
+            int moveY = 180;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, 250, 5, true);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeHeightSizeTooLongerThanImageSizeBottomRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像右に近いとき、下方向に大きく拡大して矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -200, -5, true);
+
+            // 次に画像右に寄せる
+            int moveX = 180;
+            int moveY = 0;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, 5, 250, false);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestCorrectAuxiliaryLineSizeIfNoDefineRatio()
         {
             RatioType ratioType = RatioType.NoDefined;
@@ -300,10 +370,7 @@ namespace TestMyTrimmingNew
                                                                       changeSizeWidth,
                                                                       changeSizeHeight,
                                                                       isWidthMuchLongerThanHeight);
-            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+            AreParameterEqual(testData, ac);
         }
 
         #endregion
@@ -350,6 +417,44 @@ namespace TestMyTrimmingNew
             ChangeAuxiliaryLineSizeWhereBottomLeft(ac, 200, 10, true);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeWidthSizeTooLongerThanImageSizeBottomLeft()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像下に近いとき、横方向に大きく拡大しても矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -200, -5, true);
+
+            // 次に画像下に寄せる
+            int moveX = 0;
+            int moveY = 180;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, 250, 5, true);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeHeightSizeTooLongerThanImageSizeBottomLeft()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像左に近いとき、下方向に大きく拡大して矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, -200, -5, true);
+
+            // 次に画像左に少し移動し、拡大可能にする
+            int moveX = -50;
+            int moveY = 0;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, 5, 250, false);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereBottomLeft(AuxiliaryController ac,
                                                             int changeSizeWidth,
                                                             int changeSizeHeight,
@@ -360,10 +465,7 @@ namespace TestMyTrimmingNew
                                                                      changeSizeWidth,
                                                                      changeSizeHeight,
                                                                      isWidthMuchLongerThanHeight);
-            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+            AreParameterEqual(testData, ac);
         }
 
         #endregion
@@ -410,6 +512,44 @@ namespace TestMyTrimmingNew
             ChangeAuxiliaryLineSizeWhereTopRight(ac, 200, 10, true);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeWidthSizeTooLongerThanImageSizeTopRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像上に近いとき、横方向に大きく拡大しても矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -200, -5, true);
+
+            // 次に画像上に寄せる
+            int moveX = 0;
+            int moveY = -100;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, 250, 5, true);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeHeightSizeTooLongerThanImageSizeTopRight()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像右に近いとき、上方向に大きく拡大しても矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, -200, -5, true);
+
+            // 次に画像右に寄せる
+            int moveX = 100;
+            int moveY = 0;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, 5, 250, false);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereTopRight(AuxiliaryController ac,
                                                           int changeSizeWidth,
                                                           int changeSizeHeight,
@@ -420,10 +560,7 @@ namespace TestMyTrimmingNew
                                                                    changeSizeWidth,
                                                                    changeSizeHeight,
                                                                    isWidthMuchLongerThanHeight);
-            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+            AreParameterEqual(testData, ac);
         }
 
         #endregion
@@ -470,6 +607,44 @@ namespace TestMyTrimmingNew
             ChangeAuxiliaryLineSizeWhereTopLeft(ac, 200, 10, true);
         }
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeWidthSizeTooLongerThanImageSizeTopLeft()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像上に近いとき、横方向に大きく拡大しても矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -200, -5, true);
+
+            // 次に画像上に寄せる
+            int moveX = 0;
+            int moveY = -100;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, 250, 5, true);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineFitImageWhenChangeHeightSizeTooLongerThanImageSizeTopLeft()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 補助線矩形が画像左に近いとき、上方向に大きく拡大しても矩形サイズが画像一杯のサイズになるよう制御する
+            // まず補助線矩形を画像より小さくする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, -200, -5, true);
+
+            // 次に画像左に寄せる
+            int moveX = -100;
+            int moveY = 0;
+            MoveAuxiliaryLine(ac, moveX, moveY);
+
+            // 実際に画像からはみ出るような操作をする
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, 5, 250, false);
+        }
+
         private void ChangeAuxiliaryLineSizeWhereTopLeft(AuxiliaryController ac,
                                                          int changeSizeWidth,
                                                          int changeSizeHeight,
@@ -480,10 +655,7 @@ namespace TestMyTrimmingNew
                                                                   changeSizeWidth,
                                                                   changeSizeHeight,
                                                                   isWidthMuchLongerThanHeight);
-            Assert.AreEqual(testData.ExpectLeft, ac.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(testData.ExpectTop, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(testData.ExpectWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(testData.ExpectHeight, ac.AuxiliaryHeight);
+            AreParameterEqual(testData, ac);
         }
 
         #endregion
@@ -531,13 +703,13 @@ namespace TestMyTrimmingNew
         public void TestUndoNoProcessBeforeAtLeastOneOperation()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeWidth = ac.AuxiliaryRight;
+            int beforeHeight = ac.AuxiliaryBottom;
 
             ac.CancelEvent();
 
-            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(beforeWidth, ac.AuxiliaryRight);
+            Assert.AreEqual(beforeHeight, ac.AuxiliaryBottom);
             Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
         }
@@ -711,10 +883,18 @@ namespace TestMyTrimmingNew
 
         private void AreParameterEqual(AuxiliaryLineParameter expected, AuxiliaryController actual)
         {
-            Assert.AreEqual(expected.Width, actual.AuxiliaryWidth);
-            Assert.AreEqual(expected.Height, actual.AuxiliaryHeight);
+            Assert.AreEqual(expected.Right, actual.AuxiliaryRight);
+            Assert.AreEqual(expected.Bottom, actual.AuxiliaryBottom);
             Assert.AreEqual(expected.Top, actual.AuxiliaryTopRelativeImage);
             Assert.AreEqual(expected.Left, actual.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(expected.Degree, actual.AuxiliaryDegree);
+        }
+        private void AreParameterEqual(AuxiliaryLineTestData expected, AuxiliaryController actual)
+        {
+            Assert.AreEqual(expected.ExpectLeft, actual.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(expected.ExpectTop, actual.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(expected.ExpectWidth, Common.GetAuxiliaryWidth(actual));
+            Assert.AreEqual(expected.ExpectHeight, Common.GetAuxiliaryHeight(actual));
         }
 
         #endregion
@@ -726,13 +906,13 @@ namespace TestMyTrimmingNew
         public void TestRedoNoProcessBeforeAtLeastOneOperation()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeRight = ac.AuxiliaryRight;
+            int beforeBottom = ac.AuxiliaryBottom;
 
             ac.RedoEvent();
 
-            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(beforeRight, ac.AuxiliaryRight);
+            Assert.AreEqual(beforeBottom, ac.AuxiliaryBottom);
             Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
         }
@@ -742,8 +922,8 @@ namespace TestMyTrimmingNew
         public void TestRedoNoProcessBeforeAtLeastOneOperationCanceled()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
-            int beforeWidth = ac.AuxiliaryWidth;
-            int beforeHeight = ac.AuxiliaryHeight;
+            int beforeRight = ac.AuxiliaryRight;
+            int beforeBottom = ac.AuxiliaryBottom;
             int beforeTop = ac.AuxiliaryTopRelativeImage;
             int beforeLeft = ac.AuxiliaryLeftRelativeImage;
 
@@ -752,8 +932,8 @@ namespace TestMyTrimmingNew
             ac.PublishEvent(Keys.EnableKeys.Left);
             ac.RedoEvent();
 
-            Assert.AreEqual(beforeWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(beforeHeight, ac.AuxiliaryHeight);
+            Assert.AreEqual(beforeRight, ac.AuxiliaryRight);
+            Assert.AreEqual(beforeBottom, ac.AuxiliaryBottom);
             Assert.AreEqual(beforeTop, ac.AuxiliaryTopRelativeImage);
             Assert.AreEqual(beforeLeft, ac.AuxiliaryLeftRelativeImage);
         }
@@ -838,7 +1018,6 @@ namespace TestMyTrimmingNew
             AreParameterEqual(list[2], ac);
         }
 
-
         #endregion
 
         #region "Undo/Redo: 複雑な操作"
@@ -902,6 +1081,31 @@ namespace TestMyTrimmingNew
 
             ac.RedoEvent();
             AreParameterEqual(list[4], ac);
+        }
+
+        #endregion
+
+        #region "回転"
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineRotateBasicFunction()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
+
+            // 回転するかをチェック
+            AuxiliaryLineParameter before = ac.CloneParameter();
+            int degree = 30;
+
+            RotateAuxiliaryLine(ac, degree);
+        }
+
+        private void RotateAuxiliaryLine(AuxiliaryController ac, int degree)
+        {
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineRotate().Execute(ac, degree);
+            AreParameterEqual(testData, ac);
         }
 
         #endregion

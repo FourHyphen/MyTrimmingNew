@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -10,46 +11,78 @@ namespace MyTrimmingNew.AuxiliaryLine
     {
         public AuxiliaryLineChangeSizeBottomRight(AuxiliaryController ac) : base(ac) { }
 
-        public override int GetMaxChangeSizeWidth()
-        {
-            return (AC.DisplayImageWidth - AC.AuxiliaryWidth - AC.AuxiliaryLeftRelativeImage - AC.AuxiliaryLineThickness + 1);
-        }
-
-        public override int GetMaxChangeSizeHeight()
-        {
-            return (AC.DisplayImageHeight - AC.AuxiliaryHeight - AC.AuxiliaryTopRelativeImage - AC.AuxiliaryLineThickness + 1);
-        }
-
-        public override bool WillChangeAuxilirayOrigin(int changeSizeWidth, int changeSizeHeight)
+        public override bool WillChangeAuxilirayOrigin(int newLeft, int newTop, int newRight, int newBottom)
         {
             // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if ((AC.AuxiliaryWidth + changeSizeWidth) < 0 || (AC.AuxiliaryHeight + changeSizeHeight) < 0)
+            if (AC.AuxiliaryLeftRelativeImage > newLeft || AC.AuxiliaryTopRelativeImage > newBottom)
             {
                 return true;
             }
             return false;
         }
 
-        public override int GetNewAuxiliaryLeft(int changeSizeWidth)
+        public override AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseWidth(int changeSizeWidth, int changeSizeHeight)
         {
-            // 右下点の操作なら原点は変わらない
-            return AC.AuxiliaryLeftRelativeImage;
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
+            // 右下点の操作なら左側や上側は変わらない
+            int changeWidth = changeSizeWidth;
+            int changeHeight = changeSizeHeight;
+            int newRight = AC.AuxiliaryRight + changeWidth;
+            int newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(changeWidth, changeHeight);
+            int maxRight = GetMaxRight();
+            int maxBottom = GetMaxBottom();
+
+            if (newRight > maxRight)
+            {
+                newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(newRight - maxRight, changeHeight);
+                newRight = maxRight;
+            }
+            if (newBottom > maxBottom)
+            {
+                changeHeight = maxBottom - AC.AuxiliaryBottom;
+                newRight = AC.AuxiliaryRight + CalcWidthChangeSize(changeWidth, changeHeight);
+                newBottom = maxBottom;
+            }
+
+            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeftRelativeImage, AC.AuxiliaryTopRelativeImage),
+                                      new Point(AC.AuxiliaryLeftRelativeImage, newBottom),
+                                      new Point(newRight, AC.AuxiliaryTopRelativeImage),
+                                      new Point(newRight, newBottom));
+
+            return newParameter;
         }
 
-        public override int GetNewAuxiliaryTop(int changeSizeHeight)
+        public override AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseHeight(int changeSizeWidth, int changeSizeHeight)
         {
-            // 右下点の操作なら原点は変わらない
-            return AC.AuxiliaryTopRelativeImage;
-        }
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
 
-        public override int GetNewAuxiliaryWidth(int changeSizeWidth)
-        {
-            return AC.AuxiliaryWidth + changeSizeWidth;
-        }
+            // 右下点の操作なら左側や上側は変わらない
+            int changeWidth = changeSizeWidth;
+            int changeHeight = changeSizeHeight;
+            int newRight = AC.AuxiliaryRight + CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
+            int newBottom = AC.AuxiliaryBottom + changeSizeHeight;
+            int maxRight = GetMaxRight();
+            int maxBottom = GetMaxBottom();
 
-        public override int GetNewAuxiliaryHeight(int changeSizeHeight)
-        {
-            return AC.AuxiliaryHeight + changeSizeHeight;
+            if (newBottom > maxBottom)
+            {
+                changeHeight = maxBottom - AC.AuxiliaryBottom;
+                newRight = AC.AuxiliaryRight + CalcWidthChangeSize(changeWidth, changeHeight);
+                newBottom = maxBottom;
+            }
+            if (newRight > maxRight)
+            {
+                newRight = maxRight;
+                newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(newRight - AC.AuxiliaryRight, changeHeight);
+            }
+
+            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeftRelativeImage, AC.AuxiliaryTopRelativeImage),
+                                      new Point(AC.AuxiliaryLeftRelativeImage, newBottom),
+                                      new Point(newRight, AC.AuxiliaryTopRelativeImage),
+                                      new Point(newRight, newBottom));
+
+            return newParameter;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -13,6 +13,12 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             // キー操作を想定(始点がない)
             return new AuxiliaryLineMove(ac);
+        }
+
+        public AuxiliaryLineCommand Create(AuxiliaryController ac,
+                                           int degree)
+        {
+            return new AuxiliaryLineRotate(ac, degree);
         }
 
         public AuxiliaryLineCommand Create(AuxiliaryController ac, 

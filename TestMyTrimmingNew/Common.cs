@@ -6,9 +6,9 @@ namespace TestMyTrimmingNew
     class Common
     {
         // TODO: リソース管理すればDeploymentItemと共有できるか？
-        public const string TestResourceImage001Path = @".\Resource\test001.jpg";
-        public const string TestResourceImage002Path = @".\Resource\test002.jpg";
-        public const string TestToSaveTrimImagePath = @".\Resource\test001_trimmed.jpg";
+        public const string TestResourceImage001Path = @"test001.jpg";
+        public const string TestResourceImage002Path = @"test002.jpg";
+        public const string TestToSaveTrimImagePath = @"test001_trimmed.jpg";
 
         // TODO: リソース管理してxaml側と数字を共有する
         public const int WindowInitWidth = 800;
@@ -32,6 +32,16 @@ namespace TestMyTrimmingNew
         {
             ImageController ic = GetDisplayImage(filePath);
             return new AuxiliaryController(ic, ratioType, AuxiliaryLineThickness);
+        }
+
+        public static int GetAuxiliaryWidth(AuxiliaryController ac)
+        {
+            return ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
+        }
+
+        public static int GetAuxiliaryHeight(AuxiliaryController ac)
+        {
+            return ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
         }
     }
 }

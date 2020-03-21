@@ -19,8 +19,10 @@ namespace TestMyTrimmingNew
 
             int fittedHeight = ac.DisplayImageHeight;
             int fittedWidth = (int)((double)fittedHeight * ratio);
-            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+            int actualWidth = Common.GetAuxiliaryWidth(ac);
+            int actualHeight = Common.GetAuxiliaryHeight(ac);
+            Assert.AreEqual(fittedWidth, actualWidth);
+            Assert.AreEqual(fittedHeight, actualHeight);
         }
 
         [TestMethod]
@@ -34,8 +36,10 @@ namespace TestMyTrimmingNew
 
             int fittedHeight = ac.DisplayImageHeight;
             int fittedWidth = (int)((double)fittedHeight * ratio);
-            Assert.AreEqual(fittedWidth, ac.AuxiliaryWidth);
-            Assert.AreEqual(fittedHeight, ac.AuxiliaryHeight);
+            int actualWidth = Common.GetAuxiliaryWidth(ac);
+            int actualHeight = Common.GetAuxiliaryHeight(ac);
+            Assert.AreEqual(fittedWidth, actualWidth);
+            Assert.AreEqual(fittedHeight, actualHeight);
         }
     }
 }

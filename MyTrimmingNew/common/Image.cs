@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace MyTrimmingNew.common
 {
@@ -26,6 +27,11 @@ namespace MyTrimmingNew.common
         [System.Runtime.InteropServices.DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         public static extern bool DeleteObject(IntPtr hObject);
 
+        /// <summary>
+        /// BitmapからBitmapSourceを作成する
+        /// </summary>
+        /// <param name="bitmapImage"></param>
+        /// <returns></returns>
         public static System.Windows.Media.Imaging.BitmapSource CreateBitmapSourceImage(Bitmap bitmapImage)
         {
             // 参考: http://qiita.com/KaoruHeart/items/dc130d5fc00629c1b6ea
@@ -73,28 +79,55 @@ namespace MyTrimmingNew.common
         /// <returns></returns>
         public static void SaveTrimImage(Bitmap image,
                                          String filePath,
-                                         int seemingOriginX,
-                                         int seemingOriginY,
-                                         int seemingWidth,
-                                         int seemingHeight,
+                                         int seemingLeft,
+                                         int seemingTop,
+                                         int seemingRight,
+                                         int seemingBottom,
                                          double ratio)
         {
             // 1/1スケール画像上の切り抜き範囲
-            int originX = (int)((double)seemingOriginX / ratio);
-            int originY = (int)((double)seemingOriginY / ratio);
-            int trimWidth = (int)((double)seemingWidth / ratio);
-            int trimHeight = (int)((double)seemingHeight / ratio);
+            int left = (int)((double)seemingLeft / ratio);
+            int top = (int)((double)seemingTop / ratio);
+            int right = (int)((double)seemingRight / ratio);
+            int bottom = (int)((double)seemingBottom / ratio);
 
-            // 切り抜き画像作成
-            Bitmap trimImage = new Bitmap(trimWidth, trimHeight);
-            Graphics g = Graphics.FromImage(trimImage);
-            Rectangle trim = new Rectangle(originX, originY, trimWidth, trimHeight);
-            Rectangle draw = new Rectangle(0, 0, trim.Width, trim.Height);
-            g.DrawImage(image, draw, trim, GraphicsUnit.Pixel);
-            g.Dispose();
+            ImageTrim imageTrim = new ImageTrim();
+            imageTrim.Execute(image, filePath, left, top, right, bottom);
+        }
 
-            // 保存
-            trimImage.Save(filePath);
+        /// <summary>
+        /// 回転後の見た目の矩形4隅および回転角度から切り抜き画像を保存
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="filePath"></param>
+        /// <param name="seemingLeftTop"></param>
+        /// <param name="seemingLeftBottom"></param>
+        /// <param name="seemingRightTop"></param>
+        /// <param name="seemingRightBottom"></param>
+        /// <param name="ratio"></param>
+        /// <param name="degree"></param>
+        public static void SaveTrimImage(Bitmap image,
+                                         String filePath,
+                                         Point seemingLeftTop,
+                                         Point seemingLeftBottom,
+                                         Point seemingRightTop,
+                                         Point seemingRightBottom,
+                                         double ratio,
+                                         int degree)
+        {
+            // 1/1スケール画像上のパラメーターに変換
+            Point leftTop = PointRatio(seemingLeftTop, ratio);
+            Point leftBottom = PointRatio(seemingLeftBottom, ratio);
+            Point rightTop = PointRatio(seemingRightTop, ratio);
+            Point rightBottom = PointRatio(seemingRightBottom, ratio);
+
+            ImageTrim imageTrim = new ImageTrim();
+            imageTrim.Execute(image, filePath, leftTop, leftBottom, rightTop, rightBottom, degree);
+        }
+
+        private static Point PointRatio(Point p, double ratio)
+        {
+            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
     }
 }

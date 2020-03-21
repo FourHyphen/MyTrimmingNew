@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -48,11 +49,12 @@ namespace MyTrimmingNew.AuxiliaryLine
                 }
             }
 
-            // 初期値は画像の原点に合わせる
-            Left = 0;
-            Top = 0;
-
+            LeftTop = new Point(0, 0);
+            LeftBottom = new Point(0, Height);
+            RightTop = new Point(Width, 0);
+            RightBottom = new Point(Width, Height);
             Thickness = thickness;
+            Degree = 0;
         }
 
         private AuxiliaryLineParameter(AuxiliaryLineParameter copy)
@@ -61,10 +63,13 @@ namespace MyTrimmingNew.AuxiliaryLine
             ImageHeight = copy.ImageHeight;
             Width = copy.Width;
             Height = copy.Height;
-            Top = copy.Top;
-            Left = copy.Left;
+            LeftTop = copy.LeftTop;
+            LeftBottom = copy.LeftBottom;
+            RightTop = copy.RightTop;
+            RightBottom = copy.RightBottom;
             Ratio = copy.Ratio;
             Thickness = copy.Thickness;
+            Degree = copy.Degree;
         }
 
         public object Clone()
@@ -124,35 +129,124 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public int ImageHeight { get; private set; }
 
-        public int Width { get; set; }
+        private int Width { get; set; }
 
-        public int Height { get; set; }
+        private int Height { get; set; }
 
-        private int _top;
+        private Point _leftTop = new Point();
+
+        public Point LeftTop
+        {
+            get
+            {
+                return _leftTop;
+            }
+            private set
+            {
+                _leftTop = value;
+            }
+        }
+
+        private Point _leftBottom = new Point();
+
+        public Point LeftBottom
+        {
+            get
+            {
+                return _leftBottom;
+            }
+            private set
+            {
+                _leftBottom = value;
+            }
+        }
+
+        private Point _rightTop = new Point();
+
+        public Point RightTop
+        {
+            get
+            {
+                return _rightTop;
+            }
+            private set
+            {
+                _rightTop = value;
+            }
+        }
+
+        private Point _rightBottom = new Point();
+
+        public Point RightBottom
+        {
+            get
+            {
+                return _rightBottom;
+            }
+            private set
+            {
+                _rightBottom = value;
+            }
+        }
 
         public int Top
         {
             get
             {
-                return _top;
-            }
-            set
-            {
-                _top = FitInRangeAuxiliaryTopRelativeImage(value);
+                if (LeftTop.Y < RightTop.Y)
+                {
+                    return (int)LeftTop.Y;
+                }
+                else
+                {
+                    return (int)RightTop.Y;
+                }
             }
         }
-
-        private int _left;
 
         public int Left
         {
             get
             {
-                return _left;
+                if (LeftTop.X < LeftBottom.X)
+                {
+                    return (int)LeftTop.X;
+                }
+                else
+                {
+                    return (int)LeftBottom.X;
+                }
             }
-            set
+        }
+
+
+        public int Bottom
+        {
+            get
             {
-                _left = FitInRangeAuxiliaryLeftRelativeImage(value);
+                if (LeftBottom.Y < RightBottom.Y)
+                {
+                    return (int)RightBottom.Y;
+                }
+                else
+                {
+                    return (int)LeftBottom.Y;
+                }
+            }
+        }
+
+        public int Right
+        {
+            get
+            {
+                if (RightTop.X < RightBottom.X)
+                {
+                    return (int)RightBottom.X;
+                }
+                else
+                {
+                    return (int)RightTop.X;
+                }
             }
         }
 
@@ -160,36 +254,117 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public int Thickness { get; private set; }
 
-        private int FitInRangeAuxiliaryTopRelativeImage(int toMoveTop)
-        {
-            if (toMoveTop < 0)
-            {
-                return 0;
-            }
+        private int _degree;
 
-            int maxOriginTop = ImageHeight - Height - Thickness + 1;
-            if (toMoveTop > maxOriginTop)
+        public int Degree
+        { 
+            get
             {
-                return maxOriginTop;
+                return _degree;
             }
-
-            return toMoveTop;
+            set
+            {
+                if (IsInRangeAuxiliaryLineAfterRotate(value))
+                {
+                    _degree = value;
+                }
+            }
         }
 
-        private int FitInRangeAuxiliaryLeftRelativeImage(int toMoveLeft)
+        public void Move(int moveXPixel, int moveYPixel)
         {
-            if (toMoveLeft < 0)
+            MoveWidth(moveXPixel);
+            MoveHeight(moveYPixel);
+        }
+
+        public void MoveWidth(int moveXPixel)
+        {
+            int moveX = FitInRangeImageMovingX(moveXPixel);
+            _leftTop.X += moveX;
+            _leftBottom.X += moveX;
+            _rightTop.X += moveX;
+            _rightBottom.X += moveX;
+        }
+
+        public void MoveHeight(int moveYPixel)
+        {
+            int moveY = FitInRangeImageMovingY(moveYPixel);
+            _leftTop.Y += moveY;
+            _leftBottom.Y += moveY;
+            _rightTop.Y += moveY;
+            _rightBottom.Y += moveY;
+        }
+
+        public void ReplacePoint(Point newLeftTop,
+                                 Point newLeftBottom,
+                                 Point newRightTop,
+                                 Point newRightBottom)
+        {
+            LeftTop = newLeftTop;
+            LeftBottom = newLeftBottom;
+            RightTop = newRightTop;
+            RightBottom = newRightBottom;
+        }
+
+        private int FitInRangeImageMovingX(int moveXPixel)
+        {
+            // TODO: degree対応
+            int newLeft = Left + moveXPixel;
+            int newRight = Right + moveXPixel;
+            int minLeft = 0 - Thickness + 1;
+            int maxRight = ImageWidth - Thickness + 1;
+            if (newLeft < minLeft)
             {
-                return 0;
+                if (moveXPixel > 0)
+                {
+                    return Left - Thickness + 1;
+                }
+                else
+                {
+                    return -Left - Thickness + 1;
+                }
+            }
+            else if (maxRight < newRight)
+            {
+                return (maxRight - Right - Thickness + 1);
             }
 
-            int maxOriginLeft = ImageWidth - Width - Thickness + 1;
-            if (toMoveLeft > maxOriginLeft)
+            return moveXPixel;
+        }
+
+        private int FitInRangeImageMovingY(int moveYPixel)
+        {
+            // TODO: degree対応
+            int newTop = Top + moveYPixel;
+            int newBottom = Bottom + moveYPixel;
+            int minTop = 0 - Thickness + 1;
+            int maxBottom = ImageHeight - Thickness + 1;
+            if (newTop < minTop)
             {
-                return maxOriginLeft;
+                if (moveYPixel > 0)
+                {
+                    return Top - Thickness + 1;
+                }
+                else
+                {
+                    return -Top - Thickness + 1;
+                }
+            }
+            else if (maxBottom < newBottom)
+            {
+                return (maxBottom - Bottom - Thickness + 1);
             }
 
-            return toMoveLeft;
+            return moveYPixel;
+        }
+
+        private bool IsInRangeAuxiliaryLineAfterRotate(int newDegree)
+        {
+            // TODO: 実装
+            // degreeの通りに回転したら画像からはみ出る場合、falseを返す
+            // 回転中心は矩形中心とする
+
+            return true;
         }
     }
 }

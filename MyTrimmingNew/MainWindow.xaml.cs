@@ -132,14 +132,37 @@ namespace MyTrimmingNew
         private void xShowImageMouseDown(object sender, MouseButtonEventArgs e)
         {
             // MouseUp時に発行するイベントをセット
-            Point coordinateRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            SetAuxiliaryLineEvent(coordinateRelatedAuxiliaryLine);
+            Point point = GetMousePositionRelativeAuxiliaryLine(e.GetPosition(xAuxiliaryLine));
+            SetAuxiliaryLineEvent(point);
         }
 
         private void xShowImageMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Point coordinateRelatedAuxiliaryLine = e.GetPosition(xAuxiliaryLine);
-            PublishAuxiliaryLineEvent(coordinateRelatedAuxiliaryLine);
+            Point point = GetMousePositionRelativeAuxiliaryLine(e.GetPosition(xAuxiliaryLine));
+            PublishAuxiliaryLineEvent(point);
+        }
+
+        private Point GetMousePositionRelativeAuxiliaryLine(Point mousePoint)
+        {
+            int x = (int)mousePoint.X - _auxiliaryController.AuxiliaryLeftRelativeImage;
+            int y = (int)mousePoint.Y - _auxiliaryController.AuxiliaryTopRelativeImage;
+            return new Point(x, y);
+        }
+
+        #endregion
+
+        #region ユーザー操作時処理: 回転時の処理
+
+        private void MenuEditRotatePlus10_Click(object sender, RoutedEventArgs e)
+        {
+            SetAuxiliaryLineEvent(10);
+            PublishAuxiliaryLineEvent();
+        }
+
+        private void MenuEditRotateMinus10_Click(object sender, RoutedEventArgs e)
+        {
+            SetAuxiliaryLineEvent(-10);
+            PublishAuxiliaryLineEvent();
         }
 
         #endregion
@@ -172,6 +195,15 @@ namespace MyTrimmingNew
             _auxiliaryController.SetEvent();
         }
 
+        private void SetAuxiliaryLineEvent(int degree)
+        {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
+            _auxiliaryController.SetEvent(degree);
+        }
+
         private void SetAuxiliaryLineEvent(Point mouseDownCoordinate)
         {
             if (_auxiliaryController == null)
@@ -188,6 +220,15 @@ namespace MyTrimmingNew
                 return;
             }
             _auxiliaryController.PublishEvent(operation);
+        }
+
+        private void PublishAuxiliaryLineEvent()
+        {
+            if (_auxiliaryController == null)
+            {
+                return;
+            }
+            _auxiliaryController.PublishEvent(null);
         }
 
         private void CancelAuxiliaryLineEvent()
