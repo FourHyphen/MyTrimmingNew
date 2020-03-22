@@ -5,6 +5,13 @@ namespace MyTrimmingNew
 {
     public class ImageController : Subject
     {
+        public enum SaveResult
+        {
+            Success,
+            Failure,
+            Cancel
+        }
+
         private System.IO.FileInfo _imageInfo;
         private WindowSize _windowSize;
 
@@ -55,40 +62,48 @@ namespace MyTrimmingNew
         /// <summary>
         /// 画像を保存する一連の処理を実行する
         /// </summary>
-        /// <exception>
-        /// 画像保存失敗例外
-        /// </exception>
-        public void Save(AuxiliaryController ac)
+        public SaveResult Save(AuxiliaryController ac)
         {
             string filePath = ImageFileSaveDialog.GetInstance(SaveNameExample, DirPath).Show();
             if (filePath == "")
             {
-                return;
+                return SaveResult.Cancel;
             }
 
-            if (ac.AuxiliaryDegree == 0)
+            SaveResult result;
+            try
             {
-                common.Image.SaveTrimImage(BitmapImage,
-                                           filePath,
-                                           ac.AuxiliaryLeft,
-                                           ac.AuxiliaryTop,
-                                           ac.AuxiliaryRight,
-                                           ac.AuxiliaryBottom,
-                                           _windowSize.ImageFitWindowRatio);
+                if (ac.AuxiliaryDegree == 0)
+                {
+                    common.Image.SaveTrimImage(BitmapImage,
+                                               filePath,
+                                               ac.AuxiliaryLeft,
+                                               ac.AuxiliaryTop,
+                                               ac.AuxiliaryRight,
+                                               ac.AuxiliaryBottom,
+                                               _windowSize.ImageFitWindowRatio);
+                }
+                else
+                {
+                    common.Image.SaveTrimImage(BitmapImage,
+                                               filePath,
+                                               ac.AuxiliaryLeftTop,
+                                               ac.AuxiliaryLeftBottom,
+                                               ac.AuxiliaryRightTop,
+                                               ac.AuxiliaryRightBottom,
+                                               _windowSize.ImageFitWindowRatio,
+                                               ac.AuxiliaryDegree);
+                }
+
+                result = SaveResult.Success;
             }
-            else
+            catch
             {
-                common.Image.SaveTrimImage(BitmapImage,
-                                           filePath,
-                                           ac.AuxiliaryLeftTop,
-                                           ac.AuxiliaryLeftBottom,
-                                           ac.AuxiliaryRightTop,
-                                           ac.AuxiliaryRightBottom,
-                                           _windowSize.ImageFitWindowRatio,
-                                           ac.AuxiliaryDegree);
+                result = SaveResult.Failure;
             }
 
             Notify();
+            return result;
         }
     }
 }

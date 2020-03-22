@@ -54,7 +54,7 @@ namespace MyTrimmingNew
                 _showImageObserver = new ShowImageObserver(xShowImage, _imageController);
                 _showImageLength = new ShowImageLengthObserver(xOriginalImageLength, _imageController);
             }
-            catch (Exception ex)
+            catch
             {
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageOpen);
             }
@@ -173,12 +173,12 @@ namespace MyTrimmingNew
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
-            try
+            ImageController.SaveResult result = _imageController.Save(_auxiliaryController);
+            if (result == ImageController.SaveResult.Success)
             {
-                _imageController.Save(_auxiliaryController);
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.SuccessImageSave);
             }
-            catch
+            else if (result == ImageController.SaveResult.Failure)
             {
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageSave);
             }
