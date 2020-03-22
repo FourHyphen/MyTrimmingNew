@@ -16,10 +16,17 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             // TODO: 実装
             // degreeの通りに回転したら画像からはみ出る場合に回転しない
-            Point newLeftTop = CalcRotatePoint(AC.AuxiliaryLeftTop, Degree);
-            Point newLeftBottom = CalcRotatePoint(AC.AuxiliaryLeftBottom, Degree);
-            Point newRightTop = CalcRotatePoint(AC.AuxiliaryRightTop, Degree);
-            Point newRightBottom = CalcRotatePoint(AC.AuxiliaryRightBottom, Degree);
+            Point leftTop = AC.AuxiliaryLeftTop;
+            Point leftBottom = AC.AuxiliaryLeftBottom;
+            Point rightTop = AC.AuxiliaryRightTop;
+            Point rightBottom = AC.AuxiliaryRightBottom;
+            int centerX = CalcCenterX(leftTop, rightBottom);
+            int centerY = CalcCenterY(leftBottom, rightTop);
+
+            Point newLeftTop = CalcRotatePoint(leftTop, centerX, centerY, Degree);
+            Point newLeftBottom = CalcRotatePoint(leftBottom, centerX, centerY, Degree);
+            Point newRightTop = CalcRotatePoint(rightTop, centerX, centerY, Degree);
+            Point newRightBottom = CalcRotatePoint(rightBottom, centerX, centerY, Degree);
 
             AuxiliaryLineParameter newParameter = AC.CloneParameter();
             newParameter.ReplaceParameter(newLeftTop,
@@ -31,12 +38,24 @@ namespace MyTrimmingNew.AuxiliaryLine
             return newParameter;
         }
 
-        private Point CalcRotatePoint(Point p, int degree)
+        private int CalcCenterX(Point p1, Point p2)
+        {
+            return (p1.X + p2.X) / 2;
+        }
+
+        private int CalcCenterY(Point p1, Point p2)
+        {
+            return (p1.Y + p2.Y) / 2;
+        }
+
+        private Point CalcRotatePoint(Point p, int centerX, int centerY, int degree)
         {
             double rad = ToRadian(degree);
-            double rotateX = p.X * Math.Cos(rad) - p.Y * Math.Sin(rad);
-            double rotateY = p.Y * Math.Cos(rad) + p.X * Math.Sin(rad);
-            return new Point((int)rotateX, (int)rotateY);
+            int x = p.X - centerX;
+            int y = p.Y - centerY;
+            double rotateX = x * Math.Cos(rad) - y * Math.Sin(rad);
+            double rotateY = y * Math.Cos(rad) + x * Math.Sin(rad);
+            return new Point((int)rotateX + centerX, (int)rotateY + centerY);
         }
 
         private double ToRadian(int degree)
