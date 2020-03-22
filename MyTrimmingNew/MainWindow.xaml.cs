@@ -8,6 +8,7 @@ namespace MyTrimmingNew
     public partial class MainWindow : Window
     {
         private ImageController _imageController;
+        private ShowSupportMessageObserver _showImageMessage;
         private ShowImageObserver _showImageObserver;
         private ShowImageLengthObserver _showImageLength;
 
@@ -18,6 +19,7 @@ namespace MyTrimmingNew
         public MainWindow()
         {
             InitializeComponent();
+            _showImageMessage = new ShowSupportMessageObserver(xSupportMessage);
         }
 
         #region "ユーザー操作時処理: 画像ファイルオープン"
@@ -48,6 +50,7 @@ namespace MyTrimmingNew
                 _imageController = new ImageController(imageFilePath,
                                                        (int)Width - Constant.FixCanvasWidth,
                                                        (int)Height - Constant.FixCanvasHeight);
+                _showImageMessage.Attach(_imageController);
                 _showImageObserver = new ShowImageObserver(xShowImage, _imageController);
                 _showImageLength = new ShowImageLengthObserver(xOriginalImageLength, _imageController);
             }

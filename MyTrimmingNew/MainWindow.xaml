@@ -31,7 +31,7 @@
             </Menu>
 
             <StatusBar DockPanel.Dock="Bottom">
-                <StatusBarItem DockPanel.Dock="Left" Name="xSaveResult">画像ファイルを開いてください</StatusBarItem>
+                <StatusBarItem DockPanel.Dock="Left" Name="xSupportMessage" />
                 <Separator DockPanel.Dock="Left"/>
 
                 <StatusBarItem DockPanel.Dock="Left" Name="xOriginalImageLength" />

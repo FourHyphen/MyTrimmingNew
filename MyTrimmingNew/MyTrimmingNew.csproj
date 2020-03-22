@@ -121,6 +121,7 @@
     <Compile Include="AuxiliaryLine\AuxiliaryLineRectangleObserver.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="ShowImageLengthObserver.cs" />
+    <Compile Include="ShowSupportMessageObserver.cs" />
     <Compile Include="ShowImageObserver.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="WindowSize.cs" />
