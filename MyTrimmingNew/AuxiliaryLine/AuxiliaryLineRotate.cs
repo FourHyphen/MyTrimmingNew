@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
@@ -18,14 +14,19 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public override AuxiliaryLineParameter ExecuteCore(object operation = null)
         {
+            // TODO: 実装
+            // degreeの通りに回転したら画像からはみ出る場合に回転しない
             Point newLeftTop = CalcRotatePoint(AC.AuxiliaryLeftTop, Degree);
             Point newLeftBottom = CalcRotatePoint(AC.AuxiliaryLeftBottom, Degree);
             Point newRightTop = CalcRotatePoint(AC.AuxiliaryRightTop, Degree);
             Point newRightBottom = CalcRotatePoint(AC.AuxiliaryRightBottom, Degree);
 
             AuxiliaryLineParameter newParameter = AC.CloneParameter();
-            newParameter.ReplacePoint(newLeftTop, newLeftBottom, newRightTop, newRightBottom);
-            newParameter.Degree += Degree;
+            newParameter.ReplaceParameter(newLeftTop,
+                                          newLeftBottom,
+                                          newRightTop,
+                                          newRightBottom,
+                                          newParameter.Degree + Degree);
 
             return newParameter;
         }

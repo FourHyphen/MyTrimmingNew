@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -18,12 +13,14 @@ namespace MyTrimmingNew.AuxiliaryLine
         public AuxiliaryLineCommand Create(AuxiliaryController ac,
                                            int degree)
         {
+            // 回転を想定
             return new AuxiliaryLineRotate(ac, degree);
         }
 
         public AuxiliaryLineCommand Create(AuxiliaryController ac, 
                                            Point coordinateRelatedAuxiliaryLine)
         {
+            // マウス操作を想定
             Mouse.KindMouseDownAuxiliaryLineArea area = Mouse.GetKindMouseDownAuxiliaryLineArea(ac,
                                                                                                 coordinateRelatedAuxiliaryLine);
 

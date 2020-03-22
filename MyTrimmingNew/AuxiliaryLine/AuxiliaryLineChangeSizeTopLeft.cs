@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -24,20 +23,20 @@ namespace MyTrimmingNew.AuxiliaryLine
             // 左上点の操作なら右側や下側は変わらない
             int changeWidth = changeSizeWidth;
             int changeHeight = changeSizeHeight;
-            int newLeft = AC.AuxiliaryLeftRelativeImage - changeSizeWidth;
-            int newTop = AC.AuxiliaryTopRelativeImage - CalcHeightChangeSize(changeSizeWidth, changeSizeHeight);
+            int newLeft = AC.AuxiliaryLeft - changeSizeWidth;
+            int newTop = AC.AuxiliaryTop - CalcHeightChangeSize(changeSizeWidth, changeSizeHeight);
             int minLeft = GetMinLeft();
             int minTop = GetMinTop();
 
             if (newLeft < minLeft)
             {
-                newTop = AC.AuxiliaryTopRelativeImage - CalcHeightChangeSize(minLeft - newLeft, changeHeight);
+                newTop = AC.AuxiliaryTop - CalcHeightChangeSize(minLeft - newLeft, changeHeight);
                 newLeft = minLeft;
             }
             if (newTop < minTop)
             {
-                changeHeight = AC.AuxiliaryTopRelativeImage - minTop;
-                newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeWidth, changeHeight);
+                changeHeight = AC.AuxiliaryTop - minTop;
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
                 newTop = minTop;
             }
 
@@ -55,21 +54,21 @@ namespace MyTrimmingNew.AuxiliaryLine
             // 左上点の操作なら右側や下側は変わらない
             int changeWidth = changeSizeWidth;
             int changeHeight = changeSizeHeight;
-            int newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
-            int newTop = AC.AuxiliaryTopRelativeImage - changeSizeHeight;
+            int newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
+            int newTop = AC.AuxiliaryTop - changeSizeHeight;
             int minLeft = GetMinLeft();
             int minTop = GetMinTop();
 
             if (newTop < minTop)
             {
-                changeHeight = AC.AuxiliaryTopRelativeImage - minTop;
-                newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeWidth, changeHeight);
+                changeHeight = AC.AuxiliaryTop - minTop;
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
                 newTop = minTop;
             }
             if (newLeft < minLeft)
             {
                 newLeft = minLeft;
-                newTop = AC.AuxiliaryTopRelativeImage - CalcHeightChangeSize(AC.AuxiliaryLeftRelativeImage - newLeft, changeHeight);
+                newTop = AC.AuxiliaryTop - CalcHeightChangeSize(AC.AuxiliaryLeft - newLeft, changeHeight);
             }
 
             newParameter.ReplacePoint(new Point(newLeft, newTop),

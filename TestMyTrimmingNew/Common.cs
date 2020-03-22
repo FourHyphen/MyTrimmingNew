@@ -36,12 +36,12 @@ namespace TestMyTrimmingNew
 
         public static int GetAuxiliaryWidth(AuxiliaryController ac)
         {
-            return ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
+            return ac.AuxiliaryRight - ac.AuxiliaryLeft - ac.AuxiliaryLineThickness + 1;
         }
 
         public static int GetAuxiliaryHeight(AuxiliaryController ac)
         {
-            return ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
+            return ac.AuxiliaryBottom - ac.AuxiliaryTop - ac.AuxiliaryLineThickness + 1;
         }
     }
 }

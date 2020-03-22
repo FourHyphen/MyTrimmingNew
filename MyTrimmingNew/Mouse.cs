@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MyTrimmingNew
 {
@@ -25,9 +20,9 @@ namespace MyTrimmingNew
             int mouseXRelative = (int)mouseDownCoordinateRelativeAuxiliaryLine.X;
             int mouseYRelative = (int)mouseDownCoordinateRelativeAuxiliaryLine.Y;
             bool isInRangeLeft = IsInRangeMouseDownArea(mouseXRelative, 0);
-            bool isInRangeRight = IsInRangeMouseDownArea(mouseXRelative, ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage);
+            bool isInRangeRight = IsInRangeMouseDownArea(mouseXRelative, ac.AuxiliaryRight - ac.AuxiliaryLeft);
             bool isInRangeTop = IsInRangeMouseDownArea(mouseYRelative, 0);
-            bool isInRangeBottom = IsInRangeMouseDownArea(mouseYRelative, ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage);
+            bool isInRangeBottom = IsInRangeMouseDownArea(mouseYRelative, ac.AuxiliaryBottom - ac.AuxiliaryTop);
 
             // 補助線の4隅の点のいずれか
             if (isInRangeLeft)
@@ -73,10 +68,10 @@ namespace MyTrimmingNew
                                                            int mouseXRelativeAuxiliaryLine,
                                                            int mouseYRelativeAuxiliaryLine)
         {
-            int mouseX = mouseXRelativeAuxiliaryLine + ac.AuxiliaryLeftRelativeImage;
-            int mouseY = mouseYRelativeAuxiliaryLine + ac.AuxiliaryTopRelativeImage;
-            if ((ac.AuxiliaryLeftRelativeImage < mouseX && mouseX < ac.AuxiliaryRight) &&
-                (ac.AuxiliaryTopRelativeImage < mouseY && mouseY < ac.AuxiliaryBottom))
+            int mouseX = mouseXRelativeAuxiliaryLine + ac.AuxiliaryLeft;
+            int mouseY = mouseYRelativeAuxiliaryLine + ac.AuxiliaryTop;
+            if ((ac.AuxiliaryLeft < mouseX && mouseX < ac.AuxiliaryRight) &&
+                (ac.AuxiliaryTop < mouseY && mouseY < ac.AuxiliaryBottom))
             {
                 return true;
             }

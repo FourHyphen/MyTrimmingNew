@@ -67,7 +67,7 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Up);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
         }
 
         [TestMethod]
@@ -82,14 +82,14 @@ namespace TestMyTrimmingNew
             for (int i = 1; i <= enableDownRange; i++)
             {
                 ac.PublishEvent(down);
-                Assert.AreEqual(i, ac.AuxiliaryTopRelativeImage);
+                Assert.AreEqual(i, ac.AuxiliaryTop);
             }
 
             int maxDownRange = enableDownRange - Common.AuxiliaryLineThickness + 1;
-            Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(maxDownRange, ac.AuxiliaryTop);
 
             ac.PublishEvent(down);
-            Assert.AreEqual(maxDownRange, ac.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(maxDownRange, ac.AuxiliaryTop);
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Left);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         [TestMethod]
@@ -116,14 +116,14 @@ namespace TestMyTrimmingNew
             {
                 ac.PublishEvent(right);
                 // 原点を右に移動させるので、原点位置=Leftと比較する
-                Assert.AreEqual(i, ac.AuxiliaryLeftRelativeImage);
+                Assert.AreEqual(i, ac.AuxiliaryLeft);
             }
 
             int maxRightRange = enableRightRange - Common.AuxiliaryLineThickness + 1;
-            Assert.AreEqual(maxRightRange, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(maxRightRange, ac.AuxiliaryLeft);
 
             ac.PublishEvent(right);
-            Assert.AreEqual(maxRightRange, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(maxRightRange, ac.AuxiliaryLeft);
         }
 
         #endregion
@@ -171,17 +171,17 @@ namespace TestMyTrimmingNew
                                        int moveX,
                                        int moveY)
         {
-            int width = ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
-            int height = ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
-            int startMovePointX = ac.AuxiliaryLeftRelativeImage + (width / 2);
-            int startMovePointY = ac.AuxiliaryTopRelativeImage + (height / 2);
+            int width = ac.AuxiliaryRight - ac.AuxiliaryLeft - ac.AuxiliaryLineThickness + 1;
+            int height = ac.AuxiliaryBottom - ac.AuxiliaryTop - ac.AuxiliaryLineThickness + 1;
+            int startMovePointX = ac.AuxiliaryLeft + (width / 2);
+            int startMovePointY = ac.AuxiliaryTop + (height / 2);
             int finishMovePointX = startMovePointX + moveX;
             int finishMovePointY = startMovePointY + moveY;
             System.Windows.Point startMovePoint = new System.Windows.Point(startMovePointX, startMovePointY);
             System.Windows.Point finishMovePoint = new System.Windows.Point(finishMovePointX, finishMovePointY);
 
-            int correctLeft = ac.AuxiliaryLeftRelativeImage + moveX;
-            int correctTop = ac.AuxiliaryTopRelativeImage + moveY;
+            int correctLeft = ac.AuxiliaryLeft + moveX;
+            int correctTop = ac.AuxiliaryTop + moveY;
             MoveAuxiliaryLine(ac, startMovePoint, finishMovePoint, correctLeft, correctTop);
         }
 
@@ -260,8 +260,8 @@ namespace TestMyTrimmingNew
         {
             ac.SetEvent(startPoint);
             ac.PublishEvent(finishPoint);
-            Assert.AreEqual(ac.AuxiliaryLeftRelativeImage, correctLeftAfterMove);
-            Assert.AreEqual(ac.AuxiliaryTopRelativeImage, correctTopAfterMove);
+            Assert.AreEqual(ac.AuxiliaryLeft, correctLeftAfterMove);
+            Assert.AreEqual(ac.AuxiliaryTop, correctTopAfterMove);
         }
 
         #endregion
@@ -710,8 +710,8 @@ namespace TestMyTrimmingNew
 
             Assert.AreEqual(beforeWidth, ac.AuxiliaryRight);
             Assert.AreEqual(beforeHeight, ac.AuxiliaryBottom);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         #endregion
@@ -726,12 +726,12 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Down);
-            Assert.AreEqual(1, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(1, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
 
             ac.CancelEvent();
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         [TestMethod]
@@ -742,12 +742,12 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Up);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
 
             ac.CancelEvent();
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         [TestMethod]
@@ -758,12 +758,12 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Left);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
 
             ac.CancelEvent();
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         [TestMethod]
@@ -781,12 +781,12 @@ namespace TestMyTrimmingNew
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Right);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(1, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(1, ac.AuxiliaryLeft);
 
             ac.CancelEvent();
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         #endregion
@@ -885,14 +885,14 @@ namespace TestMyTrimmingNew
         {
             Assert.AreEqual(expected.Right, actual.AuxiliaryRight);
             Assert.AreEqual(expected.Bottom, actual.AuxiliaryBottom);
-            Assert.AreEqual(expected.Top, actual.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(expected.Left, actual.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(expected.Top, actual.AuxiliaryTop);
+            Assert.AreEqual(expected.Left, actual.AuxiliaryLeft);
             Assert.AreEqual(expected.Degree, actual.AuxiliaryDegree);
         }
         private void AreParameterEqual(AuxiliaryLineTestData expected, AuxiliaryController actual)
         {
-            Assert.AreEqual(expected.ExpectLeft, actual.AuxiliaryLeftRelativeImage);
-            Assert.AreEqual(expected.ExpectTop, actual.AuxiliaryTopRelativeImage);
+            Assert.AreEqual(expected.ExpectLeft, actual.AuxiliaryLeft);
+            Assert.AreEqual(expected.ExpectTop, actual.AuxiliaryTop);
             Assert.AreEqual(expected.ExpectWidth, Common.GetAuxiliaryWidth(actual));
             Assert.AreEqual(expected.ExpectHeight, Common.GetAuxiliaryHeight(actual));
         }
@@ -913,8 +913,8 @@ namespace TestMyTrimmingNew
 
             Assert.AreEqual(beforeRight, ac.AuxiliaryRight);
             Assert.AreEqual(beforeBottom, ac.AuxiliaryBottom);
-            Assert.AreEqual(0, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(0, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(0, ac.AuxiliaryTop);
+            Assert.AreEqual(0, ac.AuxiliaryLeft);
         }
 
         [TestMethod]
@@ -924,8 +924,8 @@ namespace TestMyTrimmingNew
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
             int beforeRight = ac.AuxiliaryRight;
             int beforeBottom = ac.AuxiliaryBottom;
-            int beforeTop = ac.AuxiliaryTopRelativeImage;
-            int beforeLeft = ac.AuxiliaryLeftRelativeImage;
+            int beforeTop = ac.AuxiliaryTop;
+            int beforeLeft = ac.AuxiliaryLeft;
 
             // CancelせずにRedoを実行する
             ac.SetEvent();
@@ -934,8 +934,8 @@ namespace TestMyTrimmingNew
 
             Assert.AreEqual(beforeRight, ac.AuxiliaryRight);
             Assert.AreEqual(beforeBottom, ac.AuxiliaryBottom);
-            Assert.AreEqual(beforeTop, ac.AuxiliaryTopRelativeImage);
-            Assert.AreEqual(beforeLeft, ac.AuxiliaryLeftRelativeImage);
+            Assert.AreEqual(beforeTop, ac.AuxiliaryTop);
+            Assert.AreEqual(beforeLeft, ac.AuxiliaryLeft);
         }
 
         #endregion

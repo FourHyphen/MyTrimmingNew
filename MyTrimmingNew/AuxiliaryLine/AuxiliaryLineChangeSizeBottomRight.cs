@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -14,7 +9,7 @@ namespace MyTrimmingNew.AuxiliaryLine
         public override bool WillChangeAuxilirayOrigin(int newLeft, int newTop, int newRight, int newBottom)
         {
             // 右下点を思いっきり左や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if (AC.AuxiliaryLeftRelativeImage > newLeft || AC.AuxiliaryTopRelativeImage > newBottom)
+            if (AC.AuxiliaryLeft > newLeft || AC.AuxiliaryTop > newBottom)
             {
                 return true;
             }
@@ -45,9 +40,9 @@ namespace MyTrimmingNew.AuxiliaryLine
                 newBottom = maxBottom;
             }
 
-            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeftRelativeImage, AC.AuxiliaryTopRelativeImage),
-                                      new Point(AC.AuxiliaryLeftRelativeImage, newBottom),
-                                      new Point(newRight, AC.AuxiliaryTopRelativeImage),
+            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeft, AC.AuxiliaryTop),
+                                      new Point(AC.AuxiliaryLeft, newBottom),
+                                      new Point(newRight, AC.AuxiliaryTop),
                                       new Point(newRight, newBottom));
 
             return newParameter;
@@ -77,9 +72,9 @@ namespace MyTrimmingNew.AuxiliaryLine
                 newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(newRight - AC.AuxiliaryRight, changeHeight);
             }
 
-            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeftRelativeImage, AC.AuxiliaryTopRelativeImage),
-                                      new Point(AC.AuxiliaryLeftRelativeImage, newBottom),
-                                      new Point(newRight, AC.AuxiliaryTopRelativeImage),
+            newParameter.ReplacePoint(new Point(AC.AuxiliaryLeft, AC.AuxiliaryTop),
+                                      new Point(AC.AuxiliaryLeft, newBottom),
+                                      new Point(newRight, AC.AuxiliaryTop),
                                       new Point(newRight, newBottom));
 
             return newParameter;

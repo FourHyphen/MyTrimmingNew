@@ -12,8 +12,8 @@ namespace TestMyTrimmingNew
                                                 bool isChangeSizeWidthMuchLongerThanChangeSizeHeight)
         {
             // 操作前の値を保持
-            int beforeLeftRelativeImage = ac.AuxiliaryLeftRelativeImage;
-            int beforeTopRelativeImage = ac.AuxiliaryTopRelativeImage;
+            int beforeLeftRelativeImage = ac.AuxiliaryLeft;
+            int beforeTopRelativeImage = ac.AuxiliaryTop;
             int beforeWidth = GetAuxiliaryWidth(ac);
             int beforeHeight = GetAuxiliaryHeight(ac);
 
@@ -90,12 +90,12 @@ namespace TestMyTrimmingNew
 
         protected int GetAuxiliaryWidth(AuxiliaryController ac)
         {
-            return ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage - ac.AuxiliaryLineThickness + 1;
+            return ac.AuxiliaryRight - ac.AuxiliaryLeft - ac.AuxiliaryLineThickness + 1;
         }
 
         protected int GetAuxiliaryHeight(AuxiliaryController ac)
         {
-            return ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage - ac.AuxiliaryLineThickness + 1;
+            return ac.AuxiliaryBottom - ac.AuxiliaryTop - ac.AuxiliaryLineThickness + 1;
         }
 
         public abstract double GetMouseUpX(AuxiliaryController ac,

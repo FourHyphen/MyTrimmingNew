@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
@@ -219,7 +215,6 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
         }
 
-
         public int Bottom
         {
             get
@@ -254,22 +249,7 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public int Thickness { get; private set; }
 
-        private int _degree;
-
-        public int Degree
-        { 
-            get
-            {
-                return _degree;
-            }
-            set
-            {
-                if (IsInRangeAuxiliaryLineAfterRotate(value))
-                {
-                    _degree = value;
-                }
-            }
-        }
+        public int Degree { get; private set; }
 
         public void Move(int moveXPixel, int moveYPixel)
         {
@@ -306,9 +286,18 @@ namespace MyTrimmingNew.AuxiliaryLine
             RightBottom = newRightBottom;
         }
 
+        public void ReplaceParameter(Point newLeftTop,
+                                     Point newLeftBottom,
+                                     Point newRightTop,
+                                     Point newRightBottom,
+                                     int degree)
+        {
+            Degree = degree;
+            ReplacePoint(newLeftTop, newLeftBottom, newRightTop, newRightBottom);
+        }
+
         private int FitInRangeImageMovingX(int moveXPixel)
         {
-            // TODO: degree対応
             int newLeft = Left + moveXPixel;
             int newRight = Right + moveXPixel;
             int minLeft = 0 - Thickness + 1;
@@ -334,7 +323,6 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         private int FitInRangeImageMovingY(int moveYPixel)
         {
-            // TODO: degree対応
             int newTop = Top + moveYPixel;
             int newBottom = Bottom + moveYPixel;
             int minTop = 0 - Thickness + 1;
@@ -356,15 +344,6 @@ namespace MyTrimmingNew.AuxiliaryLine
             }
 
             return moveYPixel;
-        }
-
-        private bool IsInRangeAuxiliaryLineAfterRotate(int newDegree)
-        {
-            // TODO: 実装
-            // degreeの通りに回転したら画像からはみ出る場合、falseを返す
-            // 回転中心は矩形中心とする
-
-            return true;
         }
     }
 }

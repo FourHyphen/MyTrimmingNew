@@ -9,7 +9,7 @@ namespace TestMyTrimmingNew
                                            int changeSizeWidthPixel)
         {
             // 矩形拡大のために動かす方向 = Left値が減る方向
-            return ac.AuxiliaryLeftRelativeImage - (double)changeSizeWidthPixel;
+            return ac.AuxiliaryLeft - (double)changeSizeWidthPixel;
         }
 
         public override double GetMouseUpY(AuxiliaryController ac,

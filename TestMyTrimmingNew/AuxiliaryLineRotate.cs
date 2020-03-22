@@ -7,13 +7,13 @@ namespace TestMyTrimmingNew
     {
         public AuxiliaryLineTestData Execute(AuxiliaryController ac, int degree)
         {
-            int left = ac.AuxiliaryLeftRelativeImage;
-            int top = ac.AuxiliaryTopRelativeImage;
+            int left = ac.AuxiliaryLeft;
+            int top = ac.AuxiliaryTop;
 
             int newLeft = CalcRotateX(left, top, degree);
             int newTop = CalcRotateY(left, top, degree);
-            int width = ac.AuxiliaryRight - ac.AuxiliaryLeftRelativeImage;
-            int height = ac.AuxiliaryBottom - ac.AuxiliaryTopRelativeImage;
+            int width = ac.AuxiliaryRight - ac.AuxiliaryLeft;
+            int height = ac.AuxiliaryBottom - ac.AuxiliaryTop;
 
             return new AuxiliaryLineTestData(newLeft, newTop, width, height);
         }

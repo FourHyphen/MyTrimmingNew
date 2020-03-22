@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 using MyTrimmingNew.common;
 
 namespace MyTrimmingNew.AuxiliaryLine
@@ -45,6 +40,7 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             AuxiliaryLineParameter newParameter = AC.CloneParameter();
 
+            // TODO: カーソルキーでの移動距離を可変にする
             if (key == Keys.EnableKeys.Up)
             {
                 newParameter.MoveHeight(-1);

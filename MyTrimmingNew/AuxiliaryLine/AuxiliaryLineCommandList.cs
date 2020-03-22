@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -18,8 +14,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             CommandListIndex = 0;
         }
 
-        public AuxiliaryLineParameter Execute(AuxiliaryController ac,
-                                              AuxiliaryLineCommand command,
+        public AuxiliaryLineParameter Execute(AuxiliaryLineCommand command,
                                               object operation)
         {
             if (DoneUnExecuteBefore())

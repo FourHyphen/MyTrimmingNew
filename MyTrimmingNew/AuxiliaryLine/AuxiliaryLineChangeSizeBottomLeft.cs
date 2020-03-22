@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -14,7 +9,7 @@ namespace MyTrimmingNew.AuxiliaryLine
         public override bool WillChangeAuxilirayOrigin(int newLeft, int newTop, int newRight, int newBottom)
         {
             // 左下点を思いっきり右や上に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
-            if (AC.AuxiliaryRight < newLeft || AC.AuxiliaryTopRelativeImage > newBottom)
+            if (AC.AuxiliaryRight < newLeft || AC.AuxiliaryTop > newBottom)
             {
                 return true;
             }
@@ -28,7 +23,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             // 左下点の操作なら右側と上側は変わらない
             int changeWidth = changeSizeWidth;
             int changeHeight = changeSizeHeight;
-            int newLeft = AC.AuxiliaryLeftRelativeImage - changeSizeWidth;
+            int newLeft = AC.AuxiliaryLeft - changeSizeWidth;
             int newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(changeSizeWidth, changeSizeHeight);
             int minLeft = GetMinLeft();
             int maxBottom = GetMaxBottom();
@@ -41,13 +36,13 @@ namespace MyTrimmingNew.AuxiliaryLine
             if (newBottom > maxBottom)
             {
                 changeHeight = maxBottom - AC.AuxiliaryBottom;
-                newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeWidth, changeHeight);
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
                 newBottom = maxBottom;
             }
 
-            newParameter.ReplacePoint(new Point(newLeft, AC.AuxiliaryTopRelativeImage),
+            newParameter.ReplacePoint(new Point(newLeft, AC.AuxiliaryTop),
                                       new Point(newLeft, newBottom),
-                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryTopRelativeImage),
+                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryTop),
                                       new Point(AC.AuxiliaryRight, newBottom));
 
             return newParameter;
@@ -60,7 +55,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             // 左下点の操作なら右側と上側は変わらない
             int changeWidth = changeSizeWidth;
             int changeHeight = changeSizeHeight;
-            int newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
+            int newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
             int newBottom = AC.AuxiliaryBottom + changeSizeHeight;
             int minLeft = GetMinLeft();
             int maxBottom = GetMaxBottom();
@@ -68,18 +63,18 @@ namespace MyTrimmingNew.AuxiliaryLine
             if (newBottom > maxBottom)
             {
                 changeHeight = maxBottom - AC.AuxiliaryBottom;
-                newLeft = AC.AuxiliaryLeftRelativeImage - CalcWidthChangeSize(changeWidth, changeHeight);
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
                 newBottom = maxBottom;
             }
             if (newLeft < minLeft)
             {
                 newLeft = minLeft;
-                newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(AC.AuxiliaryLeftRelativeImage - newLeft, changeHeight);
+                newBottom = AC.AuxiliaryBottom + CalcHeightChangeSize(AC.AuxiliaryLeft - newLeft, changeHeight);
             }
 
-            newParameter.ReplacePoint(new Point(newLeft, AC.AuxiliaryTopRelativeImage),
+            newParameter.ReplacePoint(new Point(newLeft, AC.AuxiliaryTop),
                                       new Point(newLeft, newBottom),
-                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryTopRelativeImage),
+                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryTop),
                                       new Point(AC.AuxiliaryRight, newBottom));
 
             return newParameter;
