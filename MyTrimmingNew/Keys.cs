@@ -13,6 +13,8 @@ namespace MyTrimmingNew
             Down,
             Left,
             Right,
+            RotatePlus,
+            RotateMinus,
             Cancel,
             Redo,
             Else
@@ -36,6 +38,7 @@ namespace MyTrimmingNew
 
         private static EnableKeys ToEnableKeysConbination(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
         {
+            // Ctrl + 何か
             if (keyboard.Modifiers == ModifierKeys.Control)
             {
                 if (key == Key.Z)
@@ -45,6 +48,19 @@ namespace MyTrimmingNew
                 else if (key == Key.Y)
                 {
                     return EnableKeys.Redo;
+                }
+                else if (key == Key.OemMinus)
+                {
+                    return EnableKeys.RotateMinus;
+                }
+            }
+
+            // Ctrl + Shift + 何か
+            if (keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
+                if (key == Key.OemPlus)
+                {
+                    return EnableKeys.RotatePlus;
                 }
             }
 
@@ -71,12 +87,6 @@ namespace MyTrimmingNew
             }
 
             return EnableKeys.Else;
-        }
-
-        public static bool IsKeyCursor(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
-        {
-            EnableKeys ekey = ToEnableKeys(key, keyboard);
-            return IsKeyCursor(ekey);
         }
 
         public static bool IsKeyCursor(EnableKeys key)

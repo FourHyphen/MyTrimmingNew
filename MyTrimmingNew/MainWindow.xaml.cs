@@ -101,10 +101,21 @@ namespace MyTrimmingNew
         private void mainWindowKeyDown(object sender, KeyEventArgs e)
         {
             Keys.EnableKeys keyKind = Keys.ToEnableKeys(e.Key, e.KeyboardDevice);
+
             if (Keys.IsKeyCursor(keyKind))
             {
                 SetAuxiliaryLineEvent();
                 PublishAuxiliaryLineEvent(keyKind);
+            }
+            else if (keyKind == Keys.EnableKeys.RotatePlus)
+            {
+                SetAuxiliaryLineEvent(5);
+                PublishAuxiliaryLineEvent();
+            }
+            else if (keyKind == Keys.EnableKeys.RotateMinus)
+            {
+                SetAuxiliaryLineEvent(-5);
+                PublishAuxiliaryLineEvent();
             }
             else if (keyKind == Keys.EnableKeys.Cancel)
             {
