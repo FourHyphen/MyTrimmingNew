@@ -66,14 +66,27 @@ namespace MyTrimmingNew
                 return;
             }
 
-            common.Image.SaveTrimImage(BitmapImage,
-                                       filePath,
-                                       ac.AuxiliaryLeftTop,
-                                       ac.AuxiliaryLeftBottom,
-                                       ac.AuxiliaryRightTop,
-                                       ac.AuxiliaryRightBottom,
-                                       _windowSize.ImageFitWindowRatio,
-                                       ac.AuxiliaryDegree);
+            if (ac.AuxiliaryDegree == 0)
+            {
+                common.Image.SaveTrimImage(BitmapImage,
+                                           filePath,
+                                           ac.AuxiliaryLeft,
+                                           ac.AuxiliaryTop,
+                                           ac.AuxiliaryRight,
+                                           ac.AuxiliaryBottom,
+                                           _windowSize.ImageFitWindowRatio);
+            }
+            else
+            {
+                common.Image.SaveTrimImage(BitmapImage,
+                                           filePath,
+                                           ac.AuxiliaryLeftTop,
+                                           ac.AuxiliaryLeftBottom,
+                                           ac.AuxiliaryRightTop,
+                                           ac.AuxiliaryRightBottom,
+                                           _windowSize.ImageFitWindowRatio,
+                                           ac.AuxiliaryDegree);
+            }
 
             Notify();
         }
