@@ -7,6 +7,8 @@ namespace TestMyTrimmingNew
     [TestClass]
     public class UnitTestClassCommonImage
     {
+        #region 画像のresize & open
+
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestEqualOfChangedImageSizeWidthAndHeight()
@@ -20,6 +22,10 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(newWidth, newImg.Width);
             Assert.AreEqual(newHeight, newImg.Height);
         }
+
+        #endregion
+
+        #region 保存
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
@@ -57,6 +63,10 @@ namespace TestMyTrimmingNew
 
             EqualImage(trimmedImg, ansImg);
         }
+
+        #endregion
+
+        #region 回転して保存
 
         // TODO: テストが完成するまでignoreにする
         [TestMethod]
@@ -132,5 +142,7 @@ namespace TestMyTrimmingNew
         {
             // TODO: 画像の中身をチェックする
         }
+
+        #endregion
     }
 }
