@@ -173,6 +173,11 @@ namespace MyTrimmingNew
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
         {
+            if (_imageController == null)
+            {
+                return;
+            }
+
             ImageController.SaveResult result = _imageController.Save(_auxiliaryController);
             if (result == ImageController.SaveResult.Success)
             {
