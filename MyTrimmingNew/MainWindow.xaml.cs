@@ -26,8 +26,13 @@ namespace MyTrimmingNew
 
         private void menuFileOpen_Click(object sender, RoutedEventArgs e)
         {
+            OpenImage();
+        }
+
+        private void OpenImage()
+        {
             string filePath = ImageFileOpenDialog.GetInstance().Show();
-            if(filePath != "")
+            if (filePath != "")
             {
                 DisplayInfo(filePath);
             }
@@ -125,6 +130,14 @@ namespace MyTrimmingNew
             {
                 RedoAuxiliaryLineEvent();
             }
+            else if (keyKind == Keys.EnableKeys.FileOpen)
+            {
+                OpenImage();
+            }
+            else if (keyKind == Keys.EnableKeys.FileSave)
+            {
+                SaveImage();
+            }
         }
 
         #endregion
@@ -172,6 +185,11 @@ namespace MyTrimmingNew
         #region "ユーザー操作時処理: 画像ファイル保存"
 
         private void menuFileSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveImage();
+        }
+
+        private void SaveImage()
         {
             if (_imageController == null)
             {

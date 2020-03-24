@@ -17,6 +17,8 @@ namespace MyTrimmingNew
             RotateMinus,
             Cancel,
             Redo,
+            FileOpen,
+            FileSave,
             Else
         }
 
@@ -52,6 +54,14 @@ namespace MyTrimmingNew
                 else if (key == Key.OemMinus)
                 {
                     return EnableKeys.RotateMinus;
+                }
+                else if (key == Key.O)
+                {
+                    return EnableKeys.FileOpen;
+                }
+                else if (key == Key.S)
+                {
+                    return EnableKeys.FileSave;
                 }
             }
 
