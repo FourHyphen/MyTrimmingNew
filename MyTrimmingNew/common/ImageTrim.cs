@@ -9,6 +9,15 @@ namespace MyTrimmingNew.common
 {
     class ImageTrim
     {
+        /// <summary>
+        /// 画像をtrimして保存(回転非対応)
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="filePath"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="right"></param>
+        /// <param name="bottom"></param>
         public void Execute(Bitmap image,
                             String filePath,
                             int left,
@@ -38,6 +47,17 @@ namespace MyTrimmingNew.common
             trimImage.Save(filePath);
         }
 
+        /// <summary>
+        /// 画像のtrimおよび保存(回転対応)
+        /// 条件：4点座標は非負であること
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="filePath"></param>
+        /// <param name="leftTop"></param>
+        /// <param name="leftBottom"></param>
+        /// <param name="rightTop"></param>
+        /// <param name="rightBottom"></param>
+        /// <param name="degree"></param>
         public void Execute(Bitmap image,
                             String filePath,
                             Point leftTop,

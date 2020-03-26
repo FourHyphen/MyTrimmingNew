@@ -68,11 +68,73 @@ namespace TestMyTrimmingNew
 
         #region 回転して保存
 
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoCrashImageSizeAfterSaveTrimImageWithRotatePlus()
+        {
+            // 第一段階: まずクラッシュしなければよしとする
+            // 数字の根拠無し
+            double ratio = 0.5;
+            Point seemingLeftTop = new Point(200, 200);
+            Point seemingLeftBottom = new Point(200, 400);
+            Point seemingRightTop = new Point(600, 200);
+            Point seemingRightBottom = new Point(600, 400);
+
+            int degree = 20;
+            Point rotateLeftTop = CalcRotatePoint(seemingLeftTop, degree);
+            Point rotateLeftBottom = CalcRotatePoint(seemingLeftBottom, degree);
+            Point rotateRightTop = CalcRotatePoint(seemingRightTop, degree);
+            Point rotateRightBottom = CalcRotatePoint(seemingRightBottom, degree);
+
+            System.IO.File.Delete(Common.TestToSaveTrimImagePath);
+
+            Bitmap img = new Bitmap(Common.TestResourceImage001Path);
+            MyTrimmingNew.common.Image.SaveTrimImage(img,
+                                                     Common.TestToSaveTrimImagePath,
+                                                     rotateLeftTop,
+                                                     rotateLeftBottom,
+                                                     rotateRightTop,
+                                                     rotateRightBottom,
+                                                     ratio,
+                                                     degree);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestNoCrashImageSizeAfterSaveTrimImageWithRotateMinus()
+        {
+            // 第一段階: まずクラッシュしなければよしとする
+            // 数字の根拠無し
+            double ratio = 0.5;
+            Point seemingLeftTop = new Point(400, 800);
+            Point seemingLeftBottom = new Point(400, 1200);
+            Point seemingRightTop = new Point(1200, 800);
+            Point seemingRightBottom = new Point(1200, 1200);
+
+            int degree = -20;
+            Point rotateLeftTop = CalcRotatePoint(seemingLeftTop, degree);
+            Point rotateLeftBottom = CalcRotatePoint(seemingLeftBottom, degree);
+            Point rotateRightTop = CalcRotatePoint(seemingRightTop, degree);
+            Point rotateRightBottom = CalcRotatePoint(seemingRightBottom, degree);
+
+            System.IO.File.Delete(Common.TestToSaveTrimImagePath);
+
+            Bitmap img = new Bitmap(Common.TestResourceImage001Path);
+            MyTrimmingNew.common.Image.SaveTrimImage(img,
+                                                     Common.TestToSaveTrimImagePath,
+                                                     rotateLeftTop,
+                                                     rotateLeftBottom,
+                                                     rotateRightTop,
+                                                     rotateRightBottom,
+                                                     ratio,
+                                                     degree);
+        }
+
         // TODO: テストが完成するまでignoreにする
         [TestMethod]
         [Ignore]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestCorrectImageSizeAfterSaveTrimImageWithRotate()
+        public void TestCorrectImageSizeAfterSaveTrimImageWithRotatePlus()
         {
             // 数字の根拠無し
             double ratio = 0.5;

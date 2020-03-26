@@ -43,22 +43,22 @@ namespace MyTrimmingNew.common
 
         public bool IsInside(int x, int y)
         {
-            if (!IsYBiggerThanLine(x, y, LineLeftA, LineLeftB))
+            if (!IsYInsideRectLineLeft(x, y))
             {
                 return false;
             }
 
-            if (IsYBiggerThanLine(x, y, LineRightA, LineRightB))
+            if (!IsYInsideRectLineRight(x, y))
             {
                 return false;
             }
 
-            if (!IsYBiggerThanLine(x, y, LineTopA, LineTopB))
+            if (!IsYInsideRectLineTop(x, y))
             {
                 return false;
             }
 
-            if (IsYBiggerThanLine(x, y, LineBottomA, LineBottomB))
+            if (!IsYInsideRectLineBottom(x, y))
             {
                 return false;
             }
@@ -66,10 +66,42 @@ namespace MyTrimmingNew.common
             return true;
         }
 
-        private bool IsYBiggerThanLine(int x, int y, double a, double b)
+        private bool IsYInsideRectLineLeft(int x, int y)
         {
-            int lineY = (int)(a * x + b);
-            return (y > lineY);
+            int lineY = (int)(LineLeftA * x + LineLeftB);
+            if (LineLeftA > 0.0)
+            {
+                return (lineY > y);
+            }
+            else
+            {
+                return (lineY < y);
+            }
+        }
+
+        private bool IsYInsideRectLineRight(int x, int y)
+        {
+            int lineY = (int)(LineRightA * x + LineRightB);
+            if (LineRightA > 0.0)
+            {
+                return (lineY < y);
+            }
+            else
+            {
+                return (lineY > y);
+            }
+        }
+
+        private bool IsYInsideRectLineTop(int x, int y)
+        {
+            int lineY = (int)(LineTopA * x + LineTopB);
+            return (lineY < y);
+        }
+
+        private bool IsYInsideRectLineBottom(int x, int y)
+        {
+            int lineY = (int)(LineBottomA * x + LineBottomB);
+            return (lineY > y);
         }
 
         private double CalcLineA(Point p1, Point p2)
