@@ -16,6 +16,10 @@ namespace MyTrimmingNew
         private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
         private AuxiliaryLineLengthObserver _auxiliaryLineLength;
 
+        // TODO: オプションか外部ファイルか何かで可変にする
+        private int _rotateByKey = 1;
+        private int _rotateByKeyWithCtrl = 10;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -114,13 +118,19 @@ namespace MyTrimmingNew
             }
             else if (keyKind == Keys.EnableKeys.RotatePlus)
             {
-                SetAuxiliaryLineEvent(5);
-                PublishAuxiliaryLineEvent();
+                RotateAuxiliaryLine(_rotateByKey);
             }
             else if (keyKind == Keys.EnableKeys.RotateMinus)
             {
-                SetAuxiliaryLineEvent(-5);
-                PublishAuxiliaryLineEvent();
+                RotateAuxiliaryLine(-_rotateByKey);
+            }
+            else if (keyKind == Keys.EnableKeys.RotatePlusWithCtrl)
+            {
+                RotateAuxiliaryLine(_rotateByKeyWithCtrl);
+            }
+            else if (keyKind == Keys.EnableKeys.RotateMinusWithCtrl)
+            {
+                RotateAuxiliaryLine(-_rotateByKeyWithCtrl);
             }
             else if (keyKind == Keys.EnableKeys.Cancel)
             {
@@ -170,13 +180,17 @@ namespace MyTrimmingNew
 
         private void MenuEditRotatePlus10_Click(object sender, RoutedEventArgs e)
         {
-            SetAuxiliaryLineEvent(10);
-            PublishAuxiliaryLineEvent();
+            RotateAuxiliaryLine(10);
         }
 
         private void MenuEditRotateMinus10_Click(object sender, RoutedEventArgs e)
         {
-            SetAuxiliaryLineEvent(-10);
+            RotateAuxiliaryLine(-10);
+        }
+
+        private void RotateAuxiliaryLine(int degree)
+        {
+            SetAuxiliaryLineEvent(degree);
             PublishAuxiliaryLineEvent();
         }
 

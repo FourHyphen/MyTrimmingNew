@@ -15,6 +15,8 @@ namespace MyTrimmingNew
             Right,
             RotatePlus,
             RotateMinus,
+            RotatePlusWithCtrl,
+            RotateMinusWithCtrl,
             Cancel,
             Redo,
             FileOpen,
@@ -40,6 +42,19 @@ namespace MyTrimmingNew
 
         private static EnableKeys ToEnableKeysConbination(System.Windows.Input.Key key, System.Windows.Input.KeyboardDevice keyboard)
         {
+            // Ctrl + Shift + 何か
+            if (keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
+                if (key == Key.OemPlus)
+                {
+                    return EnableKeys.RotatePlusWithCtrl;
+                }
+                else if (key == Key.OemMinus)
+                {
+                    return EnableKeys.RotateMinusWithCtrl;
+                }
+            }
+
             // Ctrl + 何か
             if (keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -53,7 +68,7 @@ namespace MyTrimmingNew
                 }
                 else if (key == Key.OemMinus)
                 {
-                    return EnableKeys.RotateMinus;
+                    return EnableKeys.RotateMinusWithCtrl;
                 }
                 else if (key == Key.O)
                 {
@@ -65,8 +80,8 @@ namespace MyTrimmingNew
                 }
             }
 
-            // Ctrl + Shift + 何か
-            if (keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            // Shift + 何か
+            if (keyboard.Modifiers == ModifierKeys.Shift)
             {
                 if (key == Key.OemPlus)
                 {
@@ -94,6 +109,10 @@ namespace MyTrimmingNew
             else if (key == Key.Right)
             {
                 return EnableKeys.Right;
+            }
+            else if (key == Key.OemMinus)
+            {
+                return EnableKeys.RotateMinus;
             }
 
             return EnableKeys.Else;
