@@ -1,67 +1,102 @@
-﻿using System.Windows;
+﻿using System.Drawing;
 using MyTrimmingNew;
+using MyTrimmingNew.AuxiliaryLine;
 
 namespace TestMyTrimmingNew
 {
     class AuxiliaryLineChangeSizeTopLeft : AuxiliaryLineChangeSizeTemplate
     {
-        public override double GetMouseUpX(AuxiliaryController ac,
-                                           int changeSizeWidthPixel)
+        public AuxiliaryLineChangeSizeTopLeft(AuxiliaryController ac) : base(ac) { }
+
+        public override int GetMouseUpX(AuxiliaryController ac,
+                                        int changeSizeWidthPixel)
         {
             // 矩形拡大のために動かす方向 = Left値が減る方向
-            return ac.AuxiliaryLeft - (double)changeSizeWidthPixel;
+            return ac.AuxiliaryLeft - changeSizeWidthPixel;
         }
 
-        public override double GetMouseUpY(AuxiliaryController ac,
-                                           int changeSizeHeightPixel)
+        public override int GetMouseUpY(AuxiliaryController ac,
+                                        int changeSizeHeightPixel)
         {
             // 矩形拡大のために動かす方向 = Top値が減る方向
-            return -(double)changeSizeHeightPixel;
+            return -changeSizeHeightPixel;
         }
 
-        public override Point GetMouseDownPoint(AuxiliaryController ac)
+        public override System.Windows.Point GetMouseDownPoint(AuxiliaryController ac)
         {
-            return new Point(0, 0);
+            return new System.Windows.Point(0, 0);
         }
 
-        public override int GetMaxChangeSizeWidth(AuxiliaryController ac,
-                                                  int beforeWidth,
-                                                  int beforeLeftRelativeImage)
+        public override AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseWidth(int changeSizeWidth, int changeSizeHeight)
         {
-            return beforeLeftRelativeImage - Common.AuxiliaryLineThickness + 1;
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
+            // 左上点の操作なら右側や下側は変わらない
+            int changeWidth = changeSizeWidth;
+            int changeHeight = changeSizeHeight;
+            int newLeft = AC.AuxiliaryLeft - changeSizeWidth;
+            int newTop = AC.AuxiliaryTop - CalcHeightChangeSize(changeSizeWidth, changeSizeHeight);
+            int minLeft = GetMinLeft();
+            int minTop = GetMinTop();
+
+            if (newLeft < minLeft)
+            {
+                newTop = AC.AuxiliaryTop - CalcHeightChangeSize(minLeft - newLeft, changeHeight);
+                newLeft = minLeft;
+            }
+            if (newTop < minTop)
+            {
+                changeHeight = AC.AuxiliaryTop - minTop;
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
+                newTop = minTop;
+            }
+
+            newParameter.ReplacePoint(new Point(newLeft, newTop),
+                                      new Point(newLeft, AC.AuxiliaryBottom),
+                                      new Point(AC.AuxiliaryRight, newTop),
+                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryBottom));
+            return newParameter;
         }
 
-        public override int GetMaxChangeSizeHeight(AuxiliaryController ac,
-                                                   int beforeHeight,
-                                                   int beforeTopRelativeImage)
+        public override AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseHeight(int changeSizeWidth, int changeSizeHeight)
         {
-            return beforeTopRelativeImage - Common.AuxiliaryLineThickness + 1;
+            AuxiliaryLineParameter newParameter = AC.CloneParameter();
+
+            // 左上点の操作なら右側や下側は変わらない
+            int changeWidth = changeSizeWidth;
+            int changeHeight = changeSizeHeight;
+            int newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeSizeWidth, changeSizeHeight);
+            int newTop = AC.AuxiliaryTop - changeSizeHeight;
+            int minLeft = GetMinLeft();
+            int minTop = GetMinTop();
+
+            if (newTop < minTop)
+            {
+                changeHeight = AC.AuxiliaryTop - minTop;
+                newLeft = AC.AuxiliaryLeft - CalcWidthChangeSize(changeWidth, changeHeight);
+                newTop = minTop;
+            }
+            if (newLeft < minLeft)
+            {
+                newLeft = minLeft;
+                newTop = AC.AuxiliaryTop - CalcHeightChangeSize(AC.AuxiliaryLeft - newLeft, changeHeight);
+            }
+
+            newParameter.ReplacePoint(new Point(newLeft, newTop),
+                                      new Point(newLeft, AC.AuxiliaryBottom),
+                                      new Point(AC.AuxiliaryRight, newTop),
+                                      new Point(AC.AuxiliaryRight, AC.AuxiliaryBottom));
+            return newParameter;
         }
 
-        public override bool WillChangeAuxiliaryLineOrigin(int beforeWidth,
-                                                           int beforeHeight,
-                                                           int changeSizeWidth,
-                                                           int changeSizeHeight)
+        public override bool WillChangeAuxiliaryOrigin(int newLeft, int newTop, int newRight, int newBottom)
         {
-            if ((-changeSizeWidth > beforeWidth) || (changeSizeHeight < -beforeHeight))
+            // 左上点を思いっきり右や下に引っ張ると原点が変わりうるが、その場合はサイズ変更しない
+            if (AC.AuxiliaryRight < newLeft || AC.AuxiliaryBottom < newTop)
             {
                 return true;
             }
             return false;
-        }
-
-        public override AuxiliaryLineTestData GetAuxiliaryTestData(int beforeLeftRelativeImage,
-                                                                   int beforeTopRelativeImage,
-                                                                   int beforeWidth,
-                                                                   int beforeHeight,
-                                                                   int changeSizeWidth,
-                                                                   int changeSizeHeight)
-        {
-            // 左上点操作の場合、原点はTopもLeftも変わる
-            return new AuxiliaryLineTestData(beforeLeftRelativeImage - changeSizeWidth,
-                                             beforeTopRelativeImage - changeSizeHeight,
-                                             beforeWidth + changeSizeWidth,
-                                             beforeHeight + changeSizeHeight);
         }
     }
 }

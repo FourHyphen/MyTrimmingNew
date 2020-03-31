@@ -1,92 +1,67 @@
 ﻿using System;
 using System.Windows;
 using MyTrimmingNew;
+using MyTrimmingNew.AuxiliaryLine;
 
 namespace TestMyTrimmingNew
 {
     abstract class AuxiliaryLineChangeSizeTemplate
     {
-        public AuxiliaryLineTestData ChangeSize(AuxiliaryController ac,
-                                                int changeSizeWidthPixel,
+        protected AuxiliaryController AC { get; set; }
+
+        public AuxiliaryLineChangeSizeTemplate(AuxiliaryController ac)
+        {
+            AC = ac;
+        }
+
+        public AuxiliaryLineTestData ChangeSize(int changeSizeWidthPixel,
                                                 int changeSizeHeightPixel,
                                                 bool isChangeSizeWidthMuchLongerThanChangeSizeHeight)
         {
             // 操作前の値を保持
-            int beforeLeftRelativeImage = ac.AuxiliaryLeft;
-            int beforeTopRelativeImage = ac.AuxiliaryTop;
-            int beforeWidth = GetAuxiliaryWidth(ac);
-            int beforeHeight = GetAuxiliaryHeight(ac);
+            AuxiliaryLineParameter now = AC.CloneParameter();
+            AuxiliaryLineParameter afterParameter = null;
 
-            // 操作
-            double mouseUpX = GetMouseUpX(ac, changeSizeWidthPixel);
-            double mouseUpY = GetMouseUpY(ac, changeSizeHeightPixel);
-            Point mouseDown = GetMouseDownPoint(ac);
-            Point mouseUp = new Point(mouseUpX, mouseUpY);
-            ac.SetEvent(mouseDown);
-            ac.PublishEvent(mouseUp);
-
-            // X方向操作距離とY方向操作距離を、矩形の縦横比率に合わせる
-            int changeSizeWidth = changeSizeWidthPixel;
-            int changeSizeHeight = changeSizeHeightPixel;
+            // 矩形操作前にサイズ変更後の各種パラメーターを求め、テストデータとする
             if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
             {
-                changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
+                afterParameter = GetNewAuxiliaryLineParameterBaseWidth(changeSizeWidthPixel, changeSizeHeightPixel);
             }
             else
             {
-                changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
+                afterParameter = GetNewAuxiliaryLineParameterBaseHeight(changeSizeWidthPixel, changeSizeHeightPixel);
             }
 
-            // 画像からはみ出るようなサイズ変更が要求された場合、代わりに画像一杯まで広げる
-            int maxChangeSizeWidth = GetMaxChangeSizeWidth(ac, beforeWidth, beforeLeftRelativeImage);
-            int maxChangeHeight = GetMaxChangeSizeHeight(ac, beforeHeight, beforeTopRelativeImage);
-            if (changeSizeWidth > maxChangeSizeWidth)
+            // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
+            if (WillChangeAuxiliaryOrigin(afterParameter.Left, afterParameter.Top, afterParameter.Right, afterParameter.Bottom))
             {
-                if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
-                {
-                    changeSizeWidth = maxChangeSizeWidth;
-                    changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
-                }
-                else
-                {
-                    changeSizeHeight = maxChangeHeight;
-                    changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
-                }
-            }
-            if (changeSizeHeight > maxChangeHeight)
-            {
-                if (isChangeSizeWidthMuchLongerThanChangeSizeHeight)
-                {
-                    changeSizeHeight = maxChangeHeight;
-                    changeSizeWidth = CalcAuxiliaryWidth(changeSizeWidth, changeSizeHeight, ac);
-                }
-                else
-                {
-                    changeSizeWidth = maxChangeSizeWidth;
-                    changeSizeHeight = CalcAuxiliaryHeight(changeSizeWidth, changeSizeHeight, ac);
-                }
-            }
-            // 補正してもなお画像からはみ出る場合あり、それを再度補正する
-            if (changeSizeWidth > maxChangeSizeWidth)
-            {
-                changeSizeWidth = maxChangeSizeWidth;
-                changeSizeHeight = CalcAuxiliaryHeight(changeSizeHeight, changeSizeWidth, ac);
+                afterParameter = now;
             }
 
-            if (WillChangeAuxiliaryLineOrigin(beforeWidth, beforeHeight, changeSizeWidth, changeSizeHeight))
-            {
-                // 原点が変わるようなサイズ変更が要求されても、サイズ変更しない
-                changeSizeWidth = 0;
-                changeSizeHeight = 0;
-            }
+            // 操作
+            double mouseUpX = (double)GetMouseUpX(AC, changeSizeWidthPixel);
+            double mouseUpY = (double)GetMouseUpY(AC, changeSizeHeightPixel);
+            Point mouseDown = GetMouseDownPoint(AC);
+            Point mouseUp = new Point(mouseUpX, mouseUpY);
+            AC.SetEvent(mouseDown);
+            AC.PublishEvent(mouseUp);
 
-            return GetAuxiliaryTestData(beforeLeftRelativeImage,
-                                        beforeTopRelativeImage,
-                                        beforeWidth,
-                                        beforeHeight,
-                                        changeSizeWidth,
-                                        changeSizeHeight);
+            return new AuxiliaryLineTestData(afterParameter);
         }
+
+        public abstract int GetMouseUpX(AuxiliaryController ac,
+                                        int changeSizeWidthPixel);
+
+        public abstract int GetMouseUpY(AuxiliaryController ac,
+                                        int changeSizeHeightPixel);
+
+        public abstract Point GetMouseDownPoint(AuxiliaryController ac);
+
+        public abstract AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseWidth(int changeSizeWidth, int changeSizeHeight);
+
+        public abstract AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseHeight(int changeSizeWidth, int changeSizeHeight);
+
+        public abstract bool WillChangeAuxiliaryOrigin(int newLeft, int newTop, int newRight, int newBottom);
 
         protected int GetAuxiliaryWidth(AuxiliaryController ac)
         {
@@ -98,57 +73,60 @@ namespace TestMyTrimmingNew
             return ac.AuxiliaryBottom - ac.AuxiliaryTop - ac.AuxiliaryLineThickness + 1;
         }
 
-        public abstract double GetMouseUpX(AuxiliaryController ac,
-                                           int changeSizeWidthPixel);
-
-        public abstract double GetMouseUpY(AuxiliaryController ac,
-                                           int changeSizeHeightPixel);
-
-        public abstract Point GetMouseDownPoint(AuxiliaryController ac);
-
-        private int CalcAuxiliaryHeight(int nowHeight, int newWidth, AuxiliaryController ac)
+        protected int CalcWidthChangeSize(int willChangeSizeWidth, int willChangeSizeHeight)
         {
-            if (ac.AuxiliaryRatio == null)
+            if (AC.AuxiliaryRatio == null)
             {
-                return nowHeight;
+                return willChangeSizeWidth;
             }
             else
             {
-                return (int)Math.Round((double)newWidth / (double)ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                return CalcWidthChangeSizeBaseHeight(willChangeSizeHeight, (double)AC.AuxiliaryRatio);
             }
         }
 
-        private int CalcAuxiliaryWidth(int nowWidth, int newHeight, AuxiliaryController ac)
+        private int CalcWidthChangeSizeBaseHeight(int willChangeSizeHeight, double auxiliaryRatio)
         {
-            if (ac.AuxiliaryRatio == null)
+            double newWidth = (double)willChangeSizeHeight * auxiliaryRatio;
+            return (int)Math.Round(newWidth, 0, MidpointRounding.AwayFromZero);
+        }
+
+        protected int CalcHeightChangeSize(int willChangeSizeWidth, int willChangeSizeHeight)
+        {
+            if (AC.AuxiliaryRatio == null)
             {
-                return nowWidth;
+                return willChangeSizeHeight;
             }
             else
             {
-                return (int)Math.Round((double)newHeight * (double)ac.AuxiliaryRatio, 0, MidpointRounding.AwayFromZero);
+                return CalcHeightChangeSizeBaseWidth(willChangeSizeWidth, (double)AC.AuxiliaryRatio);
             }
         }
 
-        public abstract int GetMaxChangeSizeWidth(AuxiliaryController ac,
-                                                  int beforeWidth,
-                                                  int beforeLeftRelativeImage);
+        private int CalcHeightChangeSizeBaseWidth(int willChangeSizeWidth, double auxiliaryRatio)
+        {
+            double newHeight = (double)willChangeSizeWidth / auxiliaryRatio;
+            return (int)Math.Round(newHeight, 0, MidpointRounding.AwayFromZero);
+        }
 
-        public abstract int GetMaxChangeSizeHeight(AuxiliaryController ac,
-                                                   int beforeHeight,
-                                                   int beforeTopRelativeImage);
+        protected int GetMinLeft()
+        {
+            return (0 - AC.AuxiliaryLineThickness + 1);
+        }
 
-        public abstract bool WillChangeAuxiliaryLineOrigin(int beforeWidth,
-                                                           int beforeHeight,
-                                                           int changeSizeWidth,
-                                                           int changeSizeHeight);
+        protected int GetMinTop()
+        {
+            return (0 - AC.AuxiliaryLineThickness + 1);
+        }
 
-        public abstract AuxiliaryLineTestData GetAuxiliaryTestData(int beforeLeftRelativeImage,
-                                                                   int beforeTopRelativeImage,
-                                                                   int beforeWidth,
-                                                                   int beforeHeight,
-                                                                   int changeSizeWidth,
-                                                                   int changeSizeHeight);
+        protected int GetMaxRight()
+        {
+            return (AC.DisplayImageWidth - AC.AuxiliaryLineThickness + 1);
+        }
 
+        protected int GetMaxBottom()
+        {
+            return (AC.DisplayImageHeight - AC.AuxiliaryLineThickness + 1);
+        }
     }
 }

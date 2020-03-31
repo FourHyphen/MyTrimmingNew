@@ -366,10 +366,9 @@ namespace TestMyTrimmingNew
                                                              bool isWidthMuchLongerThanHeight)
         {
             AuxiliaryLineTestData testData
-                = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
-                                                                      changeSizeWidth,
-                                                                      changeSizeHeight,
-                                                                      isWidthMuchLongerThanHeight);
+                = new AuxiliaryLineChangeSizeBottomRight(ac).ChangeSize(changeSizeWidth,
+                                                                        changeSizeHeight,
+                                                                        isWidthMuchLongerThanHeight);
             AreParameterEqual(testData, ac);
         }
 
@@ -461,10 +460,9 @@ namespace TestMyTrimmingNew
                                                             bool isWidthMuchLongerThanHeight)
         {
             AuxiliaryLineTestData testData
-                = new AuxiliaryLineChangeSizeBottomLeft().ChangeSize(ac,
-                                                                     changeSizeWidth,
-                                                                     changeSizeHeight,
-                                                                     isWidthMuchLongerThanHeight);
+                = new AuxiliaryLineChangeSizeBottomLeft(ac).ChangeSize(changeSizeWidth,
+                                                                       changeSizeHeight,
+                                                                       isWidthMuchLongerThanHeight);
             AreParameterEqual(testData, ac);
         }
 
@@ -556,10 +554,9 @@ namespace TestMyTrimmingNew
                                                           bool isWidthMuchLongerThanHeight)
         {
             AuxiliaryLineTestData testData
-                = new AuxiliaryLineChangeSizeTopRight().ChangeSize(ac,
-                                                                   changeSizeWidth,
-                                                                   changeSizeHeight,
-                                                                   isWidthMuchLongerThanHeight);
+                = new AuxiliaryLineChangeSizeTopRight(ac).ChangeSize(changeSizeWidth,
+                                                                     changeSizeHeight,
+                                                                     isWidthMuchLongerThanHeight);
             AreParameterEqual(testData, ac);
         }
 
@@ -651,10 +648,9 @@ namespace TestMyTrimmingNew
                                                          bool isWidthMuchLongerThanHeight)
         {
             AuxiliaryLineTestData testData
-                = new AuxiliaryLineChangeSizeTopLeft().ChangeSize(ac,
-                                                                  changeSizeWidth,
-                                                                  changeSizeHeight,
-                                                                  isWidthMuchLongerThanHeight);
+                = new AuxiliaryLineChangeSizeTopLeft(ac).ChangeSize(changeSizeWidth,
+                                                                    changeSizeHeight,
+                                                                    isWidthMuchLongerThanHeight);
             AreParameterEqual(testData, ac);
         }
 
@@ -774,10 +770,7 @@ namespace TestMyTrimmingNew
 
             // 矩形を小さくして、右キーで矩形を移動できるだけのスペースを作る
             AuxiliaryLineTestData testData
-                = new AuxiliaryLineChangeSizeBottomRight().ChangeSize(ac,
-                                                                      -100,
-                                                                      -5,
-                                                                      true);
+                = new AuxiliaryLineChangeSizeBottomRight(ac).ChangeSize(-100, -5, true);
 
             ac.SetEvent();
             ac.PublishEvent(Keys.EnableKeys.Right);
@@ -883,18 +876,20 @@ namespace TestMyTrimmingNew
 
         private void AreParameterEqual(AuxiliaryLineParameter expected, AuxiliaryController actual)
         {
-            Assert.AreEqual(expected.Right, actual.AuxiliaryRight);
-            Assert.AreEqual(expected.Bottom, actual.AuxiliaryBottom);
-            Assert.AreEqual(expected.Top, actual.AuxiliaryTop);
-            Assert.AreEqual(expected.Left, actual.AuxiliaryLeft);
+            Assert.AreEqual(expected.LeftTop, actual.AuxiliaryLeftTop);
+            Assert.AreEqual(expected.LeftBottom, actual.AuxiliaryLeftBottom);
+            Assert.AreEqual(expected.RightTop, actual.AuxiliaryRightTop);
+            Assert.AreEqual(expected.RightBottom, actual.AuxiliaryRightBottom);
             Assert.AreEqual(expected.Degree, actual.AuxiliaryDegree);
         }
+
         private void AreParameterEqual(AuxiliaryLineTestData expected, AuxiliaryController actual)
         {
-            Assert.AreEqual(expected.ExpectLeft, actual.AuxiliaryLeft);
-            Assert.AreEqual(expected.ExpectTop, actual.AuxiliaryTop);
-            Assert.AreEqual(expected.ExpectWidth, Common.GetAuxiliaryWidth(actual));
-            Assert.AreEqual(expected.ExpectHeight, Common.GetAuxiliaryHeight(actual));
+            Assert.AreEqual(expected.ExpectLeftTop, actual.AuxiliaryLeftTop);
+            Assert.AreEqual(expected.ExpectLeftBottom, actual.AuxiliaryLeftBottom);
+            Assert.AreEqual(expected.ExpectRightTop, actual.AuxiliaryRightTop);
+            Assert.AreEqual(expected.ExpectRightBottom, actual.AuxiliaryRightBottom);
+            Assert.AreEqual(expected.ExpectDegree, actual.AuxiliaryDegree);
         }
 
         #endregion

@@ -1,30 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
+using MyTrimmingNew.AuxiliaryLine;
 
 namespace TestMyTrimmingNew
 {
     class AuxiliaryLineTestData
     {
-        public AuxiliaryLineTestData(int expectLeft,
-                                     int expectTop,
-                                     int expectWidth,
-                                     int expectHeight)
+        public AuxiliaryLineTestData(Point expectLeftTop,
+                                     Point expectLeftBottom,
+                                     Point expectRightTop,
+                                     Point expectRightBottom,
+                                     int expectDegree)
         {
-            ExpectLeft = expectLeft;
-            ExpectTop = expectTop;
-            ExpectWidth = expectWidth;
-            ExpectHeight = expectHeight;
+            ExpectLeftTop = expectLeftTop;
+            ExpectLeftBottom = expectLeftBottom;
+            ExpectRightTop = expectRightTop;
+            ExpectRightBottom = expectRightBottom;
+            ExpectDegree = expectDegree;
         }
 
-        public int ExpectLeft { get; private set; }
+        public AuxiliaryLineTestData(AuxiliaryLineParameter param)
+        {
+            ExpectLeftTop = param.LeftTop;
+            ExpectLeftBottom = param.LeftBottom;
+            ExpectRightTop = param.RightTop;
+            ExpectRightBottom = param.RightBottom;
+            ExpectDegree = param.Degree;
+        }
 
-        public int ExpectTop { get; private set; }
+        public Point ExpectLeftTop { get; private set; }
 
-        public int ExpectWidth { get; private set; }
+        public Point ExpectLeftBottom { get; private set; }
 
-        public int ExpectHeight { get; private set; }
+        public Point ExpectRightTop { get; private set; }
+
+        public Point ExpectRightBottom { get; private set; }
+
+        public int ExpectDegree { get; private set; }
     }
 }

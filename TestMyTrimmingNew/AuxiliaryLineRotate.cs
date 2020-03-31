@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using MyTrimmingNew;
 
 namespace TestMyTrimmingNew
@@ -10,26 +11,20 @@ namespace TestMyTrimmingNew
             int left = ac.AuxiliaryLeft;
             int top = ac.AuxiliaryTop;
 
-            int newLeft = CalcRotateX(left, top, degree);
-            int newTop = CalcRotateY(left, top, degree);
-            int width = ac.AuxiliaryRight - ac.AuxiliaryLeft;
-            int height = ac.AuxiliaryBottom - ac.AuxiliaryTop;
+            Point newLeftTop = CalcRotatePoint(ac.AuxiliaryLeftTop, degree);
+            Point newLeftBottom = CalcRotatePoint(ac.AuxiliaryLeftBottom, degree);
+            Point newRightTop = CalcRotatePoint(ac.AuxiliaryRightTop, degree);
+            Point newRightBottom = CalcRotatePoint(ac.AuxiliaryRightBottom, degree);
 
-            return new AuxiliaryLineTestData(newLeft, newTop, width, height);
+            return new AuxiliaryLineTestData(newLeftTop, newLeftBottom, newRightTop, newRightBottom, degree);
         }
 
-        private int CalcRotateX(int x, int y, int degree)
+        private Point CalcRotatePoint(Point p, int degree)
         {
             double rad = ToRadian(degree);
-            double rotateX = x * Math.Cos(rad) - y * Math.Sin(rad);
-            return (int)rotateX;
-        }
-
-        private int CalcRotateY(int x, int y, int degree)
-        {
-            double rad = ToRadian(degree);
-            double rotateY = y * Math.Cos(rad) + x * Math.Sin(rad);
-            return (int)rotateY;
+            double rotateX = p.X * Math.Cos(rad) - p.Y * Math.Sin(rad);
+            double rotateY = p.Y * Math.Cos(rad) + p.X * Math.Sin(rad);
+            return new Point((int)rotateX, (int)rotateY);
         }
 
         private double ToRadian(int degree)
