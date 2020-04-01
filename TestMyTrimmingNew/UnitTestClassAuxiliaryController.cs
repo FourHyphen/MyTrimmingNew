@@ -1084,16 +1084,46 @@ namespace TestMyTrimmingNew
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestAuxiliaryLineRotateBasicFunction()
+        public void TestAuxiliaryLineRotatePlus()
         {
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
-            List<AuxiliaryLineParameter> list = new List<AuxiliaryLineParameter>();
 
-            // 回転するかをチェック
+            // 縮小＆移動して回転できるスペースを作る
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+
+            RotateAuxiliaryLine(ac, 20);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineRotateMinus()
+        {
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動して回転できるスペースを作る
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+
+            RotateAuxiliaryLine(ac, -20);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineNoRotateIfAuxiliaryLineOutOfRangeAfterRotate()
+        {
+            // 回転すると画像からはみ出る場合は回転しない
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動して回転できるスペースを作る
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -100, -5, true);
+            MoveAuxiliaryLine(ac, 100, 80);
+
             AuxiliaryLineParameter before = ac.CloneParameter();
-            int degree = 30;
+            AuxiliaryLineTestData testData
+                = new AuxiliaryLineRotate().Execute(ac, 20);
 
-            RotateAuxiliaryLine(ac, degree);
+            AreParameterEqual(before, ac);
         }
 
         private void RotateAuxiliaryLine(AuxiliaryController ac, int degree)

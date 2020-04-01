@@ -14,8 +14,6 @@ namespace MyTrimmingNew.AuxiliaryLine
 
         public override AuxiliaryLineParameter ExecuteCore(object operation = null)
         {
-            // TODO: 実装
-            // degreeの通りに回転したら画像からはみ出る場合に回転しない
             Point leftTop = AC.AuxiliaryLeftTop;
             Point leftBottom = AC.AuxiliaryLeftBottom;
             Point rightTop = AC.AuxiliaryRightTop;
@@ -27,6 +25,15 @@ namespace MyTrimmingNew.AuxiliaryLine
             Point newLeftBottom = CalcRotatePoint(leftBottom, centerX, centerY, Degree);
             Point newRightTop = CalcRotatePoint(rightTop, centerX, centerY, Degree);
             Point newRightBottom = CalcRotatePoint(rightBottom, centerX, centerY, Degree);
+
+            // degreeの通りに回転したら画像からはみ出る場合に回転しない
+            if (IsOutOfRangeDisplayImage(newLeftTop) ||
+                IsOutOfRangeDisplayImage(newLeftBottom) ||
+                IsOutOfRangeDisplayImage(newRightTop) ||
+                IsOutOfRangeDisplayImage(newRightBottom))
+            {
+                return AC.CloneParameter();
+            }
 
             AuxiliaryLineParameter newParameter = AC.CloneParameter();
             newParameter.ReplaceParameter(newLeftTop,
@@ -61,6 +68,21 @@ namespace MyTrimmingNew.AuxiliaryLine
         private double ToRadian(int degree)
         {
             return (double)degree * Math.PI / 180.0;
+        }
+
+        private bool IsOutOfRangeDisplayImage(Point p)
+        {
+            if (p.X < 0 || AC.DisplayImageWidth < p.X)
+            {
+                return true;
+            }
+
+            if (p.Y < 0 || AC.DisplayImageHeight < p.Y)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
