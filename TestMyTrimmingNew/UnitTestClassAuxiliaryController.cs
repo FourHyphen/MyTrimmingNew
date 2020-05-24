@@ -1083,6 +1083,7 @@ namespace TestMyTrimmingNew
         #region "回転"
 
         [TestMethod]
+        [Ignore]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineRotatePlus()
         {
@@ -1096,6 +1097,7 @@ namespace TestMyTrimmingNew
         }
 
         [TestMethod]
+        [Ignore]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineRotateMinus()
         {
@@ -1109,13 +1111,14 @@ namespace TestMyTrimmingNew
         }
 
         [TestMethod]
+        [Ignore]
         [DeploymentItem(@".\Resource\test001.jpg")]
         public void TestAuxiliaryLineNoRotateIfAuxiliaryLineOutOfRangeAfterRotate()
         {
             // 回転すると画像からはみ出る場合は回転しない
             AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
 
-            // 縮小＆移動して回転できるスペースを作る
+            // 縮小＆移動して回転できそうなスペースを作る(実際には回転させたくない)
             ChangeAuxiliaryLineSizeWhereBottomRight(ac, -100, -5, true);
             MoveAuxiliaryLine(ac, 100, 80);
 
@@ -1124,6 +1127,70 @@ namespace TestMyTrimmingNew
                 = new AuxiliaryLineRotate().Execute(ac, 20);
 
             AreParameterEqual(before, ac);
+        }
+
+        [TestMethod]
+        [Ignore]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineChangeSizeBottomRightAfterRotate()
+        {
+            // 回転後に拡大縮小する
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動＆回転
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+            RotateAuxiliaryLine(ac, -20);
+
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, 50, 5, true);
+        }
+
+        [TestMethod]
+        [Ignore]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineChangeSizeBottomLeftAfterRotate()
+        {
+            // 回転後に拡大縮小する
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動＆回転
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+            RotateAuxiliaryLine(ac, -20);
+
+            ChangeAuxiliaryLineSizeWhereBottomLeft(ac, 50, 5, true);
+        }
+
+        [TestMethod]
+        [Ignore]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineChangeSizeTopRightAfterRotate()
+        {
+            // 回転後に拡大縮小する
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動＆回転
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+            RotateAuxiliaryLine(ac, -20);
+
+            ChangeAuxiliaryLineSizeWhereTopRight(ac, 50, 5, true);
+        }
+
+        [TestMethod]
+        [Ignore]
+        [DeploymentItem(@".\Resource\test001.jpg")]
+        public void TestAuxiliaryLineChangeSizeTopLeftAfterRotate()
+        {
+            // 回転後に拡大縮小する
+            AuxiliaryController ac = Common.GetAuxiliaryControllerImage001RatioTypeW16H9();
+
+            // 縮小＆移動＆回転
+            ChangeAuxiliaryLineSizeWhereBottomRight(ac, -400, -5, true);
+            MoveAuxiliaryLine(ac, 200, 200);
+            RotateAuxiliaryLine(ac, -20);
+
+            ChangeAuxiliaryLineSizeWhereTopLeft(ac, 50, 5, true);
         }
 
         private void RotateAuxiliaryLine(AuxiliaryController ac, int degree)

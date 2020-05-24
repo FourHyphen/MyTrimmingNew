@@ -12,18 +12,18 @@ namespace TestMyTrimmingNew
                                         int changeSizeWidthPixel)
         {
             // 矩形拡大のために動かす方向 = Left値が減る方向
-            return ac.AuxiliaryLeft - changeSizeWidthPixel;
+            return ac.AuxiliaryLeftBottom.X - changeSizeWidthPixel;
         }
 
         public override int GetMouseUpY(AuxiliaryController ac,
                                         int changeSizeHeightPixel)
         {
-            return GetAuxiliaryHeight(ac) + changeSizeHeightPixel;
+            return ac.AuxiliaryLeftBottom.Y + changeSizeHeightPixel;
         }
 
         public override System.Windows.Point GetMouseDownPoint(AuxiliaryController ac)
         {
-            return new System.Windows.Point(0, GetAuxiliaryHeight(ac));
+            return new System.Windows.Point(ac.AuxiliaryLeftBottom.X, ac.AuxiliaryLeftBottom.Y);
         }
 
         public override AuxiliaryLineParameter GetNewAuxiliaryLineParameterBaseWidth(int changeSizeWidth, int changeSizeHeight)

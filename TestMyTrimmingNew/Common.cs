@@ -59,9 +59,20 @@ namespace TestMyTrimmingNew
             return new Point((int)rotateX, (int)rotateY);
         }
 
-        private static double ToRadian(int degree)
+        public static double ToRadian(int degree)
         {
             return (double)degree * Math.PI / 180.0;
+        }
+
+        public static double CalcSlope(Point p1, Point p2)
+        {
+            double numer = (double)(p2.X - p1.X);
+            if (numer == 0.0)
+            {
+                return 1e+6;
+            }
+
+            return (double)(p2.Y - p1.Y) / numer;
         }
     }
 }

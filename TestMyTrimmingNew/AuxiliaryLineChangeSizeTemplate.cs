@@ -63,16 +63,6 @@ namespace TestMyTrimmingNew
 
         public abstract bool WillChangeAuxiliaryOrigin(int newLeft, int newTop, int newRight, int newBottom);
 
-        protected int GetAuxiliaryWidth(AuxiliaryController ac)
-        {
-            return ac.AuxiliaryRight - ac.AuxiliaryLeft - ac.AuxiliaryLineThickness + 1;
-        }
-
-        protected int GetAuxiliaryHeight(AuxiliaryController ac)
-        {
-            return ac.AuxiliaryBottom - ac.AuxiliaryTop - ac.AuxiliaryLineThickness + 1;
-        }
-
         protected int CalcWidthChangeSize(int willChangeSizeWidth, int willChangeSizeHeight)
         {
             if (AC.AuxiliaryRatio == null)
