@@ -157,14 +157,12 @@ namespace MyTrimmingNew
         private void xShowImageMouseDown(object sender, MouseButtonEventArgs e)
         {
             // MouseUp時に発行するイベントをセット
-            Point point = GetMousePositionRelativeAuxiliaryLine(e.GetPosition(xAuxiliaryLine));
-            SetAuxiliaryLineEvent(point);
+            SetAuxiliaryLineEvent(e.GetPosition(xAuxiliaryLine));
         }
 
         private void xShowImageMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Point point = GetMousePositionRelativeAuxiliaryLine(e.GetPosition(xAuxiliaryLine));
-            PublishAuxiliaryLineEvent(point);
+            PublishAuxiliaryLineEvent(e.GetPosition(xAuxiliaryLine));
         }
 
         private Point GetMousePositionRelativeAuxiliaryLine(Point mousePoint)
