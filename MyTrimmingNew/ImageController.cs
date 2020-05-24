@@ -22,6 +22,11 @@ namespace MyTrimmingNew
             _windowSize = new WindowSize(windowWidth, windowHeight, OriginalImageWidth, OriginalImageHeight);
         }
 
+        ~ImageController()
+        {
+            Dispose();
+        }
+
         public void Dispose()
         {
             if (BitmapImage != null)
