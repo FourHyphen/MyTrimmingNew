@@ -54,6 +54,11 @@ namespace MyTrimmingNew
 
         private void DisplayImageInfo(string imageFilePath)
         {
+            if (_imageController != null)
+            {
+                _imageController.Dispose();
+            }
+
             try
             {
                 _imageController = new ImageController(imageFilePath,

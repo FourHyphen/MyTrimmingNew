@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace MyTrimmingNew
 {
-    public class ImageController : Subject
+    public class ImageController : Subject, IDisposable
     {
         public enum SaveResult
         {
@@ -20,6 +20,14 @@ namespace MyTrimmingNew
             BitmapImage = new Bitmap(imagePath);
             _imageInfo = new System.IO.FileInfo(imagePath);
             _windowSize = new WindowSize(windowWidth, windowHeight, OriginalImageWidth, OriginalImageHeight);
+        }
+
+        public void Dispose()
+        {
+            if (BitmapImage != null)
+            {
+                BitmapImage.Dispose();
+            }
         }
 
         public Bitmap BitmapImage { get; private set; }

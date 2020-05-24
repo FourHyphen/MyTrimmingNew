@@ -49,6 +49,5 @@ namespace TestMyTrimmingNew
             Assert.AreEqual(ansImageWidth, ic.DisplayImageWidth);
             Assert.AreEqual(ansImageHeight, ic.DisplayImageHeight);
         }
-
     }
 }
