@@ -67,8 +67,8 @@ namespace MyTrimmingNew.common
                             int degree)
         {
             // 回転パラメーター準備
-            int centerX = CalcCenterX(leftTop, rightBottom);
-            int centerY = CalcCenterY(leftBottom, rightTop);
+            int centerX = Common.CalcCenterX(leftTop, rightBottom);
+            int centerY = Common.CalcCenterY(leftBottom, rightTop);
             double radian = (double)degree * Math.PI / 180;
             double cos = Math.Cos(radian);
             double sin = Math.Sin(radian);
@@ -122,16 +122,6 @@ namespace MyTrimmingNew.common
             SaveTrimImage(trimImage, filePath, minX, minY,width, height);
 
             return;
-        }
-
-        private int CalcCenterX(Point p1, Point p2)
-        {
-            return (p1.X + p2.X) / 2;
-        }
-
-        private int CalcCenterY(Point p1, Point p2)
-        {
-            return (p1.Y + p2.Y) / 2;
         }
 
         private int CalcRotateX(int x, int y, int centerX, int centerY, double cos, double sin)

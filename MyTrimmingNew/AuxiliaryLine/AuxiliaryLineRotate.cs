@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using MyTrimmingNew.common;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -18,8 +19,8 @@ namespace MyTrimmingNew.AuxiliaryLine
             Point leftBottom = AC.AuxiliaryLeftBottom;
             Point rightTop = AC.AuxiliaryRightTop;
             Point rightBottom = AC.AuxiliaryRightBottom;
-            int centerX = CalcCenterX(leftTop, rightBottom);
-            int centerY = CalcCenterY(leftBottom, rightTop);
+            int centerX = Common.CalcCenterX(leftTop, rightBottom);
+            int centerY = Common.CalcCenterY(leftBottom, rightTop);
 
             Point newLeftTop = CalcRotatePoint(leftTop, centerX, centerY, Degree);
             Point newLeftBottom = CalcRotatePoint(leftBottom, centerX, centerY, Degree);
@@ -45,29 +46,14 @@ namespace MyTrimmingNew.AuxiliaryLine
             return newParameter;
         }
 
-        private int CalcCenterX(Point p1, Point p2)
-        {
-            return (p1.X + p2.X) / 2;
-        }
-
-        private int CalcCenterY(Point p1, Point p2)
-        {
-            return (p1.Y + p2.Y) / 2;
-        }
-
         private Point CalcRotatePoint(Point p, int centerX, int centerY, int degree)
         {
-            double rad = ToRadian(degree);
+            double rad = Common.ToRadian(degree);
             int x = p.X - centerX;
             int y = p.Y - centerY;
             double rotateX = x * Math.Cos(rad) - y * Math.Sin(rad);
             double rotateY = y * Math.Cos(rad) + x * Math.Sin(rad);
             return new Point((int)rotateX + centerX, (int)rotateY + centerY);
-        }
-
-        private double ToRadian(int degree)
-        {
-            return (double)degree * Math.PI / 180.0;
         }
 
         private bool IsOutOfRangeDisplayImage(Point p)

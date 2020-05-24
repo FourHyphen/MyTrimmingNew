@@ -109,7 +109,15 @@ namespace MyTrimmingNew.common
             double x = (double)(p2.X - p1.X);
             double y = (double)(p2.Y - p1.Y);
 
-            return (y / x);
+            if (x == 0.0)
+            {
+                // 直線が x = 定数 となる場合、aを十分大きな値にした直線で近似する
+                return (y / 1e-4);
+            }
+            else
+            {
+                return (y / x);
+            }
         }
 
         private double CalcLineB(int x, int y, double a)
