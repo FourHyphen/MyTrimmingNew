@@ -10,6 +10,11 @@ namespace TestMyTrimmingNew
     [TestClass]
     public class UnitTestClassAuxiliaryController
     {
+        // 反省点
+        // テスト側にも矩形変更ロジックを実装するのではなく、
+        // テスト側は正解パラメーターを計算しておいて、それと比較すべきだった
+        //  -> 次は処理の2重実装にならないようにする
+
         #region "初期化"
 
         [TestMethod]
