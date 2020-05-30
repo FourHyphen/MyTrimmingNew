@@ -56,5 +56,35 @@ namespace MyTrimmingNew.common
 
             return (double)(p2.Y - p1.Y) / numer;
         }
+
+        /// <summary>
+        /// 2直線が直交するかを返す
+        /// </summary>
+        /// <param name="baseP"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static bool Are2LinesOrthogonal(System.Drawing.Point baseP, System.Drawing.Point widthP, System.Drawing.Point heightP)
+        {
+            if (baseP.Y == widthP.Y)
+            {
+                return (baseP.X == heightP.X);
+            }
+
+            double a1 = CalcSlope(baseP, widthP);
+            double a2 = CalcSlope(baseP, heightP);
+            return Are2LinesOrthogonal(a1, a2);
+        }
+
+        /// <summary>
+        /// 2直線が直交するかを返す
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <returns></returns>
+        public static bool Are2LinesOrthogonal(double a1, double a2)
+        {
+            return (a1 * a2 == -1.0);
+        }
     }
 }

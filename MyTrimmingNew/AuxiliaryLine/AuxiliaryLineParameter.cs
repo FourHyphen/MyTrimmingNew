@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using MyTrimmingNew.common;
 
 namespace MyTrimmingNew.AuxiliaryLine
 {
@@ -284,6 +285,7 @@ namespace MyTrimmingNew.AuxiliaryLine
             LeftBottom = newLeftBottom;
             RightTop = newRightTop;
             RightBottom = newRightBottom;
+            FitRatio(LeftTop, LeftBottom, RightTop, RightBottom);
         }
 
         public void ReplaceParameter(Point newLeftTop,
@@ -294,6 +296,107 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             Degree = degree;
             ReplacePoint(newLeftTop, newLeftBottom, newRightTop, newRightBottom);
+        }
+
+        private void FitRatio(Point leftTop,
+                              Point leftBottom,
+                              Point rightTop,
+                              Point rightBottom)
+        {
+            if (Ratio == null)
+            {
+                return;
+            }
+
+            FitRatioCore(leftTop, leftBottom, rightTop, rightBottom);
+        }
+
+        private void FitRatioCore(Point leftTop,
+                                  Point leftBottom,
+                                  Point rightTop,
+                                  Point rightBottom)
+        {
+            if (Degree == 0)
+            {
+                FitRatioDegree0(leftTop, leftBottom, rightTop, rightBottom);
+            }
+            else
+            {
+                FitRatioDegreeNot0(leftTop, leftBottom, rightTop, rightBottom);
+            }
+        }
+
+        private void FitRatioDegree0(Point leftTop,
+                                     Point leftBottom,
+                                     Point rightTop,
+                                     Point rightBottom)
+        {
+            // 左上点を基準にする
+            if (rightTop.Y != leftTop.Y)
+            {
+                rightTop.Y = leftTop.Y;
+            }
+            if (leftBottom.X != leftTop.X)
+            {
+                leftBottom.X = leftTop.X;
+            }
+
+            int width = rightTop.X - leftTop.X;
+            int height = leftBottom.Y - leftTop.Y;
+            if (rightBottom.X != leftBottom.X + width)
+            {
+                rightBottom.X = leftBottom.X + width;
+            }
+            if (rightBottom.Y != rightTop.Y + height)
+            {
+                rightBottom.Y = rightTop.Y + height;
+            }
+        }
+
+        private void FitRatioDegreeNot0(Point leftTop,
+                                        Point leftBottom,
+                                        Point rightTop,
+                                        Point rightBottom)
+        {
+            // 左上点を基準にする
+            int width = CalcBaseWidth(leftTop, rightTop);
+            FitLeftBottom(leftTop, rightTop, leftBottom, width);
+        }
+
+        private int CalcBaseWidth(Point leftTop, Point rightTop)
+        {
+            return Common.CalcEuclideanDist(leftTop, rightTop);
+        }
+
+        private void FitLeftBottom(Point leftTop, Point rightTop, Point leftBottom, int baseWidth)
+        {
+            // 角度が90度か？
+            bool orthogonal = Common.Are2LinesOrthogonal(leftTop, rightTop, leftBottom);
+            if (orthogonal)
+            {
+                // 角度は問題ないのであとはheight
+                int baseHeight = CalcBaseHeight(leftTop, leftBottom, baseWidth);
+                if (leftTop.Y - leftBottom.Y != 0)
+                {
+                    // TODO
+                }
+            }
+            else
+            {
+                // 角度もズレてる、TODO
+            }
+        }
+
+        private int CalcBaseHeight(Point leftTop, Point leftBottom, int baseWidth)
+        {
+            int baseHeight = Common.CalcEuclideanDist(leftTop, leftBottom);
+            int ratio = baseWidth / baseHeight;
+            if (ratio != Ratio)
+            {
+                baseHeight = (int)((double)baseWidth / Ratio);
+            }
+
+            return baseHeight;
         }
 
         private int FitInRangeImageMovingX(int moveXPixel)
