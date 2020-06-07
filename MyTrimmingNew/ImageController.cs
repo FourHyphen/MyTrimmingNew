@@ -52,9 +52,23 @@ namespace MyTrimmingNew
         public System.Windows.Media.Imaging.BitmapSource GetImage()
         {
             // 要求タイミングはWindow新規表示 or リサイズ時のみなのでインスタンス保持する必要なし、都度作成する
-            return common.Image.CreateBitmapSourceImage(BitmapImage,
-                                                        _windowSize.ImageFitWindowWidth,
-                                                        _windowSize.ImageFitWindowHeight);
+            return GetImage(BitmapImage, _windowSize.ImageFitWindowWidth, _windowSize.ImageFitWindowHeight);
+        }
+
+        public System.Windows.Media.Imaging.BitmapSource GetTrimImage(AuxiliaryController ac, int windowWidth)
+        {
+            int width = windowWidth;
+            int height = (int)((double)width / ac.AuxiliaryRatio);
+            return GetImage(Trim(ac), width, height);
+        }
+
+        /// <summary>
+        /// 表示用画像
+        /// </summary>
+        /// <returns></returns>
+        public System.Windows.Media.Imaging.BitmapSource GetImage(Bitmap bitmap, int width, int height)
+        {
+            return common.Image.CreateBitmapSourceImage(bitmap, width, height);
         }
 
         public string SaveNameExample
@@ -73,6 +87,37 @@ namespace MyTrimmingNew
         }
 
         /// <summary>
+        /// 画像をTrimする
+        /// </summary>
+        /// <param name="ac"></param>
+        /// <returns></returns>
+        public Bitmap Trim(AuxiliaryController ac)
+        {
+            Bitmap bitmap = null;
+            if (ac.AuxiliaryDegree == 0)
+            {
+                bitmap = common.Image.CreateTrimImage(BitmapImage,
+                                                      ac.AuxiliaryLeft,
+                                                      ac.AuxiliaryTop,
+                                                      ac.AuxiliaryRight,
+                                                      ac.AuxiliaryBottom,
+                                                      _windowSize.ImageFitWindowRatio);
+            }
+            else
+            {
+                bitmap = common.Image.CreateTrimImage(BitmapImage,
+                                                      ac.AuxiliaryLeftTop,
+                                                      ac.AuxiliaryLeftBottom,
+                                                      ac.AuxiliaryRightTop,
+                                                      ac.AuxiliaryRightBottom,
+                                                      _windowSize.ImageFitWindowRatio,
+                                                      ac.AuxiliaryDegree);
+            }
+
+            return bitmap;
+        }
+
+        /// <summary>
         /// 画像を保存する一連の処理を実行する
         /// </summary>
         public SaveResult Save(AuxiliaryController ac)
@@ -86,28 +131,8 @@ namespace MyTrimmingNew
             SaveResult result;
             try
             {
-                if (ac.AuxiliaryDegree == 0)
-                {
-                    common.Image.SaveTrimImage(BitmapImage,
-                                               filePath,
-                                               ac.AuxiliaryLeft,
-                                               ac.AuxiliaryTop,
-                                               ac.AuxiliaryRight,
-                                               ac.AuxiliaryBottom,
-                                               _windowSize.ImageFitWindowRatio);
-                }
-                else
-                {
-                    common.Image.SaveTrimImage(BitmapImage,
-                                               filePath,
-                                               ac.AuxiliaryLeftTop,
-                                               ac.AuxiliaryLeftBottom,
-                                               ac.AuxiliaryRightTop,
-                                               ac.AuxiliaryRightBottom,
-                                               _windowSize.ImageFitWindowRatio,
-                                               ac.AuxiliaryDegree);
-                }
-
+                Bitmap bitmap = Trim(ac);
+                bitmap.Save(filePath);
                 result = SaveResult.Success;
             }
             catch

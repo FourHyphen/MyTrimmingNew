@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using MyTrimmingNew.AuxiliaryLine;
+using MyTrimmingNew.common;
 
 namespace MyTrimmingNew
 {
@@ -153,6 +154,10 @@ namespace MyTrimmingNew
             {
                 SaveImage();
             }
+            else if (keyKind == Keys.EnableKeys.PreviewWindowOpen)
+            {
+                OpenPreviewWindow();
+            }
         }
 
         #endregion
@@ -222,6 +227,26 @@ namespace MyTrimmingNew
             {
                 ImageProcessResultMessageBox.Show(ImageProcessResultMessageBox.Result.FailureImageSave);
             }
+        }
+
+        #endregion
+
+        #region "ユーザー操作時処理: プレビューWindow"
+
+        private void menuPreviewWindowOpen_Click(object sender, RoutedEventArgs e)
+        {
+            OpenPreviewWindow();
+        }
+
+        private void OpenPreviewWindow()
+        {
+            if (_imageController == null)
+            {
+                return;
+            }
+
+            Window preview = new Preview(_imageController, _auxiliaryController);
+            preview.Show();
         }
 
         #endregion

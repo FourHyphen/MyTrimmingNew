@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace MyTrimmingNew.common
 {
@@ -68,7 +63,7 @@ namespace MyTrimmingNew.common
         }
 
         /// <summary>
-        /// 切り抜き画像保存
+        /// 切り抜き画像作成
         /// 切り抜き範囲の原点指定は画像を親とした相対値としてください
         /// </summary>
         /// <param name="filePath"></param>
@@ -77,13 +72,12 @@ namespace MyTrimmingNew.common
         /// <param name="seemingWidth"></param>
         /// <param name="seemingHeight"></param>
         /// <returns></returns>
-        public static void SaveTrimImage(Bitmap image,
-                                         String filePath,
-                                         int seemingLeft,
-                                         int seemingTop,
-                                         int seemingRight,
-                                         int seemingBottom,
-                                         double ratio)
+        public static System.Drawing.Bitmap CreateTrimImage(Bitmap image,
+                                                            int seemingLeft,
+                                                            int seemingTop,
+                                                            int seemingRight,
+                                                            int seemingBottom,
+                                                            double ratio)
         {
             // 1/1スケール画像上の切り抜き範囲
             int left = (int)((double)seemingLeft / ratio);
@@ -92,28 +86,27 @@ namespace MyTrimmingNew.common
             int bottom = (int)((double)seemingBottom / ratio);
 
             ImageTrim imageTrim = new ImageTrim();
-            imageTrim.Execute(image, filePath, left, top, right, bottom);
+            return imageTrim.Execute(image, left, top, right, bottom);
         }
 
         /// <summary>
-        /// 回転後の見た目の矩形4隅および回転角度から切り抜き画像を保存
+        /// 回転後の見た目の矩形4隅および回転角度から切り抜き画像を作成
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="filePath"></param>
         /// <param name="seemingLeftTop"></param>
         /// <param name="seemingLeftBottom"></param>
         /// <param name="seemingRightTop"></param>
         /// <param name="seemingRightBottom"></param>
         /// <param name="ratio"></param>
         /// <param name="degree"></param>
-        public static void SaveTrimImage(Bitmap image,
-                                         String filePath,
-                                         Point seemingLeftTop,
-                                         Point seemingLeftBottom,
-                                         Point seemingRightTop,
-                                         Point seemingRightBottom,
-                                         double ratio,
-                                         int degree)
+        /// <returns></returns>
+        public static System.Drawing.Bitmap CreateTrimImage(Bitmap image,
+                                                            Point seemingLeftTop,
+                                                            Point seemingLeftBottom,
+                                                            Point seemingRightTop,
+                                                            Point seemingRightBottom,
+                                                            double ratio,
+                                                            int degree)
         {
             // 1/1スケール画像上のパラメーターに変換
             Point leftTop = PointRatio(seemingLeftTop, ratio);
@@ -122,7 +115,7 @@ namespace MyTrimmingNew.common
             Point rightBottom = PointRatio(seemingRightBottom, ratio);
 
             ImageTrim imageTrim = new ImageTrim();
-            imageTrim.Execute(image, filePath, leftTop, leftBottom, rightTop, rightBottom, degree);
+            return imageTrim.Execute(image, leftTop, leftBottom, rightTop, rightBottom, degree);
         }
 
         private static Point PointRatio(Point p, double ratio)

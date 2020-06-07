@@ -25,11 +25,11 @@ namespace TestMyTrimmingNew
 
         #endregion
 
-        #region 保存
+        #region Trim
 
         [TestMethod]
         [DeploymentItem(@".\Resource\test001.jpg")]
-        public void TestCorrectImageSizeAfterSaveTrimImage()
+        public void TestCorrectImageSizeAfterTrimImage()
         {
             // 数字の根拠無し
             // 1/1スケールだと(x=400, y=600)からwidth=800, height=400の範囲を切り取る設定
@@ -39,18 +39,13 @@ namespace TestMyTrimmingNew
             int seemingTrimRight = 600;
             int seemingTrimBottom = 500;
 
-            System.IO.File.Delete(Common.TestToSaveTrimImagePath001);
-
             Bitmap img = new Bitmap(Common.TestResourceImage001Path);
-            MyTrimmingNew.common.Image.SaveTrimImage(img,
-                                                     Common.TestToSaveTrimImagePath001,
-                                                     seemingTrimLeft,
-                                                     seemingTrimTop,
-                                                     seemingTrimRight,
-                                                     seemingTrimBottom,
-                                                     ratio);
-
-            Bitmap trimmedImg = new Bitmap(Common.TestToSaveTrimImagePath001);
+            Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
+                                                                           seemingTrimLeft,
+                                                                           seemingTrimTop,
+                                                                           seemingTrimRight,
+                                                                           seemingTrimBottom,
+                                                                           ratio);
 
             int seemingTrimWidth = seemingTrimRight - seemingTrimLeft;
             int seemingTrimHeight = seemingTrimBottom - seemingTrimTop;
@@ -117,14 +112,14 @@ namespace TestMyTrimmingNew
             System.IO.File.Delete(saveImagePath);
 
             Bitmap img = new Bitmap(openImagePath);
-            MyTrimmingNew.common.Image.SaveTrimImage(img,
-                                                     saveImagePath,
-                                                     rotateLeftTop,
-                                                     rotateLeftBottom,
-                                                     rotateRightTop,
-                                                     rotateRightBottom,
-                                                     ratio,
-                                                     degree);
+            Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
+                                                                           rotateLeftTop,
+                                                                           rotateLeftBottom,
+                                                                           rotateRightTop,
+                                                                           rotateRightBottom,
+                                                                           ratio,
+                                                                           degree);
+            trimmedImg.Save(saveImagePath);
         }
 
         // TODO: テストが完成するまでignoreにする
@@ -149,16 +144,15 @@ namespace TestMyTrimmingNew
             System.IO.File.Delete(Common.TestToSaveTrimImagePath004);
 
             Bitmap img = new Bitmap(Common.TestResourceImage001Path);
-            MyTrimmingNew.common.Image.SaveTrimImage(img,
-                                                     Common.TestToSaveTrimImagePath004,
-                                                     rotateLeftTop,
-                                                     rotateLeftBottom,
-                                                     rotateRightTop,
-                                                     rotateRightBottom,
-                                                     ratio,
-                                                     degree);
+            Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
+                                                                           rotateLeftTop,
+                                                                           rotateLeftBottom,
+                                                                           rotateRightTop,
+                                                                           rotateRightBottom,
+                                                                           ratio,
+                                                                           degree);
+            trimmedImg.Save(Common.TestToSaveTrimImagePath004);
 
-            Bitmap trimmedImg = new Bitmap(Common.TestToSaveTrimImagePath004);
             EqualImage(img, trimmedImg, rotateLeftTop, rotateLeftBottom, rotateRightTop, rotateRightBottom, ratio, degree);
         }
 

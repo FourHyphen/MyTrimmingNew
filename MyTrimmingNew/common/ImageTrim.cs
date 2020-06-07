@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace MyTrimmingNew.common
@@ -13,29 +9,26 @@ namespace MyTrimmingNew.common
         /// 画像をtrimして保存(回転非対応)
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="filePath"></param>
         /// <param name="left"></param>
         /// <param name="top"></param>
         /// <param name="right"></param>
         /// <param name="bottom"></param>
-        public void Execute(Bitmap image,
-                            String filePath,
-                            int left,
-                            int top,
-                            int right,
-                            int bottom)
+        public System.Drawing.Bitmap Execute(Bitmap image,
+                                             int left,
+                                             int top,
+                                             int right,
+                                             int bottom)
         {
             int width = right - left;
             int height = bottom - top;
-            SaveTrimImage(image, filePath, left, top, width, height);
+            return ExecuteCore(image, left, top, width, height);
         }
 
-        private void SaveTrimImage(Bitmap image,
-                                   String filePath,
-                                   int originX,
-                                   int originY,
-                                   int trimWidth,
-                                   int trimHeight)
+        private static System.Drawing.Bitmap ExecuteCore(Bitmap image,
+                                                         int originX,
+                                                         int originY,
+                                                         int trimWidth,
+                                                         int trimHeight)
         {
             Bitmap trimImage = new Bitmap(trimWidth, trimHeight);
             Graphics g = Graphics.FromImage(trimImage);
@@ -44,7 +37,7 @@ namespace MyTrimmingNew.common
             g.DrawImage(image, draw, trim, GraphicsUnit.Pixel);
             g.Dispose();
 
-            trimImage.Save(filePath);
+            return trimImage;
         }
 
         /// <summary>
@@ -52,19 +45,17 @@ namespace MyTrimmingNew.common
         /// 条件：4点座標は非負であること
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="filePath"></param>
         /// <param name="leftTop"></param>
         /// <param name="leftBottom"></param>
         /// <param name="rightTop"></param>
         /// <param name="rightBottom"></param>
         /// <param name="degree"></param>
-        public void Execute(Bitmap image,
-                            String filePath,
-                            Point leftTop,
-                            Point leftBottom,
-                            Point rightTop,
-                            Point rightBottom,
-                            int degree)
+        public System.Drawing.Bitmap Execute(Bitmap image,
+                                             Point leftTop,
+                                             Point leftBottom,
+                                             Point rightTop,
+                                             Point rightBottom,
+                                             int degree)
         {
             // 回転パラメーター準備
             int centerX = Common.CalcCenterX(leftTop, rightBottom);
@@ -116,12 +107,10 @@ namespace MyTrimmingNew.common
             maxY -= 1;
             minX += 1;
             minY += 1;
-
             int width = maxX - minX;
             int height = maxY - minY;
-            SaveTrimImage(trimImage, filePath, minX, minY,width, height);
 
-            return;
+            return ExecuteCore(trimImage, minX, minY,width, height);
         }
 
         private int CalcRotateX(int x, int y, int centerX, int centerY, double cos, double sin)

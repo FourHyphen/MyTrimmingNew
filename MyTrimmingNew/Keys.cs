@@ -21,6 +21,7 @@ namespace MyTrimmingNew
             Redo,
             FileOpen,
             FileSave,
+            PreviewWindowOpen,
             Else
         }
 
@@ -77,6 +78,10 @@ namespace MyTrimmingNew
                 else if (key == Key.S)
                 {
                     return EnableKeys.FileSave;
+                }
+                else if (key == Key.P)
+                {
+                    return EnableKeys.PreviewWindowOpen;
                 }
             }
 
