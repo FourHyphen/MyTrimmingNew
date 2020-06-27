@@ -6,6 +6,10 @@ namespace MyTrimmingNew.AuxiliaryLine
 {
     public class AuxiliaryLineParameter : ICloneable
     {
+        // 反省点
+        // 画面表示は各種座標をintにしないといけないが、内部データまでそれに引っ張られる必要はなかった
+        // ViewとModelは概念のレベルでも完全に分離し、Model側はModel側の本来あるべき姿(double型)にすべきだった
+
         public enum RatioType
         {
             W16H9,
@@ -303,6 +307,9 @@ namespace MyTrimmingNew.AuxiliaryLine
                               Point rightTop,
                               Point rightBottom)
         {
+            // 反省点
+            // そもそもFitが必要になったのは、Pointをint型にしたからパラメーター変更毎に計算誤差がたまっていくから
+            //  -> doubleにしておけば、このFitは不要のはずだった
             if (Ratio == null)
             {
                 return;
@@ -358,6 +365,8 @@ namespace MyTrimmingNew.AuxiliaryLine
                                         Point rightTop,
                                         Point rightBottom)
         {
+            // TODO: ロジックの実装
+            //  -> そもそもPointをdouble型にした方が良い
             // 左上点を基準にする
             int width = CalcBaseWidth(leftTop, rightTop);
             FitLeftBottom(leftTop, rightTop, leftBottom, width);
