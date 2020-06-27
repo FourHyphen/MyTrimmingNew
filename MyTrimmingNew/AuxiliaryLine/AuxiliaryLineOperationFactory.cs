@@ -32,6 +32,11 @@ namespace MyTrimmingNew.AuxiliaryLine
             {
                 return new AuxiliaryLineMove(ac, coordinateRelatedAuxiliaryLine);
             }
+            else if (ac.AuxiliaryDegree != 0)
+            {
+                // TODO: 回転時は拡大縮小を無効にする(回転時の拡大縮小後パラメーターの計算が難しいため)
+                return new AuxiliaryLineNoneOperation(ac);
+            }
             else
             {
                 return new AuxiliaryLineChangeSize(ac, coordinateRelatedAuxiliaryLine);
