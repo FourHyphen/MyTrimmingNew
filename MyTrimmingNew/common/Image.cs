@@ -76,37 +76,18 @@ namespace MyTrimmingNew.common
         }
 
         /// <summary>
-        /// 回転後の見た目の矩形4隅および回転角度から切り抜き画像を作成
+        /// 回転後の矩形4隅および回転角度から切り抜き画像を作成
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="seemingLeftTop"></param>
-        /// <param name="seemingLeftBottom"></param>
-        /// <param name="seemingRightTop"></param>
-        /// <param name="seemingRightBottom"></param>
-        /// <param name="ratio"></param>
-        /// <param name="degree"></param>
         /// <returns></returns>
         public static System.Drawing.Bitmap CreateTrimImage(Bitmap image,
-                                                            Point seemingLeftTop,
-                                                            Point seemingLeftBottom,
-                                                            Point seemingRightTop,
-                                                            Point seemingRightBottom,
-                                                            double ratio,
+                                                            Point leftTop,
+                                                            Point leftBottom,
+                                                            Point rightTop,
+                                                            Point rightBottom,
                                                             int degree)
         {
-            // 1/1スケール画像上のパラメーターに変換
-            Point leftTop = PointRatio(seemingLeftTop, ratio);
-            Point leftBottom = PointRatio(seemingLeftBottom, ratio);
-            Point rightTop = PointRatio(seemingRightTop, ratio);
-            Point rightBottom = PointRatio(seemingRightBottom, ratio);
-
             ImageTrim imageTrim = new ImageTrim();
             return imageTrim.Execute(image, leftTop, leftBottom, rightTop, rightBottom, degree);
-        }
-
-        private static Point PointRatio(Point p, double ratio)
-        {
-            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
     }
 }

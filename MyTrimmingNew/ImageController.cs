@@ -139,15 +139,20 @@ namespace MyTrimmingNew
             else
             {
                 bitmap = common.Image.CreateTrimImage(BitmapImage,
-                                                      ac.AuxiliaryLeftTop,
-                                                      ac.AuxiliaryLeftBottom,
-                                                      ac.AuxiliaryRightTop,
-                                                      ac.AuxiliaryRightBottom,
-                                                      ImageFitRatio,
+                                                      PointRatio(ac.AuxiliaryLeftTop, ImageFitRatio),
+                                                      PointRatio(ac.AuxiliaryLeftBottom, ImageFitRatio),
+                                                      PointRatio(ac.AuxiliaryRightTop, ImageFitRatio),
+                                                      PointRatio(ac.AuxiliaryRightBottom, ImageFitRatio),
                                                       ac.AuxiliaryDegree);
             }
 
             return bitmap;
+        }
+
+        private Point PointRatio(Point p, double ratio)
+        {
+            // 1/1スケール画像上のパラメーターに変換
+            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
 
         /// <summary>

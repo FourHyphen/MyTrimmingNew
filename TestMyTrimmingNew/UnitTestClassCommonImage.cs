@@ -109,17 +109,27 @@ namespace TestMyTrimmingNew
             Point rotateRightTop = Common.CalcRotatePoint(beforeRotateSeemingRightTop, degree);
             Point rotateRightBottom = Common.CalcRotatePoint(beforeRotateSeemingRightBottom, degree);
 
+            Point trimLeftTop = PointRatio(rotateLeftTop, ratio);
+            Point trimLeftBottom = PointRatio(rotateLeftBottom, ratio);
+            Point trimRightTop = PointRatio(rotateRightTop, ratio);
+            Point trimRightBottom = PointRatio(rotateRightBottom, ratio);
+
             System.IO.File.Delete(saveImagePath);
 
             Bitmap img = new Bitmap(openImagePath);
             Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
-                                                                           rotateLeftTop,
-                                                                           rotateLeftBottom,
-                                                                           rotateRightTop,
-                                                                           rotateRightBottom,
-                                                                           ratio,
+                                                                           trimLeftTop,
+                                                                           trimLeftBottom,
+                                                                           trimRightTop,
+                                                                           trimRightBottom,
                                                                            degree);
             trimmedImg.Save(saveImagePath);
+        }
+
+        private Point PointRatio(Point p, double ratio)
+        {
+            // 1/1スケール画像上のパラメーターに変換
+            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
 
         // TODO: テストが完成するまでignoreにする
@@ -141,15 +151,19 @@ namespace TestMyTrimmingNew
             Point rotateRightTop = Common.CalcRotatePoint(seemingRightTop, degree);
             Point rotateRightBottom = Common.CalcRotatePoint(seemingRightBottom, degree);
 
+            Point trimLeftTop = PointRatio(rotateLeftTop, ratio);
+            Point trimLeftBottom = PointRatio(rotateLeftBottom, ratio);
+            Point trimRightTop = PointRatio(rotateRightTop, ratio);
+            Point trimRightBottom = PointRatio(rotateRightBottom, ratio);
+
             System.IO.File.Delete(Common.TestToSaveTrimImagePath004);
 
             Bitmap img = new Bitmap(Common.TestResourceImage001Path);
             Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
-                                                                           rotateLeftTop,
-                                                                           rotateLeftBottom,
-                                                                           rotateRightTop,
-                                                                           rotateRightBottom,
-                                                                           ratio,
+                                                                           trimLeftTop,
+                                                                           trimLeftBottom,
+                                                                           trimRightTop,
+                                                                           trimRightBottom,
                                                                            degree);
             trimmedImg.Save(Common.TestToSaveTrimImagePath004);
 
