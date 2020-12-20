@@ -63,30 +63,16 @@ namespace MyTrimmingNew.common
         }
 
         /// <summary>
-        /// 切り抜き画像作成
-        /// 切り抜き範囲の原点指定は画像を親とした相対値としてください
+        /// imageの(left, top)からwidth, heightの範囲を切り抜いたBitmapを返す
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="seemingOriginX"></param>
-        /// <param name="seemingOriginY"></param>
-        /// <param name="seemingWidth"></param>
-        /// <param name="seemingHeight"></param>
-        /// <returns></returns>
         public static System.Drawing.Bitmap CreateTrimImage(Bitmap image,
-                                                            int seemingLeft,
-                                                            int seemingTop,
-                                                            int seemingRight,
-                                                            int seemingBottom,
-                                                            double ratio)
+                                                            int left,
+                                                            int top,
+                                                            int width,
+                                                            int height)
         {
-            // 1/1スケール画像上の切り抜き範囲
-            int left = (int)((double)seemingLeft / ratio);
-            int top = (int)((double)seemingTop / ratio);
-            int right = (int)((double)seemingRight / ratio);
-            int bottom = (int)((double)seemingBottom / ratio);
-
             ImageTrim imageTrim = new ImageTrim();
-            return imageTrim.Execute(image, left, top, right, bottom);
+            return imageTrim.Execute(image, left, top, width, height);
         }
 
         /// <summary>

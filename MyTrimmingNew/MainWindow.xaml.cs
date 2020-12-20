@@ -15,7 +15,7 @@ namespace MyTrimmingNew
 
         private AuxiliaryController _auxiliaryController;
         private AuxiliaryLineRectangleObserver _auxiliaryLineRectangle;
-        private AuxiliaryLineLengthObserver _auxiliaryLineLength;
+        private TrimmingImageLengthObserver _trimmingImageLength;
 
         // TODO: オプションか外部ファイルか何かで可変にする
         private int _rotateByKey = 1;
@@ -82,7 +82,7 @@ namespace MyTrimmingNew
         {
             _auxiliaryController = new AuxiliaryController(ic, ratioType:ratioType);
             _auxiliaryLineRectangle = new AuxiliaryLineRectangleObserver(xAuxiliaryLine, _auxiliaryController);
-            _auxiliaryLineLength = new AuxiliaryLineLengthObserver(xAuxiliaryLineLength, _auxiliaryController);
+            _trimmingImageLength = new TrimmingImageLengthObserver(xAuxiliaryLineLength, ic, _auxiliaryController);
         }
 
         #endregion

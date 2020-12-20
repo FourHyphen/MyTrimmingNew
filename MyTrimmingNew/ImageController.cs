@@ -15,6 +15,8 @@ namespace MyTrimmingNew
         private System.IO.FileInfo _imageInfo;
         private WindowSize _windowSize;
 
+        public double ImageFitRatio { get { return _windowSize.ImageFitWindowRatio; } }
+
         public ImageController(String imagePath, int windowWidth, int windowHeight)
         {
             BitmapImage = new Bitmap(imagePath);
@@ -86,6 +88,38 @@ namespace MyTrimmingNew
             get { return _imageInfo.DirectoryName; }
         }
 
+        public int LeftOriginalScale(AuxiliaryController ac)
+        {
+            return (int)((double)ac.AuxiliaryLeft / ImageFitRatio);
+        }
+
+        public int RightOriginalScale(AuxiliaryController ac)
+        {
+            return (int)((double)ac.AuxiliaryRight / ImageFitRatio);
+        }
+
+        public int TopOriginalScale(AuxiliaryController ac)
+        {
+            return (int)((double)ac.AuxiliaryTop / ImageFitRatio);
+        }
+
+        public int BottomOriginalScale(AuxiliaryController ac)
+        {
+            return (int)((double)ac.AuxiliaryBottom / ImageFitRatio);
+        }
+
+        // 1/1スケール画像上の切り抜き範囲: 横の長さ
+        public int TrimmingWidth(AuxiliaryController ac)
+        {
+            return (RightOriginalScale(ac) - LeftOriginalScale(ac));
+        }
+
+        // 1/1スケール画像上の切り抜き範囲: 縦の長さ
+        public int TrimmingHeight(AuxiliaryController ac)
+        {
+            return (BottomOriginalScale(ac) - TopOriginalScale(ac));
+        }
+
         /// <summary>
         /// 画像をTrimする
         /// </summary>
@@ -97,11 +131,10 @@ namespace MyTrimmingNew
             if (ac.AuxiliaryDegree == 0)
             {
                 bitmap = common.Image.CreateTrimImage(BitmapImage,
-                                                      ac.AuxiliaryLeft,
-                                                      ac.AuxiliaryTop,
-                                                      ac.AuxiliaryRight,
-                                                      ac.AuxiliaryBottom,
-                                                      _windowSize.ImageFitWindowRatio);
+                                                      LeftOriginalScale(ac),
+                                                      TopOriginalScale(ac),
+                                                      TrimmingWidth(ac),
+                                                      TrimmingHeight(ac));
             }
             else
             {
@@ -110,7 +143,7 @@ namespace MyTrimmingNew
                                                       ac.AuxiliaryLeftBottom,
                                                       ac.AuxiliaryRightTop,
                                                       ac.AuxiliaryRightBottom,
-                                                      _windowSize.ImageFitWindowRatio,
+                                                      ImageFitRatio,
                                                       ac.AuxiliaryDegree);
             }
 

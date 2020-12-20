@@ -110,7 +110,7 @@
     <Compile Include="common\ImageTrim.cs" />
     <Compile Include="common\TrimRect.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="AuxiliaryLine\AuxiliaryLineLengthObserver.cs" />
+    <Compile Include="AuxiliaryLine\TrimmingImageLengthObserver.cs" />
     <Compile Include="AuxiliaryLine\AuxiliaryLineCommand.cs" />
     <Compile Include="ImageController.cs" />
     <Compile Include="ImageFileOpenDialog.cs" />

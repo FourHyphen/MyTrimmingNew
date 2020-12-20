@@ -39,20 +39,20 @@ namespace TestMyTrimmingNew
             int seemingTrimRight = 600;
             int seemingTrimBottom = 500;
 
-            Bitmap img = new Bitmap(Common.TestResourceImage001Path);
-            Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
-                                                                           seemingTrimLeft,
-                                                                           seemingTrimTop,
-                                                                           seemingTrimRight,
-                                                                           seemingTrimBottom,
-                                                                           ratio);
-
             int seemingTrimWidth = seemingTrimRight - seemingTrimLeft;
             int seemingTrimHeight = seemingTrimBottom - seemingTrimTop;
             int ansLeft = (int)((double)seemingTrimLeft / ratio);
             int ansTop = (int)((double)seemingTrimTop / ratio);
             int ansTrimWidth = (int)((double)seemingTrimWidth / ratio);
             int ansTrimHeight = (int)((double)seemingTrimHeight / ratio);
+
+            Bitmap img = new Bitmap(Common.TestResourceImage001Path);
+            Bitmap trimmedImg = MyTrimmingNew.common.Image.CreateTrimImage(img,
+                                                                           ansLeft,
+                                                                           ansTop,
+                                                                           ansTrimWidth,
+                                                                           ansTrimHeight);
+
             Rectangle rect = new Rectangle(ansLeft, ansTop, ansTrimWidth, ansTrimHeight);
             Bitmap ansImg = img.Clone(rect, img.PixelFormat);
 

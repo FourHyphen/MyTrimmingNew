@@ -11,16 +11,14 @@ namespace MyTrimmingNew.common
         /// <param name="image"></param>
         /// <param name="left"></param>
         /// <param name="top"></param>
-        /// <param name="right"></param>
-        /// <param name="bottom"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public System.Drawing.Bitmap Execute(Bitmap image,
                                              int left,
                                              int top,
-                                             int right,
-                                             int bottom)
+                                             int width,
+                                             int height)
         {
-            int width = right - left;
-            int height = bottom - top;
             return ExecuteCore(image, left, top, width, height);
         }
 
