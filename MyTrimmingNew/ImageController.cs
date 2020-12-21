@@ -111,13 +111,40 @@ namespace MyTrimmingNew
         // 1/1スケール画像上の切り抜き範囲: 横の長さ
         public int TrimmingWidth(AuxiliaryController ac)
         {
-            return (RightOriginalScale(ac) - LeftOriginalScale(ac));
+            if (ac.AuxiliaryDegree == 0)
+            {
+                return (RightOriginalScale(ac) - LeftOriginalScale(ac));
+            }
+            else
+            {
+                return CalcEuclideanDistOfOriginalScale(ac.AuxiliaryLeftTop, ac.AuxiliaryRightTop);
+            }
         }
 
         // 1/1スケール画像上の切り抜き範囲: 縦の長さ
         public int TrimmingHeight(AuxiliaryController ac)
         {
-            return (BottomOriginalScale(ac) - TopOriginalScale(ac));
+            if (ac.AuxiliaryDegree == 0)
+            {
+                return (BottomOriginalScale(ac) - TopOriginalScale(ac));
+            }
+            else
+            {
+                return CalcEuclideanDistOfOriginalScale(ac.AuxiliaryLeftTop, ac.AuxiliaryLeftBottom);
+            }
+        }
+
+        private int CalcEuclideanDistOfOriginalScale(Point p1, Point p2)
+        {
+            // 1/1スケール画像上のパラメーターに変換
+            Point scaleP1 = PointRatio(p1, ImageFitRatio);
+            Point scaleP2 = PointRatio(p2, ImageFitRatio);
+            return common.Common.CalcEuclideanDist(scaleP1, scaleP2);
+        }
+
+        private Point PointRatio(Point p, double ratio)
+        {
+            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
 
         /// <summary>
@@ -147,12 +174,6 @@ namespace MyTrimmingNew
             }
 
             return bitmap;
-        }
-
-        private Point PointRatio(Point p, double ratio)
-        {
-            // 1/1スケール画像上のパラメーターに変換
-            return new Point((int)(p.X / ratio), (int)(p.Y / ratio));
         }
 
         /// <summary>

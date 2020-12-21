@@ -32,26 +32,20 @@ namespace MyTrimmingNew.AuxiliaryLine
         {
             string width = GetWillTrimmingWidth(ac);
             string height = GetWillTrimmingHeight(ac);
-            string length = "トリム領域: (横 " + width + ", 縦 " + height + ")";
+            string length = "大まかなトリム領域サイズ: (横 " + width + ", 縦 " + height + ") ※厳密な値にするのはTODO";
             CC.Content = length;
         }
 
         private string GetWillTrimmingWidth(AuxiliaryController ac)
         {
             // 1/1スケール画像上の切り抜き範囲: 横の長さ
-            double ratio = IC.ImageFitRatio;
-            int left = (int)((double)ac.AuxiliaryLeft / ratio);
-            int right = (int)((double)ac.AuxiliaryRight / ratio);
-            return (right - left).ToString();
+            return IC.TrimmingWidth(ac).ToString();
         }
 
         private string GetWillTrimmingHeight(AuxiliaryController ac)
         {
             // 1/1スケール画像上の切り抜き範囲: 縦の長さ
-            double ratio = IC.ImageFitRatio;
-            int top = (int)((double)ac.AuxiliaryTop / ratio);
-            int bottom = (int)((double)ac.AuxiliaryBottom / ratio);
-            return (bottom - top).ToString();
+            return IC.TrimmingHeight(ac).ToString();
         }
     }
 }
