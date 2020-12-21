@@ -181,7 +181,7 @@ namespace MyTrimmingNew
         /// </summary>
         public SaveResult Save(AuxiliaryController ac)
         {
-            string filePath = ImageFileSaveDialog.GetInstance(SaveNameExample, DirPath).Show();
+            string filePath = new ImageFileSaveDialog(SaveNameExample, DirPath).Show();
             if (filePath == "")
             {
                 return SaveResult.Cancel;

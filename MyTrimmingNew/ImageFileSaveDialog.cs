@@ -5,42 +5,20 @@ namespace MyTrimmingNew
     class ImageFileSaveDialog
     {
         private SaveFileDialog _sfd;
-        private static ImageFileSaveDialog _self = null;
-        private static string _saveImageNameExample;
-        private static string _saveImageDirPath;
 
-        private ImageFileSaveDialog()
+        public ImageFileSaveDialog(string saveImageNameExample, string saveImageDirPath)
         {
             _sfd = new SaveFileDialog();
-            Init();
-        }
-
-        /// <summary>
-        /// シングルトン: 自身のインスタンスを返す
-        /// </summary>
-        /// <returns></returns>
-        public static ImageFileSaveDialog GetInstance(string saveImageNameExample, 
-                                                      string saveImageDirPath)
-        {
-            _saveImageNameExample = saveImageNameExample;
-            _saveImageDirPath = saveImageDirPath;
-
-            if (_self == null)
-            {
-                _self = new ImageFileSaveDialog();
-            }
-
-            return _self;
+            Init(saveImageNameExample, saveImageDirPath);
         }
 
         /// <summary>
         /// 初期値設定
         /// </summary>
-        /// <param name="sfd"></param>
-        private void Init()
+        private void Init(string saveImageNameExample, string saveImageDirPath)
         {
-            _sfd.FileName = _saveImageNameExample;
-            _sfd.InitialDirectory = _saveImageDirPath;
+            _sfd.FileName = saveImageNameExample;
+            _sfd.InitialDirectory = saveImageDirPath;
             _sfd.Title = "保存先を指定してください";
             _sfd.RestoreDirectory = true;
             _sfd.CheckFileExists = false;
